@@ -2,7 +2,7 @@
 <html lang="pt">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>M.E. Maurício — Designer Gráfico Sénior</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -38,6 +38,7 @@ nav {
   display: flex; align-items: center; justify-content: space-between;
   background: rgba(255,255,255,0.92);
   backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
   border-bottom: 1px solid var(--border);
   transition: box-shadow 0.3s;
 }
@@ -62,11 +63,39 @@ nav.scrolled { box-shadow: 0 2px 20px rgba(0,0,0,0.08); }
 .nav-burger {
   display: none; background: none; border: none;
   cursor: pointer; font-size: 1.4rem; color: var(--text);
+  padding: 4px 8px; /* larger tap target */
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* ── MOBILE NAV OVERLAY ── */
+.mobile-nav {
+  display: none; position: fixed; inset: 0;
+  background: rgba(3,62,140,0.98); z-index: 200;
+  flex-direction: column; align-items: center; justify-content: center; gap: 2rem;
+  /* prevent scroll-through on iOS */
+  touch-action: none;
+  overscroll-behavior: contain;
+}
+.mobile-nav.open { display: flex; }
+.mobile-nav a {
+  font-family: 'Syne', sans-serif; font-weight: 700; font-size: 1.8rem;
+  color: rgba(255,255,255,0.85); text-decoration: none; transition: color 0.2s;
+  -webkit-tap-highlight-color: transparent;
+}
+.mobile-nav a:hover,
+.mobile-nav a:active { color: var(--gold); }
+.mobile-close {
+  position: absolute; top: 20px; right: 24px;
+  background: none; border: none; color: rgba(255,255,255,0.7);
+  font-size: 2rem; cursor: pointer;
+  padding: 8px; /* larger tap target */
+  -webkit-tap-highlight-color: transparent;
 }
 
 /* ── HERO ── */
 .hero {
   min-height: 100vh;
+  min-height: 100dvh; /* dynamic viewport for iOS Safari */
   display: grid;
   grid-template-columns: 1fr 1fr;
   position: relative;
@@ -123,6 +152,7 @@ nav.scrolled { box-shadow: 0 2px 20px rgba(0,0,0,0.08); }
   padding: 14px 28px; border-radius: 10px;
   font-size: 0.95rem; font-weight: 600; text-decoration: none;
   transition: transform 0.2s, box-shadow 0.2s;
+  -webkit-tap-highlight-color: transparent;
 }
 .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(244,174,2,0.4); }
 .btn-outline {
@@ -132,6 +162,7 @@ nav.scrolled { box-shadow: 0 2px 20px rgba(0,0,0,0.08); }
   border: 1.5px solid rgba(255,255,255,0.25);
   font-size: 0.95rem; font-weight: 500; text-decoration: none;
   transition: border-color 0.2s, background 0.2s;
+  -webkit-tap-highlight-color: transparent;
 }
 .btn-outline:hover { border-color: rgba(255,255,255,0.6); background: rgba(255,255,255,0.06); }
 .hero-stats {
@@ -175,6 +206,8 @@ nav.scrolled { box-shadow: 0 2px 20px rgba(0,0,0,0.08); }
   transform: translateX(-50%) scale(0.97);
   display: block;
   pointer-events: none;
+  /* Prevent layout shift on iOS */
+  will-change: opacity, transform;
 }
 .hero-slide.active {
   opacity: 1;
@@ -187,24 +220,33 @@ nav.scrolled { box-shadow: 0 2px 20px rgba(0,0,0,0.08); }
   display: flex; gap: 8px; z-index: 3;
 }
 .hero-dot {
+  width: 28px; height: 28px; /* large tap target wrapper */
+  display: flex; align-items: center; justify-content: center;
+  background: none; border: none; cursor: pointer; padding: 0;
+  -webkit-tap-highlight-color: transparent;
+}
+.hero-dot::after {
+  content: '';
   width: 7px; height: 7px; border-radius: 50%;
   background: rgba(255,255,255,0.3);
-  border: none; cursor: pointer; padding: 0;
   transition: background 0.3s, transform 0.3s;
+  display: block;
 }
-.hero-dot.active { background: var(--gold); transform: scale(1.3); }
+.hero-dot.active::after { background: var(--gold); transform: scale(1.3); }
 
 /* Slide arrows */
 .hero-arrow {
   position: absolute; top: 50%; transform: translateY(-50%);
   background: rgba(255,255,255,0.08);
   backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
   border: 1px solid rgba(255,255,255,0.14);
-  color: rgba(255,255,255,0.7); width: 38px; height: 38px;
+  color: rgba(255,255,255,0.7); width: 44px; height: 44px; /* bigger tap target */
   border-radius: 50%; font-size: 0.85rem;
   display: flex; align-items: center; justify-content: center;
   cursor: pointer; z-index: 3;
   transition: background 0.2s, color 0.2s;
+  -webkit-tap-highlight-color: transparent;
 }
 .hero-arrow:hover { background: rgba(244,174,2,0.25); color: var(--gold); }
 .hero-arrow-prev { left: 12px; }
@@ -215,8 +257,11 @@ nav.scrolled { box-shadow: 0 2px 20px rgba(0,0,0,0.08); }
   position: absolute; bottom: 3.5rem; right: 1.5rem;
   background: rgba(2, 30, 75, 0.82);
   backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
   border: 1px solid rgba(244,174,2,0.3);
   border-radius: 14px; padding: 1rem 1.4rem; z-index: 4;
+  /* Ensure it never overflows on small screens */
+  max-width: calc(100% - 3rem);
 }
 .hb-title {
   font-family: 'Syne', sans-serif; font-weight: 800;
@@ -302,6 +347,8 @@ section { padding: 96px 5vw; }
   content: '"'; position: absolute; top: -20px; left: 20px;
   font-family: 'Syne', sans-serif; font-size: 8rem;
   color: rgba(244,174,2,0.2); font-weight: 800; line-height: 1;
+  /* decorative only, hidden from assistive tech */
+  aria-hidden: true;
 }
 .about-quote {
   font-size: 1.1rem; line-height: 1.65;
@@ -331,8 +378,10 @@ section { padding: 96px 5vw; }
 .filter-btn {
   background: var(--off-white); border: 1px solid var(--border);
   color: var(--text-mid); font-size: 0.825rem; font-weight: 500;
-  padding: 8px 18px; border-radius: 100px; cursor: pointer;
+  padding: 10px 18px; /* taller for mobile tap */
+  border-radius: 100px; cursor: pointer;
   transition: all 0.2s; font-family: 'Inter', sans-serif;
+  -webkit-tap-highlight-color: transparent;
 }
 .filter-btn:hover, .filter-btn.active {
   background: var(--blue); border-color: var(--blue); color: #fff;
@@ -341,6 +390,8 @@ section { padding: 96px 5vw; }
 .port-item {
   border-radius: var(--radius); overflow: hidden; position: relative;
   aspect-ratio: 4/3; cursor: pointer; background: var(--off-white);
+  /* Fix iOS Safari aspect-ratio */
+  min-height: 0;
 }
 .port-item img {
   width: 100%; height: 100%; object-fit: cover;
@@ -352,6 +403,10 @@ section { padding: 96px 5vw; }
   opacity: 0; transition: opacity 0.3s;
   display: flex; flex-direction: column; justify-content: flex-end; padding: 1.5rem;
 }
+/* On touch devices, always show overlay slightly so it's discoverable */
+@media (hover: none) {
+  .port-overlay { opacity: 0.85; }
+}
 .port-item:hover .port-overlay { opacity: 1; }
 .port-item:hover img { transform: scale(1.05); }
 .port-overlay-title {
@@ -362,11 +417,15 @@ section { padding: 96px 5vw; }
 .port-zoom {
   position: absolute; top: 12px; right: 12px;
   width: 36px; height: 36px; background: rgba(255,255,255,0.15);
-  backdrop-filter: blur(4px); border-radius: 50%;
+  backdrop-filter: blur(4px); -webkit-backdrop-filter: blur(4px);
+  border-radius: 50%;
   display: flex; align-items: center; justify-content: center;
-  color: #fff; font-size: 0.9rem; opacity: 0; transition: opacity 0.3s;
+  color: #fff; font-size: 0.9rem;
+  opacity: 0; transition: opacity 0.3s;
 }
 .port-item:hover .port-zoom { opacity: 1; }
+@media (hover: none) { .port-zoom { opacity: 1; } }
+
 .port-load-more { text-align: center; margin-top: 2.5rem; }
 .btn-load {
   display: inline-flex; align-items: center; gap: 8px;
@@ -374,6 +433,7 @@ section { padding: 96px 5vw; }
   color: var(--text-mid); font-size: 0.9rem; font-weight: 500;
   padding: 12px 28px; border-radius: 10px; cursor: pointer;
   font-family: 'Inter', sans-serif; transition: all 0.2s;
+  -webkit-tap-highlight-color: transparent;
 }
 .btn-load:hover { background: var(--blue-light); color: var(--blue); border-color: var(--blue); }
 
@@ -381,14 +441,33 @@ section { padding: 96px 5vw; }
 .lightbox {
   display: none; position: fixed; inset: 0; z-index: 1000;
   background: rgba(2,15,45,0.97);
-  align-items: center; justify-content: center; padding: 2rem;
+  align-items: center; justify-content: center;
+  padding: 2rem;
+  /* iOS safe areas */
+  padding-top: max(2rem, env(safe-area-inset-top));
+  padding-bottom: max(2rem, env(safe-area-inset-bottom));
+  padding-left: max(1rem, env(safe-area-inset-left));
+  padding-right: max(1rem, env(safe-area-inset-right));
+  /* Prevent scroll pass-through on iOS */
+  touch-action: none;
+  overscroll-behavior: contain;
 }
 .lightbox.open { display: flex; }
-.lightbox img { max-width: 90vw; max-height: 85vh; border-radius: var(--radius); object-fit: contain; }
+.lightbox img {
+  max-width: 90vw;
+  max-height: 75vh; /* reduced from 85vh for iOS Safari dynamic URL bar */
+  max-height: 75dvh;
+  border-radius: var(--radius); object-fit: contain;
+  display: block;
+}
 .lb-close {
   position: absolute; top: 20px; right: 24px;
-  background: none; border: none; color: rgba(255,255,255,0.7);
-  font-size: 2rem; cursor: pointer; transition: color 0.2s;
+  background: rgba(255,255,255,0.08); border: none;
+  color: rgba(255,255,255,0.7);
+  font-size: 1.5rem; cursor: pointer; transition: color 0.2s;
+  width: 44px; height: 44px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  -webkit-tap-highlight-color: transparent;
 }
 .lb-close:hover { color: var(--gold); }
 .lb-nav {
@@ -397,6 +476,7 @@ section { padding: 96px 5vw; }
   width: 48px; height: 48px; border-radius: 50%; font-size: 1.2rem;
   cursor: pointer; display: flex; align-items: center; justify-content: center;
   transition: background 0.2s;
+  -webkit-tap-highlight-color: transparent;
 }
 .lb-nav:hover { background: rgba(255,255,255,0.22); }
 .lb-prev { left: 16px; }
@@ -404,6 +484,19 @@ section { padding: 96px 5vw; }
 .lb-counter {
   position: absolute; bottom: 20px; left: 50%; transform: translateX(-50%);
   color: rgba(255,255,255,0.5); font-size: 0.8rem; letter-spacing: 0.05em;
+  white-space: nowrap;
+}
+#lb-desc {
+  display: none;
+  position: absolute;
+  bottom: 56px; left: 50%; transform: translateX(-50%);
+  max-width: min(600px, 90vw); /* doesn't overflow on mobile */
+  text-align: center;
+  color: rgba(255,255,255,0.7);
+  font-size: 0.82rem; line-height: 1.6;
+  background: rgba(0,0,0,0.4);
+  backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px);
+  padding: 10px 20px; border-radius: 10px; white-space: pre-line;
 }
 
 /* ── PROCESSO ── */
@@ -421,7 +514,7 @@ section { padding: 96px 5vw; }
 .step-title { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 0.95rem; color: var(--text); margin-bottom: 0.6rem; }
 .step-desc { font-size: 0.825rem; line-height: 1.6; color: var(--text-muted); }
 
-/* ── Contacto ── */
+/* ── CONTACTO ── */
 .contact { background: var(--blue); }
 .contact-inner { display: grid; grid-template-columns: 1fr 1fr; gap: 5rem; align-items: start; }
 .contact .section-label { color: var(--gold); }
@@ -441,19 +534,39 @@ section { padding: 96px 5vw; }
 .ci-label { font-size: 0.75rem; color: rgba(255,255,255,0.45); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 3px; }
 .ci-value { font-size: 0.925rem; color: rgba(255,255,255,0.88); font-weight: 500; text-decoration: none; transition: color 0.2s; }
 .ci-value:hover { color: var(--gold); }
+
+/* ── FORM ── */
 .contact-form { display: flex; flex-direction: column; gap: 1rem; }
 .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
 .form-group { display: flex; flex-direction: column; gap: 6px; }
 .form-label { font-size: 0.8rem; font-weight: 500; color: rgba(255,255,255,0.6); letter-spacing: 0.04em; text-transform: uppercase; }
-.form-input, .form-textarea {
+.form-input, .form-textarea, .form-select {
   background: rgba(255,255,255,0.07); border: 1px solid rgba(255,255,255,0.15);
   border-radius: 10px; padding: 12px 16px;
-  font-size: 0.9rem; color: #fff; font-family: 'Inter', sans-serif;
+  font-size: 1rem; /* prevent iOS zoom on focus (must be >=16px) */
+  color: #fff; font-family: 'Inter', sans-serif;
   transition: border-color 0.2s, background 0.2s; outline: none;
+  width: 100%;
+  -webkit-appearance: none; /* iOS consistent styling */
+  appearance: none;
 }
 .form-input::placeholder, .form-textarea::placeholder { color: rgba(255,255,255,0.3); }
-.form-input:focus, .form-textarea:focus { border-color: var(--gold); background: rgba(255,255,255,0.1); }
+.form-input:focus, .form-textarea:focus, .form-select:focus { border-color: var(--gold); background: rgba(255,255,255,0.1); }
 .form-textarea { resize: vertical; min-height: 120px; }
+
+/* Custom select arrow (replaces native since we used appearance:none) */
+.select-wrap { position: relative; }
+.select-wrap::after {
+  content: '\f107'; font-family: 'Font Awesome 6 Free'; font-weight: 900;
+  position: absolute; right: 16px; top: 50%; transform: translateY(-50%);
+  color: rgba(255,255,255,0.5); pointer-events: none;
+}
+/* Select option text (best effort — options are OS-rendered) */
+.form-select option {
+  background: #033E8C;
+  color: #fff;
+}
+
 .btn-submit {
   background: var(--gold); color: #1a1000; border: none;
   padding: 14px 28px; border-radius: 10px;
@@ -461,8 +574,9 @@ section { padding: 96px 5vw; }
   font-family: 'Inter', sans-serif;
   display: flex; align-items: center; gap: 8px;
   transition: transform 0.2s, box-shadow 0.2s; align-self: flex-start;
+  -webkit-tap-highlight-color: transparent;
+  /* Full width on mobile */
 }
-.btn-submit:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(244,174,2,0.35); }
 
 /* ── FOOTER ── */
 footer {
@@ -470,71 +584,134 @@ footer {
   padding: 2.5rem 5vw;
   display: flex; align-items: center; justify-content: space-between;
   font-size: 0.82rem; flex-wrap: wrap; gap: 1rem;
+  /* Safe area for notched phones */
+  padding-bottom: max(2.5rem, env(safe-area-inset-bottom));
 }
 .footer-logo { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 1rem; color: rgba(255,255,255,0.85); text-decoration: none; }
 .footer-logo span { color: var(--gold); }
 .social-links { display: flex; gap: 1rem; }
 .social-link {
-  width: 36px; height: 36px; background: rgba(255,255,255,0.07); border-radius: 8px;
+  width: 40px; height: 40px; background: rgba(255,255,255,0.07); border-radius: 8px;
   display: flex; align-items: center; justify-content: center;
   color: rgba(255,255,255,0.6); text-decoration: none; font-size: 0.95rem;
   transition: background 0.2s, color 0.2s;
+  -webkit-tap-highlight-color: transparent;
 }
 .social-link:hover { background: var(--gold); color: #1a1000; }
-
-/* ── MOBILE NAV ── */
-.mobile-nav {
-  display: none; position: fixed; inset: 0;
-  background: rgba(3,62,140,0.98); z-index: 200;
-  flex-direction: column; align-items: center; justify-content: center; gap: 2rem;
-}
-.mobile-nav.open { display: flex; }
-.mobile-nav a {
-  font-family: 'Syne', sans-serif; font-weight: 700; font-size: 1.8rem;
-  color: rgba(255,255,255,0.85); text-decoration: none; transition: color 0.2s;
-}
-.mobile-nav a:hover { color: var(--gold); }
-.mobile-close {
-  position: absolute; top: 20px; right: 24px;
-  background: none; border: none; color: rgba(255,255,255,0.7); font-size: 2rem; cursor: pointer;
-}
 
 /* ── ANIMATIONS ── */
 .fade-in { opacity: 0; transform: translateY(24px); transition: opacity 0.6s ease, transform 0.6s ease; }
 .fade-in.visible { opacity: 1; transform: translateY(0); }
 
-/* ── RESPONSIVE ── */
+/* Respect reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .fade-in { transition: none; }
+  .hero-slide { transition: none; }
+  @keyframes pulse { 0%,100% { opacity:1; } }
+}
+
+/* ══════════════════════════════════════════
+   RESPONSIVE BREAKPOINTS
+   ══════════════════════════════════════════ */
+
+/* ── Tablet (≤960px) ── */
 @media (max-width: 960px) {
-  .hero { grid-template-columns: 1fr; }
-  .hero-text-panel { padding: 120px 6vw 60px; text-align: center; }
-  .hero-text-panel::after { display: none; }
+  /* Hero: stack vertically */
+  .hero {
+    grid-template-columns: 1fr;
+    min-height: auto;
+  }
+  .hero-text-panel {
+    padding: 120px 6vw 60px;
+    text-align: center;
+  }
+  .hero-text-panel::after { display: none; } /* remove diagonal wedge */
   .hero-eyebrow { margin: 0 auto 1.5rem; }
   .hero-desc { margin: 0 auto 2.5rem; }
   .hero-actions { justify-content: center; }
   .hero-stats { justify-content: center; }
-  .hero-photo-panel { height: 65vw; min-height: 360px; }
-  .hero-name-badge { bottom: 2.8rem; }
+
+  /* Photo panel: fixed height below text */
+  .hero-photo-panel {
+    height: 65vw;
+    min-height: 320px;
+    max-height: 520px;
+  }
+  /* Move badge up so dots don't overlap */
+  .hero-name-badge {
+    bottom: 4rem;
+    right: 1rem;
+  }
+
+  /* Sections */
   .about-inner { grid-template-columns: 1fr; gap: 3rem; }
   .contact-inner { grid-template-columns: 1fr; gap: 3rem; }
   .portfolio-grid { grid-template-columns: repeat(2, 1fr); }
   .processo-steps { grid-template-columns: repeat(2, 1fr); }
+
+  /* Nav */
   .nav-links { display: none; }
   .nav-burger { display: block; }
 }
+
+/* ── Mobile (≤560px) ── */
 @media (max-width: 560px) {
+  section { padding: 64px 5vw; }
+
+  /* Hero text */
+  .hero-text-panel { padding: 100px 5vw 48px; }
+  .hero h1 { font-size: clamp(2rem, 9vw, 2.8rem); }
+  .hero-stats { gap: 1.5rem; }
+
+  /* Photo panel */
+  .hero-photo-panel { min-height: 280px; height: 80vw; }
+  /* Smaller badge on very small screens */
+  .hero-name-badge {
+    padding: 0.75rem 1rem;
+    bottom: 3.5rem;
+    right: 0.75rem;
+  }
+  .hb-title { font-size: 0.875rem; }
+  .hb-sub { font-size: 0.65rem; }
+
+  /* Portfolio: single column */
   .portfolio-grid { grid-template-columns: 1fr; }
+  /* Restore normal aspect ratio on single column */
+  .port-item { aspect-ratio: 16/9; }
+
+  /* Form */
   .form-row { grid-template-columns: 1fr; }
+  .btn-submit { width: 100%; justify-content: center; }
+
+  /* Process: single column */
   .processo-steps { grid-template-columns: 1fr; }
-  section { padding: 72px 5vw; }
-  .hero-photo-panel { min-height: 300px; }
+
+  /* Lightbox nav arrows — move inward on narrow screens */
+  .lb-prev { left: 6px; }
+  .lb-next { right: 6px; }
+  .lb-nav { width: 40px; height: 40px; font-size: 1rem; }
+  .lb-close { top: 12px; right: 12px; }
+
+  /* Footer stack */
+  footer { flex-direction: column; align-items: center; text-align: center; gap: 0.75rem; }
+}
+
+/* ── Very small (≤380px, e.g. iPhone SE) ── */
+@media (max-width: 380px) {
+  .hero-photo-panel { min-height: 240px; height: 85vw; }
+  nav { padding: 14px 4vw; }
+  .hero-text-panel { padding: 90px 4vw 40px; }
+  .btn-primary, .btn-outline { padding: 12px 20px; font-size: 0.875rem; }
 }
 </style>
 </head>
 <body>
 
-<!-- MOBILE NAV -->
-<div id="mobile-nav" class="mobile-nav">
-  <button class="mobile-close" onclick="toggleNav()"><i class="fas fa-times"></i></button>
+<!-- MOBILE NAV OVERLAY -->
+<div id="mobile-nav" class="mobile-nav" role="dialog" aria-modal="true" aria-label="Menu de navegação">
+  <button class="mobile-close" onclick="toggleNav()" aria-label="Fechar menu">
+    <i class="fas fa-times" aria-hidden="true"></i>
+  </button>
   <a href="#servicos" onclick="toggleNav()">Serviços</a>
   <a href="#sobre" onclick="toggleNav()">Sobre</a>
   <a href="#portfolio" onclick="toggleNav()">Portefólio</a>
@@ -543,8 +720,8 @@ footer {
 </div>
 
 <!-- NAV -->
-<nav id="main-nav">
-  <a href="#" class="nav-logo">M.E.<span></span>Maurício</a>
+<nav id="main-nav" role="navigation" aria-label="Navegação principal">
+  <a href="#" class="nav-logo">M.E.<span>·</span>Maurício</a>
   <ul class="nav-links">
     <li><a href="#servicos">Serviços</a></li>
     <li><a href="#sobre">Sobre</a></li>
@@ -552,7 +729,9 @@ footer {
     <li><a href="#processo">Processo</a></li>
     <li><a href="#Contacto" class="nav-cta">Fale Comigo</a></li>
   </ul>
-  <button class="nav-burger" onclick="toggleNav()"><i class="fas fa-bars"></i></button>
+  <button class="nav-burger" onclick="toggleNav()" aria-label="Abrir menu" aria-expanded="false">
+    <i class="fas fa-bars" aria-hidden="true"></i>
+  </button>
 </nav>
 
 <!-- HERO -->
@@ -565,8 +744,8 @@ footer {
       Designer Gráfico Sénior com mais de 10 anos a transformar marcas angolanas em experiências visuais memoráveis. Da estratégia à execução.
     </p>
     <div class="hero-actions">
-      <a href="#portfolio" class="btn-primary"><i class="fas fa-eye"></i> Ver Portefólio</a>
-      <a href="#Contacto" class="btn-outline"><i class="fas fa-paper-plane"></i> Solicitar Orçamento</a>
+      <a href="#portfolio" class="btn-primary"><i class="fas fa-eye" aria-hidden="true"></i> Ver Portefólio</a>
+      <a href="#Contacto" class="btn-outline"><i class="fas fa-paper-plane" aria-hidden="true"></i> Solicitar Orçamento</a>
     </div>
     <div class="hero-stats">
       <div><div class="stat-num">10<span>+</span></div><div class="stat-label">Anos de Exp.</div></div>
@@ -577,28 +756,21 @@ footer {
 
   <!-- Direita: slideshow -->
   <div class="hero-photo-panel">
+    <div class="hero-slideshow" id="hero-slideshow"></div>
 
-    <div class="hero-slideshow" id="hero-slideshow">
-      <!-- slides gerados por JS -->
-    </div>
-
-    <!-- Setas -->
-    <button class="hero-arrow hero-arrow-prev" onclick="heroSlide(-1)" aria-label="Anterior">
-      <i class="fas fa-chevron-left"></i>
+    <button class="hero-arrow hero-arrow-prev" onclick="heroSlide(-1)" aria-label="Slide anterior">
+      <i class="fas fa-chevron-left" aria-hidden="true"></i>
     </button>
-    <button class="hero-arrow hero-arrow-next" onclick="heroSlide(1)" aria-label="Próximo">
-      <i class="fas fa-chevron-right"></i>
+    <button class="hero-arrow hero-arrow-next" onclick="heroSlide(1)" aria-label="Próximo slide">
+      <i class="fas fa-chevron-right" aria-hidden="true"></i>
     </button>
 
-    <!-- Dots -->
-    <div class="hero-dots" id="hero-dots"></div>
+    <div class="hero-dots" id="hero-dots" role="tablist" aria-label="Slides"></div>
 
-    <!-- Badge -->
-    <div class="hero-name-badge">
+    <div class="hero-name-badge" aria-hidden="true">
       <div class="hb-title">M.E. Maurício</div>
       <div class="hb-sub">Senior Designer · Luanda</div>
     </div>
-
   </div>
 </header>
 
@@ -610,32 +782,32 @@ footer {
     <p class="section-subtitle fade-in">Da identidade visual às peças de comunicação — tudo criado com estratégia e estética ao serviço dos seus objectivos.</p>
     <div class="services-grid">
       <div class="service-card fade-in">
-        <div class="service-icon"><i class="fas fa-palette"></i></div>
+        <div class="service-icon"><i class="fas fa-palette" aria-hidden="true"></i></div>
         <div class="service-title">Identidade Visual & Branding</div>
         <p class="service-desc">Criação de marcas com personalidade: logótipos, sistemas de identidade, guias de estilo e toda a linguagem visual que distingue a sua empresa.</p>
       </div>
       <div class="service-card fade-in">
-        <div class="service-icon"><i class="fas fa-bullhorn"></i></div>
+        <div class="service-icon"><i class="fas fa-bullhorn" aria-hidden="true"></i></div>
         <div class="service-title">Campanhas Publicitárias</div>
         <p class="service-desc">Concepção e execução de campanhas multicanal para meios digitais, publicidade exterior, televisão e imprensa. Criatividade orientada para resultados comerciais.</p>
       </div>
       <div class="service-card fade-in">
-        <div class="service-icon"><i class="fas fa-print"></i></div>
+        <div class="service-icon"><i class="fas fa-print" aria-hidden="true"></i></div>
         <div class="service-title">Design Editorial & Print</div>
         <p class="service-desc">Catálogos, revistas, embalagens, materiais de ponto de venda e comunicação impressa com qualidade de produção profissional.</p>
       </div>
       <div class="service-card fade-in">
-        <div class="service-icon"><i class="fas fa-mobile-alt"></i></div>
+        <div class="service-icon"><i class="fas fa-mobile-alt" aria-hidden="true"></i></div>
         <div class="service-title">Design Digital & Social</div>
         <p class="service-desc">Conteúdo visual para redes sociais, apresentações, envios de correio electrónico e interfaces digitais que captam a atenção nos ecrãs certos.</p>
       </div>
       <div class="service-card fade-in">
-        <div class="service-icon"><i class="fas fa-box-open"></i></div>
+        <div class="service-icon"><i class="fas fa-box-open" aria-hidden="true"></i></div>
         <div class="service-title">Embalagem & Sinalética</div>
         <p class="service-desc">Design de embalagens e sistemas de sinalética que comunicam valor no ponto de venda e criam uma experiência de marca coerente.</p>
       </div>
       <div class="service-card fade-in">
-        <div class="service-icon"><i class="fas fa-code"></i></div>
+        <div class="service-icon"><i class="fas fa-code" aria-hidden="true"></i></div>
         <div class="service-title">Desenvolvimento de Sites</div>
         <p class="service-desc">Criação de sites modernos, responsivos e orientados para a conversão — desde portefólios pessoais a páginas institucionais e de produto.</p>
       </div>
@@ -655,10 +827,10 @@ footer {
         <p>O meu trabalho liga criatividade a resultados. Cada projecto começa com uma pergunta: o que é que esta comunicação precisa de alcançar? A resposta visual segue sempre o propósito.</p>
       </div>
       <div class="tools-list fade-in">
-        <span class="tool-tag"><img src="images/photoshop.png" alt="">Photoshop</span>
-        <span class="tool-tag"><img src="images/illustrator.png" alt="">Illustrator</span>
-        <span class="tool-tag"><img src="images/indesign.png" alt="">InDesign</span>
-        <span class="tool-tag"><img src="images/coreldraw.png" alt="">CorelDRAW</span>
+        <span class="tool-tag"><img src="images/photoshop.png" alt="Adobe Photoshop">Photoshop</span>
+        <span class="tool-tag"><img src="images/illustrator.png" alt="Adobe Illustrator">Illustrator</span>
+        <span class="tool-tag"><img src="images/indesign.png" alt="Adobe InDesign">InDesign</span>
+        <span class="tool-tag"><img src="images/coreldraw.png" alt="CorelDRAW">CorelDRAW</span>
       </div>
     </div>
     <div class="about-visual fade-in">
@@ -687,22 +859,28 @@ footer {
     <span class="section-label fade-in">Trabalhos</span>
     <h2 class="section-title fade-in">Portefólio Seleccionado</h2>
     <p class="section-subtitle fade-in">Uma selecção de projectos de branding, campanhas e comunicação visual desenvolvidos para clientes em Angola e além-fronteiras.</p>
-    <div class="portfolio-filters fade-in" id="port-filters"></div>
+    <div class="portfolio-filters fade-in" id="port-filters" role="group" aria-label="Filtros de categoria"></div>
     <div class="portfolio-grid" id="port-grid"></div>
     <div class="port-load-more" id="port-load-wrap" style="display:none">
-      <button class="btn-load" onclick="loadMore()"><i class="fas fa-plus"></i> Ver Mais Projectos</button>
+      <button class="btn-load" onclick="loadMore()"><i class="fas fa-plus" aria-hidden="true"></i> Ver Mais Projectos</button>
     </div>
   </div>
 </section>
 
 <!-- LIGHTBOX -->
-<div class="lightbox" id="lightbox" onclick="closeLightboxBg(event)">
-  <button class="lb-close" onclick="closeLightbox()"><i class="fas fa-times"></i></button>
-  <button class="lb-nav lb-prev" onclick="lbNav(-1);event.stopPropagation()"><i class="fas fa-chevron-left"></i></button>
+<div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-label="Visualização de imagem" onclick="closeLightboxBg(event)">
+  <button class="lb-close" onclick="closeLightbox()" aria-label="Fechar">
+    <i class="fas fa-times" aria-hidden="true"></i>
+  </button>
+  <button class="lb-nav lb-prev" onclick="lbNav(-1);event.stopPropagation()" aria-label="Imagem anterior">
+    <i class="fas fa-chevron-left" aria-hidden="true"></i>
+  </button>
   <img id="lb-img" src="" alt="">
-  <button class="lb-nav lb-next" onclick="lbNav(1);event.stopPropagation()"><i class="fas fa-chevron-right"></i></button>
-  <div class="lb-counter" id="lb-counter"></div>
-  <div id="lb-desc" style="display:none;position:absolute;bottom:56px;left:50%;transform:translateX(-50%);max-width:600px;text-align:center;color:rgba(255,255,255,0.7);font-size:0.82rem;line-height:1.6;background:rgba(0,0,0,0.4);backdrop-filter:blur(6px);padding:10px 20px;border-radius:10px;white-space:pre-line;"></div>
+  <button class="lb-nav lb-next" onclick="lbNav(1);event.stopPropagation()" aria-label="Próxima imagem">
+    <i class="fas fa-chevron-right" aria-hidden="true"></i>
+  </button>
+  <div class="lb-counter" id="lb-counter" aria-live="polite"></div>
+  <div id="lb-desc"></div>
 </div>
 
 <!-- PROCESSO -->
@@ -710,17 +888,17 @@ footer {
   <div class="section-inner">
     <span class="section-label fade-in">Como Trabalho</span>
     <h2 class="section-title fade-in">Um Processo Claro<br>do Início ao Fim</h2>
-    <p class="section-subtitle fade-in">Cada projecto segue uma metodologia estruturada que garante resultados consistentes e uma colaboracção tranquila e eficiente.</p>
+    <p class="section-subtitle fade-in">Cada projecto segue uma metodologia estruturada que garante resultados consistentes e uma colaboração tranquila e eficiente.</p>
     <div class="processo-steps">
       <div class="step-card fade-in"><div class="step-num">01</div><div class="step-title">Descoberta</div><p class="step-desc">Reunião de briefing profunda para entender o negócio, o público-alvo, os objectivos e o contexto competitivo.</p></div>
       <div class="step-card fade-in"><div class="step-num">02</div><div class="step-title">Estratégia</div><p class="step-desc">Definição do posicionamento visual, referências, paleta, tipografia e direcção criativa a apresentar ao cliente.</p></div>
       <div class="step-card fade-in"><div class="step-num">03</div><div class="step-title">Criação</div><p class="step-desc">Desenvolvimento das peças com revisões colaborativas até atingir o resultado que serve os objectivos definidos.</p></div>
-      <div class="step-card fade-in"><div class="step-num">04</div><div class="step-title">Entrega</div><p class="step-desc">Entrega de todos os ficheiros em formatos prontos para produção, com guia de utilizacção e suporte pós-entrega.</p></div>
+      <div class="step-card fade-in"><div class="step-num">04</div><div class="step-title">Entrega</div><p class="step-desc">Entrega de todos os ficheiros em formatos prontos para produção, com guia de utilização e suporte pós-entrega.</p></div>
     </div>
   </div>
 </section>
 
-<!-- Contacto -->
+<!-- CONTACTO -->
 <section class="contact" id="Contacto">
   <div class="section-inner contact-inner">
     <div>
@@ -728,74 +906,117 @@ footer {
       <h2 class="section-title">Tem um projecto?<br>Fale comigo.</h2>
       <p class="section-subtitle">Disponível para projectos freelance, colaborações com agências e integração em equipas criativas em Angola e além-fronteiras.</p>
       <ul class="contact-info-list">
-        <li><div class="ci-icon"><i class="fas fa-map-marker-alt"></i></div><div><div class="ci-label">Localização</div><span class="ci-value">Luanda, Angola</span></div></li>
-        <li><div class="ci-icon"><i class="fas fa-envelope"></i></div><div><div class="ci-label">E-mail</div><a class="ci-value" href="mailto:maedmau@hotmail.com">maedmau@hotmail.com</a></div></li>
-        <li><div class="ci-icon"><i class="fab fa-whatsapp"></i></div><div><div class="ci-label">WhatsApp</div><a class="ci-value" href="https://wa.me/+244933035504" target="_blank">+244 933 035 504</a></div></li>
-        <li><div class="ci-icon"><i class="fab fa-linkedin-in"></i></div><div><div class="ci-label">LinkedIn</div><a class="ci-value" href="https://www.linkedin.com/in/maravilha-maur%C3%ADcio-039995a8/" target="_blank">linkedin.com/in/memauricio</a></div></li>
+        <li>
+          <div class="ci-icon"><i class="fas fa-map-marker-alt" aria-hidden="true"></i></div>
+          <div><div class="ci-label">Localização</div><span class="ci-value">Luanda, Angola</span></div>
+        </li>
+        <li>
+          <div class="ci-icon"><i class="fas fa-envelope" aria-hidden="true"></i></div>
+          <div><div class="ci-label">E-mail</div><a class="ci-value" href="mailto:maedmau@hotmail.com">maedmau@hotmail.com</a></div>
+        </li>
+        <li>
+          <div class="ci-icon"><i class="fab fa-whatsapp" aria-hidden="true"></i></div>
+          <div><div class="ci-label">WhatsApp</div><a class="ci-value" href="https://wa.me/+244933035504" target="_blank" rel="noopener">+244 933 035 504</a></div>
+        </li>
+        <li>
+          <div class="ci-icon"><i class="fab fa-linkedin-in" aria-hidden="true"></i></div>
+          <div><div class="ci-label">LinkedIn</div><a class="ci-value" href="https://www.linkedin.com/in/maravilha-maur%C3%ADcio-039995a8/" target="_blank" rel="noopener">linkedin.com/in/memauricio</a></div>
+        </li>
       </ul>
     </div>
-    <form class="contact-form" id="contact-form" action="https://formspree.io/f/myzgpjzv" method="POST" onsubmit="submitForm(event)">
+    <form class="contact-form" id="contact-form" onsubmit="submitForm(event)" novalidate>
       <div class="form-row">
-        <div class="form-group"><label class="form-label">Nome</label><input class="form-input" type="text" name="nome" placeholder="O seu nome" required></div>
-        <div class="form-group"><label class="form-label">E-mail</label><input class="form-input" type="email" name="email" placeholder="email@empresa.com" required></div>
+        <div class="form-group">
+          <label class="form-label" for="f-nome">Nome</label>
+          <input class="form-input" id="f-nome" type="text" name="nome" placeholder="O seu nome" required autocomplete="name">
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="f-email">E-mail</label>
+          <input class="form-input" id="f-email" type="email" name="email" placeholder="email@empresa.com" required autocomplete="email">
+        </div>
       </div>
-      <div class="form-group"><label class="form-label">Empresa</label><input class="form-input" type="text" name="empresa" placeholder="Nome da empresa (opcional)"></div>
       <div class="form-group">
-        <label class="form-label">Tipo de Projecto</label>
-        <select class="form-input" name="tipo">
-          <option value="" disabled selected>Seleccione o tipo de projecto</option>
-          <option>Identidade Visual / Branding</option>
-          <option>Campanha Publicitária</option>
-          <option>Design Editorial / Print</option>
-          <option>comunicação Digital</option>
-          <option>Outro</option>
-        </select>
+        <label class="form-label" for="f-empresa">Empresa</label>
+        <input class="form-input" id="f-empresa" type="text" name="empresa" placeholder="Nome da empresa (opcional)" autocomplete="organization">
       </div>
-      <div class="form-group"><label class="form-label">Mensagem</label><textarea class="form-textarea" name="mensagem" placeholder="Descreva o seu projecto, objectivos e prazo..."></textarea></div>
-      <button type="submit" class="btn-submit"><i class="fas fa-paper-plane"></i> Enviar Mensagem</button>
+      <div class="form-group">
+        <label class="form-label" for="f-tipo">Tipo de Projecto</label>
+        <div class="select-wrap">
+          <select class="form-input form-select" id="f-tipo" name="tipo">
+            <option value="" disabled selected>Seleccione o tipo de projecto</option>
+            <option>Identidade Visual / Branding</option>
+            <option>Campanha Publicitária</option>
+            <option>Design Editorial / Print</option>
+            <option>Comunicação Digital</option>
+            <option>Outro</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="form-label" for="f-msg">Mensagem</label>
+        <textarea class="form-textarea" id="f-msg" name="mensagem" placeholder="Descreva o seu projecto, objectivos e prazo..."></textarea>
+      </div>
+      <button type="submit" class="btn-submit">
+        <i class="fas fa-paper-plane" aria-hidden="true"></i> Enviar Mensagem
+      </button>
     </form>
   </div>
 </section>
 
 <footer>
-  <a href="#" class="footer-logo">M.E.<span></span>Maurício</a>
+  <a href="#" class="footer-logo">M.E.<span>·</span>Maurício</a>
   <span>© 2026 · Luanda, Angola</span>
   <div class="social-links">
-    <a href="https://www.linkedin.com/in/maravilha-maur%C3%ADcio-039995a8/" class="social-link" target="_blank"><i class="fab fa-linkedin-in"></i></a>
-    <a href="https://wa.me/244933035504" class="social-link" target="_blank"><i class="fab fa-whatsapp"></i></a>
+    <a href="https://www.linkedin.com/in/maravilha-maur%C3%ADcio-039995a8/" class="social-link" target="_blank" rel="noopener" aria-label="LinkedIn">
+      <i class="fab fa-linkedin-in" aria-hidden="true"></i>
+    </a>
+    <a href="https://wa.me/244933035504" class="social-link" target="_blank" rel="noopener" aria-label="WhatsApp">
+      <i class="fab fa-whatsapp" aria-hidden="true"></i>
+    </a>
   </div>
 </footer>
 
 <script>
-// ── NAV ──
+'use strict';
+
+// ── NAV SCROLL ──
 window.addEventListener('scroll', () => {
   document.getElementById('main-nav').classList.toggle('scrolled', window.scrollY > 40);
-});
+}, { passive: true });
+
+// ── MOBILE NAV ──
 function toggleNav() {
-  document.getElementById('mobile-nav').classList.toggle('open');
+  const nav    = document.getElementById('mobile-nav');
+  const burger = document.querySelector('.nav-burger');
+  const isOpen = nav.classList.toggle('open');
+  burger.setAttribute('aria-expanded', isOpen);
+  // Prevent body scroll when menu open
+  document.body.style.overflow = isOpen ? 'hidden' : '';
 }
 
-// ── SCROLL FADE ──
-const observer = new IntersectionObserver((entries) => {
-  entries.forEach((e, i) => {
-    if (e.isIntersecting) setTimeout(() => e.target.classList.add('visible'), i * 80);
+// ── SCROLL FADE (IntersectionObserver) ──
+const fadeObserver = new IntersectionObserver((entries) => {
+  entries.forEach((entry, i) => {
+    if (entry.isIntersecting) {
+      setTimeout(() => {
+        entry.target.classList.add('visible');
+        fadeObserver.unobserve(entry.target); // stop watching once visible
+      }, i * 80);
+    }
   });
-}, { threshold: 0.1 });
-document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+}, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
 
-// ────────────────────────────────────────────
+// Run after DOM fully ready
+function initFadeObserver() {
+  document.querySelectorAll('.fade-in').forEach(el => fadeObserver.observe(el));
+}
+
+// ────────────────────────────────────────
 // ── HERO SLIDESHOW ──
-// Adiciona ou remove imagens PNG aqui.
-// Devem ser PNGs sem fundo para ficar bem sobre o azul.
-// ────────────────────────────────────────────
-const HERO_SLIDES = [
-  'images/mm.png',
-  'images/mm2.png',
-  'images/mm3.png',
-];
-
-const SLIDE_INTERVAL = 3500; // ms entre slides
-let heroIdx = 0;
+// ────────────────────────────────────────
+const HERO_SLIDES    = ['images/mm.png', 'images/mm2.png', 'images/mm3.png'];
+const SLIDE_INTERVAL = 3500;
+let heroIdx   = 0;
 let heroTimer = null;
 
 function buildHeroSlideshow() {
@@ -803,17 +1024,17 @@ function buildHeroSlideshow() {
   const dots  = document.getElementById('hero-dots');
 
   HERO_SLIDES.forEach((src, i) => {
-    // Slide image
     const img = document.createElement('img');
-    img.src   = src;
-    img.alt   = `Slide ${i + 1}`;
+    img.src       = src;
+    img.alt       = `Slide ${i + 1}`;
     img.className = 'hero-slide' + (i === 0 ? ' active' : '');
+    img.loading   = 'eager'; // preload first; lazy for others done via JS
     track.appendChild(img);
 
-    // Dot
     const dot = document.createElement('button');
     dot.className = 'hero-dot' + (i === 0 ? ' active' : '');
     dot.setAttribute('aria-label', `Slide ${i + 1}`);
+    dot.setAttribute('role', 'tab');
     dot.onclick = () => goToSlide(i);
     dots.appendChild(dot);
   });
@@ -822,43 +1043,55 @@ function buildHeroSlideshow() {
 function goToSlide(n) {
   const slides = document.querySelectorAll('.hero-slide');
   const dots   = document.querySelectorAll('.hero-dot');
+  if (!slides.length) return;
 
   slides[heroIdx].classList.remove('active');
   dots[heroIdx].classList.remove('active');
 
-  heroIdx = (n + HERO_SLIDES.length) % HERO_SLIDES.length;
+  heroIdx = ((n % HERO_SLIDES.length) + HERO_SLIDES.length) % HERO_SLIDES.length;
 
   slides[heroIdx].classList.add('active');
   dots[heroIdx].classList.add('active');
 
-  // Reset timer
   clearInterval(heroTimer);
   heroTimer = setInterval(() => goToSlide(heroIdx + 1), SLIDE_INTERVAL);
 }
 
-function heroSlide(dir) {
-  goToSlide(heroIdx + dir);
-}
+function heroSlide(dir) { goToSlide(heroIdx + dir); }
 
 // Pause on hover
-document.querySelector('.hero-photo-panel') &&
-  document.querySelector('.hero-photo-panel').addEventListener('mouseenter', () => clearInterval(heroTimer));
-document.querySelector('.hero-photo-panel') &&
-  document.querySelector('.hero-photo-panel').addEventListener('mouseleave', () => {
+const photoPanel = document.querySelector('.hero-photo-panel');
+if (photoPanel) {
+  photoPanel.addEventListener('mouseenter', () => clearInterval(heroTimer));
+  photoPanel.addEventListener('mouseleave', () => {
     heroTimer = setInterval(() => goToSlide(heroIdx + 1), SLIDE_INTERVAL);
   });
+}
 
-// Swipe support (mobile)
+// ── Touch/swipe — scoped to hero panel only ──
 let touchStartX = 0;
-document.addEventListener('touchstart', e => { touchStartX = e.touches[0].clientX; }, { passive: true });
-document.addEventListener('touchend', e => {
-  const dx = e.changedTouches[0].clientX - touchStartX;
-  if (Math.abs(dx) > 50) heroSlide(dx < 0 ? 1 : -1);
-});
+let touchStartY = 0;
+if (photoPanel) {
+  photoPanel.addEventListener('touchstart', e => {
+    touchStartX = e.touches[0].clientX;
+    touchStartY = e.touches[0].clientY;
+  }, { passive: true });
 
-// ── PORTFOLIO ARRAY ──
+  photoPanel.addEventListener('touchend', e => {
+    const dx = e.changedTouches[0].clientX - touchStartX;
+    const dy = e.changedTouches[0].clientY - touchStartY;
+    // Only fire if horizontal swipe dominates (avoids scroll conflict)
+    if (Math.abs(dx) > Math.abs(dy) && Math.abs(dx) > 40) {
+      heroSlide(dx < 0 ? 1 : -1);
+    }
+  }, { passive: true });
+}
+
+// ────────────────────────────────────────
+// ── PORTFOLIO ──
+// ────────────────────────────────────────
 const PROJECTS = [
-  { thumb: 'images/port/v3p1.jpg',        full: 'images/port/v3g1.jpg',        desc: '',  cat: 'campanha'  },
+  { thumb: 'images/port/v3p1.jpg',        full: 'images/port/v3g1.jpg',         desc: '',  cat: 'campanha'  },
   { thumb: 'images/port/Prancheta 7.png', full: 'images/port/Prancheta 17.png', desc: '',  cat: 'campanha'  },
   { thumb: 'images/port/a1.jpg',          full: 'images/port/a2.jpg',           desc: '',  cat: 'branding'  },
   { thumb: 'images/port/v3p2.jpg',        full: 'images/port/v3g2.jpg',         desc: '',  cat: 'branding'  },
@@ -928,7 +1161,7 @@ const CAT_LABELS = {
   digital:   'Digital',
 };
 
-const PAGE_SIZE = 18;
+const PAGE_SIZE   = 18;
 let currentFilter = 'all';
 let visibleCount  = PAGE_SIZE;
 let activeItems   = [];
@@ -937,15 +1170,17 @@ function buildFilters() {
   const wrap = document.getElementById('port-filters');
   Object.entries(CAT_LABELS).forEach(([key, label]) => {
     const btn = document.createElement('button');
-    btn.className = 'filter-btn' + (key === 'all' ? ' active' : '');
+    btn.className   = 'filter-btn' + (key === 'all' ? ' active' : '');
     btn.textContent = label;
-    btn.onclick = () => setFilter(key, btn);
+    btn.type        = 'button';
+    btn.onclick     = () => setFilter(key, btn);
     wrap.appendChild(btn);
   });
 }
 
 function setFilter(cat, btn) {
-  currentFilter = cat; visibleCount = PAGE_SIZE;
+  currentFilter = cat;
+  visibleCount  = PAGE_SIZE;
   document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
   btn.classList.add('active');
   renderGrid();
@@ -960,19 +1195,28 @@ function renderGrid() {
   grid.innerHTML = '';
 
   activeItems.slice(0, visibleCount).forEach((p, i) => {
+    const globalIdx = PROJECTS.indexOf(p);
     const div = document.createElement('div');
-    div.className = 'port-item fade-in';
-    div.dataset.index = PROJECTS.indexOf(p);
+    div.className    = 'port-item fade-in';
+    div.dataset.index = globalIdx;
+    div.setAttribute('tabindex', '0');
+    div.setAttribute('role', 'button');
+    div.setAttribute('aria-label', `Abrir ${p.title}`);
     div.innerHTML = `
       <img src="${p.thumb}" alt="${p.title}" loading="lazy">
-      <div class="port-overlay">
+      <div class="port-overlay" aria-hidden="true">
         <span class="port-zoom"><i class="fas fa-expand"></i></span>
         <div class="port-overlay-title">${p.title}</div>
         <div class="port-overlay-cat">${CAT_LABELS[p.cat]}</div>
       </div>`;
-    div.onclick = () => openLightbox(parseInt(div.dataset.index));
+    div.onclick  = () => openLightbox(globalIdx);
+    div.onkeydown = (e) => { if (e.key === 'Enter' || e.key === ' ') openLightbox(globalIdx); };
     grid.appendChild(div);
-    requestAnimationFrame(() => setTimeout(() => div.classList.add('visible'), i * 40));
+
+    // stagger visibility
+    requestAnimationFrame(() =>
+      setTimeout(() => div.classList.add('visible'), i * 40)
+    );
   });
 
   document.getElementById('port-load-wrap').style.display =
@@ -987,17 +1231,25 @@ let lbIdx = 0;
 function openLightbox(globalIdx) {
   lbIdx = globalIdx;
   updateLightbox();
-  document.getElementById('lightbox').classList.add('open');
+  const lb = document.getElementById('lightbox');
+  lb.classList.add('open');
   document.body.style.overflow = 'hidden';
+  lb.querySelector('#lb-img').focus();
 }
 
 function updateLightbox() {
-  const p = PROJECTS[lbIdx];
-  document.getElementById('lb-img').src = p.full;
+  const p      = PROJECTS[lbIdx];
+  const img    = document.getElementById('lb-img');
+  img.src      = p.full;
+  img.alt      = p.title;
   document.getElementById('lb-counter').textContent = `${p.title}  ·  ${lbIdx + 1} / ${PROJECTS.length}`;
   const descEl = document.getElementById('lb-desc');
-  descEl.style.display = p.desc ? 'block' : 'none';
-  if (p.desc) descEl.textContent = p.desc;
+  if (p.desc) {
+    descEl.textContent     = p.desc;
+    descEl.style.display   = 'block';
+  } else {
+    descEl.style.display   = 'none';
+  }
 }
 
 function closeLightbox() {
@@ -1010,47 +1262,53 @@ function closeLightboxBg(e) {
 }
 
 function lbNav(dir) {
-  lbIdx = (lbIdx + dir + PROJECTS.length) % PROJECTS.length;
+  lbIdx = ((lbIdx + dir) % PROJECTS.length + PROJECTS.length) % PROJECTS.length;
   updateLightbox();
 }
 
+// Keyboard + swipe in lightbox
 document.addEventListener('keydown', e => {
   if (!document.getElementById('lightbox').classList.contains('open')) return;
-  if (e.key === 'Escape')      closeLightbox();
-  if (e.key === 'ArrowLeft')   lbNav(-1);
-  if (e.key === 'ArrowRight')  lbNav(1);
+  if (e.key === 'Escape')     closeLightbox();
+  if (e.key === 'ArrowLeft')  lbNav(-1);
+  if (e.key === 'ArrowRight') lbNav(1);
 });
+
+// Swipe in lightbox
+let lbTouchX = 0;
+const lb = document.getElementById('lightbox');
+lb.addEventListener('touchstart', e => { lbTouchX = e.touches[0].clientX; }, { passive: true });
+lb.addEventListener('touchend', e => {
+  const dx = e.changedTouches[0].clientX - lbTouchX;
+  if (Math.abs(dx) > 40) lbNav(dx < 0 ? 1 : -1);
+}, { passive: true });
 
 // ── FORM ──
 function submitForm(e) {
   e.preventDefault();
   const form   = e.target;
-  const inputs = form.querySelectorAll('input, select, textarea');
   const fields = {};
-  inputs.forEach(el => {
+  form.querySelectorAll('input, select, textarea').forEach(el => {
     if (el.name) fields[el.name] = el.value;
   });
 
-  // Build mailto body
   const body = [
-    'Nome: '    + (fields['nome']    || ''),
-    'E-mail: '  + (fields['email']   || ''),
-    'Empresa: ' + (fields['empresa'] || ''),
-    'Projecto: '+ (fields['tipo']    || ''),
+    'Nome: '     + (fields['nome']     || ''),
+    'E-mail: '   + (fields['email']    || ''),
+    'Empresa: '  + (fields['empresa']  || ''),
+    'Projecto: ' + (fields['tipo']     || ''),
     '',
     fields['mensagem'] || '',
   ].join('%0A');
 
   const subject = encodeURIComponent('Contacto via Site — ' + (fields['nome'] || ''));
-  const mailto  = `mailto:maedmau@hotmail.com?subject=${subject}&body=${body}`;
-
-  window.location.href = mailto;
+  window.location.href = `mailto:maedmau@hotmail.com?subject=${subject}&body=${body}`;
 
   const btn = form.querySelector('.btn-submit');
   btn.innerHTML = '<i class="fas fa-check"></i> A abrir o seu e-mail...';
   btn.style.background = '#2D9C5E';
   setTimeout(() => {
-    btn.innerHTML = '<i class="fas fa-paper-plane"></i> Enviar Mensagem';
+    btn.innerHTML = '<i class="fas fa-paper-plane" aria-hidden="true"></i> Enviar Mensagem';
     btn.style.background = '';
     form.reset();
   }, 4000);
@@ -1061,6 +1319,7 @@ buildHeroSlideshow();
 heroTimer = setInterval(() => goToSlide(heroIdx + 1), SLIDE_INTERVAL);
 buildFilters();
 renderGrid();
+initFadeObserver(); // after renderGrid so portfolio items are in DOM
 </script>
 </body>
 </html>
