@@ -1,0 +1,1066 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>M.E. Maurício — Designer Gráfico Sénior</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Syne:wght@700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --blue: #033E8C;
+  --blue-mid: #0550B3;
+  --blue-light: #EBF2FF;
+  --gold: #F4AE02;
+  --off-white: #F7F7F5;
+  --text: #111111;
+  --text-mid: #444444;
+  --text-muted: #888888;
+  --border: rgba(0,0,0,0.09);
+  --radius: 12px;
+  --radius-lg: 20px;
+}
+html { scroll-behavior: smooth; }
+body {
+  font-family: 'Inter', sans-serif;
+  font-size: 16px; color: var(--text);
+  background: #fff; overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ── NAV ── */
+nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+  padding: 18px 5vw;
+  display: flex; align-items: center; justify-content: space-between;
+  background: rgba(255,255,255,0.92);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--border);
+  transition: box-shadow 0.3s;
+}
+nav.scrolled { box-shadow: 0 2px 20px rgba(0,0,0,0.08); }
+.nav-logo {
+  font-family: 'Syne', sans-serif; font-weight: 800; font-size: 1.1rem;
+  color: var(--blue); text-decoration: none; letter-spacing: -0.5px;
+}
+.nav-logo span { color: var(--gold); }
+.nav-links { display: flex; gap: 2rem; list-style: none; }
+.nav-links a {
+  font-size: 0.875rem; font-weight: 500; color: var(--text-mid);
+  text-decoration: none; transition: color 0.2s;
+}
+.nav-links a:hover { color: var(--blue); }
+.nav-cta {
+  background: var(--blue); color: #fff !important;
+  padding: 9px 20px; border-radius: 8px;
+  transition: background 0.2s !important;
+}
+.nav-cta:hover { background: var(--blue-mid) !important; }
+.nav-burger {
+  display: none; background: none; border: none;
+  cursor: pointer; font-size: 1.4rem; color: var(--text);
+}
+
+/* ── HERO ── */
+.hero {
+  min-height: 100vh;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Left panel */
+.hero-text-panel {
+  background: var(--blue);
+  display: flex; flex-direction: column; justify-content: center;
+  padding: 140px 6vw 80px 8vw;
+  position: relative; z-index: 1;
+}
+.hero-text-panel::after {
+  content: '';
+  position: absolute; top: 0; right: -60px; bottom: 0; width: 120px;
+  background: var(--blue);
+  clip-path: polygon(0 0, 0% 100%, 100% 100%);
+  z-index: 2;
+}
+.hero-eyebrow {
+  display: inline-flex; align-items: center; gap: 8px;
+  background: rgba(244,174,2,0.18); border: 1px solid rgba(244,174,2,0.35);
+  color: var(--gold); font-size: 0.75rem; font-weight: 600;
+  letter-spacing: 0.12em; text-transform: uppercase;
+  padding: 6px 14px; border-radius: 100px;
+  margin-bottom: 1.75rem; width: fit-content;
+}
+.hero-eyebrow::before {
+  content: ''; width: 6px; height: 6px;
+  background: var(--gold); border-radius: 50%;
+  animation: pulse 2s ease-in-out infinite;
+}
+@keyframes pulse {
+  0%,100% { opacity:1; transform:scale(1); }
+  50% { opacity:0.4; transform:scale(0.7); }
+}
+.hero h1 {
+  font-family: 'Syne', sans-serif; font-weight: 800;
+  font-size: clamp(2.4rem, 4.5vw, 4.8rem);
+  line-height: 1.04; color: #fff;
+  letter-spacing: -0.03em; margin-bottom: 1.5rem;
+}
+.hero h1 em { font-style: normal; color: var(--gold); }
+.hero-desc {
+  font-size: 1rem; line-height: 1.75;
+  color: rgba(255,255,255,0.68);
+  max-width: 440px; margin-bottom: 2.5rem;
+}
+.hero-actions { display: flex; gap: 1rem; flex-wrap: wrap; }
+.btn-primary {
+  display: inline-flex; align-items: center; gap: 8px;
+  background: var(--gold); color: #1a1000;
+  padding: 14px 28px; border-radius: 10px;
+  font-size: 0.95rem; font-weight: 600; text-decoration: none;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+.btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(244,174,2,0.4); }
+.btn-outline {
+  display: inline-flex; align-items: center; gap: 8px;
+  background: transparent; color: rgba(255,255,255,0.8);
+  padding: 14px 28px; border-radius: 10px;
+  border: 1.5px solid rgba(255,255,255,0.25);
+  font-size: 0.95rem; font-weight: 500; text-decoration: none;
+  transition: border-color 0.2s, background 0.2s;
+}
+.btn-outline:hover { border-color: rgba(255,255,255,0.6); background: rgba(255,255,255,0.06); }
+.hero-stats {
+  display: flex; gap: 2.5rem;
+  margin-top: 3rem; padding-top: 2.5rem;
+  border-top: 1px solid rgba(255,255,255,0.12);
+}
+.stat-num {
+  font-family: 'Syne', sans-serif; font-weight: 800;
+  font-size: 2rem; color: #fff; line-height: 1; margin-bottom: 4px;
+}
+.stat-num span { color: var(--gold); }
+.stat-label { font-size: 0.75rem; color: rgba(255,255,255,0.45); text-transform: uppercase; letter-spacing: 0.05em; }
+
+/* ── RIGHT PANEL: SLIDESHOW ── */
+.hero-photo-panel {
+  position: relative;
+  background: var(--blue);
+  overflow: hidden;
+}
+.hero-photo-panel::before {
+  content: ''; position: absolute; inset: 0;
+  background: url('images/bg2.jpg') center/cover no-repeat;
+  opacity: 0.06;
+}
+
+/* Slideshow track */
+.hero-slideshow {
+  position: absolute; inset: 0;
+  display: flex; align-items: flex-end; justify-content: center;
+}
+.hero-slide {
+  position: absolute;
+  bottom: 0; left: 50%; transform: translateX(-50%);
+  height: 95%; width: auto;
+  max-width: 90%;
+  object-fit: contain;
+  object-position: bottom center;
+  opacity: 0;
+  transition: opacity 0.9s ease, transform 0.9s ease;
+  transform: translateX(-50%) scale(0.97);
+  display: block;
+  pointer-events: none;
+}
+.hero-slide.active {
+  opacity: 1;
+  transform: translateX(-50%) scale(1);
+}
+
+/* Slide dots */
+.hero-dots {
+  position: absolute; bottom: 1.5rem; left: 50%; transform: translateX(-50%);
+  display: flex; gap: 8px; z-index: 3;
+}
+.hero-dot {
+  width: 7px; height: 7px; border-radius: 50%;
+  background: rgba(255,255,255,0.3);
+  border: none; cursor: pointer; padding: 0;
+  transition: background 0.3s, transform 0.3s;
+}
+.hero-dot.active { background: var(--gold); transform: scale(1.3); }
+
+/* Slide arrows */
+.hero-arrow {
+  position: absolute; top: 50%; transform: translateY(-50%);
+  background: rgba(255,255,255,0.08);
+  backdrop-filter: blur(6px);
+  border: 1px solid rgba(255,255,255,0.14);
+  color: rgba(255,255,255,0.7); width: 38px; height: 38px;
+  border-radius: 50%; font-size: 0.85rem;
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer; z-index: 3;
+  transition: background 0.2s, color 0.2s;
+}
+.hero-arrow:hover { background: rgba(244,174,2,0.25); color: var(--gold); }
+.hero-arrow-prev { left: 12px; }
+.hero-arrow-next { right: 12px; }
+
+/* Name badge */
+.hero-name-badge {
+  position: absolute; bottom: 3.5rem; right: 1.5rem;
+  background: rgba(2, 30, 75, 0.82);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(244,174,2,0.3);
+  border-radius: 14px; padding: 1rem 1.4rem; z-index: 4;
+}
+.hb-title {
+  font-family: 'Syne', sans-serif; font-weight: 800;
+  font-size: 1rem; color: #fff; line-height: 1.2;
+}
+.hb-sub {
+  font-size: 0.72rem; color: var(--gold);
+  letter-spacing: 0.07em; text-transform: uppercase; margin-top: 3px;
+}
+
+/* Gold bottom accent */
+.hero-photo-panel::after {
+  content: ''; position: absolute; bottom: 0; left: 0; right: 0;
+  height: 3px;
+  background: linear-gradient(to right, transparent, var(--gold), transparent);
+  z-index: 3;
+}
+
+/* ── SECTION COMMONS ── */
+section { padding: 96px 5vw; }
+.section-inner { max-width: 1200px; margin: 0 auto; }
+.section-label {
+  display: inline-block; font-size: 0.75rem; font-weight: 600;
+  letter-spacing: 0.12em; text-transform: uppercase;
+  color: var(--blue); margin-bottom: 0.75rem;
+}
+.section-title {
+  font-family: 'Syne', sans-serif; font-weight: 800;
+  font-size: clamp(1.8rem, 3.5vw, 2.8rem);
+  line-height: 1.1; color: var(--text);
+  letter-spacing: -0.025em; margin-bottom: 1rem;
+}
+.section-subtitle {
+  font-size: 1rem; line-height: 1.7;
+  color: var(--text-muted); max-width: 560px; margin-bottom: 3rem;
+}
+
+/* ── SERVIÇOS ── */
+.services { background: var(--off-white); }
+.services-grid {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 1.5rem; margin-top: 2rem;
+}
+.service-card {
+  background: #fff; border: 1px solid var(--border);
+  border-radius: var(--radius-lg); padding: 2rem;
+  transition: transform 0.25s, box-shadow 0.25s;
+  position: relative; overflow: hidden;
+}
+.service-card::after {
+  content: ''; position: absolute;
+  bottom: 0; left: 0; right: 0; height: 3px;
+  background: var(--gold);
+  transform: scaleX(0); transform-origin: left; transition: transform 0.3s;
+}
+.service-card:hover { transform: translateY(-4px); box-shadow: 0 16px 40px rgba(3,62,140,0.1); }
+.service-card:hover::after { transform: scaleX(1); }
+.service-icon {
+  width: 48px; height: 48px; background: var(--blue-light); border-radius: 12px;
+  display: flex; align-items: center; justify-content: center;
+  margin-bottom: 1.25rem; font-size: 1.25rem; color: var(--blue);
+}
+.service-title { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 1.05rem; color: var(--text); margin-bottom: 0.6rem; }
+.service-desc { font-size: 0.875rem; line-height: 1.65; color: var(--text-muted); }
+
+/* ── SOBRE ── */
+.about-inner { display: grid; grid-template-columns: 1fr 1fr; gap: 5rem; align-items: center; }
+.about-text p { font-size: 1rem; line-height: 1.75; color: var(--text-mid); margin-bottom: 1.2rem; }
+.tools-list { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 1.5rem; }
+.tool-tag {
+  display: flex; align-items: center; gap: 7px;
+  background: var(--blue-light); border: 1px solid rgba(3,62,140,0.15);
+  color: var(--blue); font-size: 0.8rem; font-weight: 500;
+  padding: 7px 14px; border-radius: 8px;
+}
+.tool-tag img { width: 18px; height: 18px; object-fit: contain; }
+.about-card {
+  background: var(--blue); color: #fff;
+  border-radius: var(--radius-lg); padding: 2.5rem;
+  position: relative; overflow: hidden;
+}
+.about-card::before {
+  content: '"'; position: absolute; top: -20px; left: 20px;
+  font-family: 'Syne', sans-serif; font-size: 8rem;
+  color: rgba(244,174,2,0.2); font-weight: 800; line-height: 1;
+}
+.about-quote {
+  font-size: 1.1rem; line-height: 1.65;
+  color: rgba(255,255,255,0.9);
+  position: relative; z-index: 1; margin-bottom: 1.5rem;
+}
+.about-card-author { display: flex; align-items: center; gap: 12px; }
+.author-photo {
+  width: 44px; height: 44px; border-radius: 50%;
+  overflow: hidden; flex-shrink: 0;
+  border: 2px solid rgba(244,174,2,0.5);
+}
+.author-photo img { width: 100%; height: 100%; object-fit: cover; object-position: top; }
+.author-name { font-weight: 600; font-size: 0.9rem; color: #fff; }
+.author-role { font-size: 0.78rem; color: rgba(255,255,255,0.55); }
+.exp-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-top: 1.5rem; }
+.exp-item {
+  background: rgba(255,255,255,0.07); border: 1px solid rgba(255,255,255,0.12);
+  border-radius: 12px; padding: 1.2rem; text-align: center;
+}
+.exp-num { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 1.8rem; color: var(--gold); line-height: 1; margin-bottom: 4px; }
+.exp-label { font-size: 0.75rem; color: rgba(255,255,255,0.5); text-transform: uppercase; letter-spacing: 0.06em; }
+
+/* ── PORTFÓLIO ── */
+.portfolio { background: #fff; }
+.portfolio-filters { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 2.5rem; }
+.filter-btn {
+  background: var(--off-white); border: 1px solid var(--border);
+  color: var(--text-mid); font-size: 0.825rem; font-weight: 500;
+  padding: 8px 18px; border-radius: 100px; cursor: pointer;
+  transition: all 0.2s; font-family: 'Inter', sans-serif;
+}
+.filter-btn:hover, .filter-btn.active {
+  background: var(--blue); border-color: var(--blue); color: #fff;
+}
+.portfolio-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.25rem; }
+.port-item {
+  border-radius: var(--radius); overflow: hidden; position: relative;
+  aspect-ratio: 4/3; cursor: pointer; background: var(--off-white);
+}
+.port-item img {
+  width: 100%; height: 100%; object-fit: cover;
+  transition: transform 0.4s ease; display: block;
+}
+.port-overlay {
+  position: absolute; inset: 0;
+  background: linear-gradient(to top, rgba(3,62,140,0.92) 0%, rgba(3,62,140,0.4) 50%, transparent 100%);
+  opacity: 0; transition: opacity 0.3s;
+  display: flex; flex-direction: column; justify-content: flex-end; padding: 1.5rem;
+}
+.port-item:hover .port-overlay { opacity: 1; }
+.port-item:hover img { transform: scale(1.05); }
+.port-overlay-title {
+  font-family: 'Syne', sans-serif; font-weight: 700;
+  font-size: 0.95rem; color: #fff; margin-bottom: 4px;
+}
+.port-overlay-cat { font-size: 0.75rem; color: var(--gold); font-weight: 500; letter-spacing: 0.05em; text-transform: uppercase; }
+.port-zoom {
+  position: absolute; top: 12px; right: 12px;
+  width: 36px; height: 36px; background: rgba(255,255,255,0.15);
+  backdrop-filter: blur(4px); border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  color: #fff; font-size: 0.9rem; opacity: 0; transition: opacity 0.3s;
+}
+.port-item:hover .port-zoom { opacity: 1; }
+.port-load-more { text-align: center; margin-top: 2.5rem; }
+.btn-load {
+  display: inline-flex; align-items: center; gap: 8px;
+  background: var(--off-white); border: 1px solid var(--border);
+  color: var(--text-mid); font-size: 0.9rem; font-weight: 500;
+  padding: 12px 28px; border-radius: 10px; cursor: pointer;
+  font-family: 'Inter', sans-serif; transition: all 0.2s;
+}
+.btn-load:hover { background: var(--blue-light); color: var(--blue); border-color: var(--blue); }
+
+/* ── LIGHTBOX ── */
+.lightbox {
+  display: none; position: fixed; inset: 0; z-index: 1000;
+  background: rgba(2,15,45,0.97);
+  align-items: center; justify-content: center; padding: 2rem;
+}
+.lightbox.open { display: flex; }
+.lightbox img { max-width: 90vw; max-height: 85vh; border-radius: var(--radius); object-fit: contain; }
+.lb-close {
+  position: absolute; top: 20px; right: 24px;
+  background: none; border: none; color: rgba(255,255,255,0.7);
+  font-size: 2rem; cursor: pointer; transition: color 0.2s;
+}
+.lb-close:hover { color: var(--gold); }
+.lb-nav {
+  position: absolute; top: 50%; transform: translateY(-50%);
+  background: rgba(255,255,255,0.1); border: none; color: #fff;
+  width: 48px; height: 48px; border-radius: 50%; font-size: 1.2rem;
+  cursor: pointer; display: flex; align-items: center; justify-content: center;
+  transition: background 0.2s;
+}
+.lb-nav:hover { background: rgba(255,255,255,0.22); }
+.lb-prev { left: 16px; }
+.lb-next { right: 16px; }
+.lb-counter {
+  position: absolute; bottom: 20px; left: 50%; transform: translateX(-50%);
+  color: rgba(255,255,255,0.5); font-size: 0.8rem; letter-spacing: 0.05em;
+}
+
+/* ── PROCESSO ── */
+.processo { background: var(--off-white); }
+.processo-steps { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.5rem; margin-top: 2rem; }
+.step-card {
+  background: #fff; border: 1px solid var(--border);
+  border-radius: var(--radius-lg); padding: 2rem 1.5rem; text-align: center;
+}
+.step-num {
+  width: 48px; height: 48px; border-radius: 50%; background: var(--blue); color: #fff;
+  font-family: 'Syne', sans-serif; font-weight: 800; font-size: 1rem;
+  display: flex; align-items: center; justify-content: center; margin: 0 auto 1.25rem;
+}
+.step-title { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 0.95rem; color: var(--text); margin-bottom: 0.6rem; }
+.step-desc { font-size: 0.825rem; line-height: 1.6; color: var(--text-muted); }
+
+/* ── CONTATO ── */
+.contact { background: var(--blue); }
+.contact-inner { display: grid; grid-template-columns: 1fr 1fr; gap: 5rem; align-items: start; }
+.contact .section-label { color: var(--gold); }
+.contact .section-title { color: #fff; }
+.contact .section-subtitle { color: rgba(255,255,255,0.65); }
+.contact-info-list { list-style: none; }
+.contact-info-list li {
+  display: flex; align-items: flex-start; gap: 1rem;
+  padding: 1.25rem 0; border-bottom: 1px solid rgba(255,255,255,0.08);
+}
+.contact-info-list li:last-child { border-bottom: none; }
+.ci-icon {
+  width: 40px; height: 40px; background: rgba(244,174,2,0.15); border-radius: 10px;
+  display: flex; align-items: center; justify-content: center;
+  color: var(--gold); font-size: 1rem; flex-shrink: 0;
+}
+.ci-label { font-size: 0.75rem; color: rgba(255,255,255,0.45); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 3px; }
+.ci-value { font-size: 0.925rem; color: rgba(255,255,255,0.88); font-weight: 500; text-decoration: none; transition: color 0.2s; }
+.ci-value:hover { color: var(--gold); }
+.contact-form { display: flex; flex-direction: column; gap: 1rem; }
+.form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+.form-group { display: flex; flex-direction: column; gap: 6px; }
+.form-label { font-size: 0.8rem; font-weight: 500; color: rgba(255,255,255,0.6); letter-spacing: 0.04em; text-transform: uppercase; }
+.form-input, .form-textarea {
+  background: rgba(255,255,255,0.07); border: 1px solid rgba(255,255,255,0.15);
+  border-radius: 10px; padding: 12px 16px;
+  font-size: 0.9rem; color: #fff; font-family: 'Inter', sans-serif;
+  transition: border-color 0.2s, background 0.2s; outline: none;
+}
+.form-input::placeholder, .form-textarea::placeholder { color: rgba(255,255,255,0.3); }
+.form-input:focus, .form-textarea:focus { border-color: var(--gold); background: rgba(255,255,255,0.1); }
+.form-textarea { resize: vertical; min-height: 120px; }
+.btn-submit {
+  background: var(--gold); color: #1a1000; border: none;
+  padding: 14px 28px; border-radius: 10px;
+  font-size: 0.95rem; font-weight: 600; cursor: pointer;
+  font-family: 'Inter', sans-serif;
+  display: flex; align-items: center; gap: 8px;
+  transition: transform 0.2s, box-shadow 0.2s; align-self: flex-start;
+}
+.btn-submit:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(244,174,2,0.35); }
+
+/* ── FOOTER ── */
+footer {
+  background: #01224E; color: rgba(255,255,255,0.5);
+  padding: 2.5rem 5vw;
+  display: flex; align-items: center; justify-content: space-between;
+  font-size: 0.82rem; flex-wrap: wrap; gap: 1rem;
+}
+.footer-logo { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 1rem; color: rgba(255,255,255,0.85); text-decoration: none; }
+.footer-logo span { color: var(--gold); }
+.social-links { display: flex; gap: 1rem; }
+.social-link {
+  width: 36px; height: 36px; background: rgba(255,255,255,0.07); border-radius: 8px;
+  display: flex; align-items: center; justify-content: center;
+  color: rgba(255,255,255,0.6); text-decoration: none; font-size: 0.95rem;
+  transition: background 0.2s, color 0.2s;
+}
+.social-link:hover { background: var(--gold); color: #1a1000; }
+
+/* ── MOBILE NAV ── */
+.mobile-nav {
+  display: none; position: fixed; inset: 0;
+  background: rgba(3,62,140,0.98); z-index: 200;
+  flex-direction: column; align-items: center; justify-content: center; gap: 2rem;
+}
+.mobile-nav.open { display: flex; }
+.mobile-nav a {
+  font-family: 'Syne', sans-serif; font-weight: 700; font-size: 1.8rem;
+  color: rgba(255,255,255,0.85); text-decoration: none; transition: color 0.2s;
+}
+.mobile-nav a:hover { color: var(--gold); }
+.mobile-close {
+  position: absolute; top: 20px; right: 24px;
+  background: none; border: none; color: rgba(255,255,255,0.7); font-size: 2rem; cursor: pointer;
+}
+
+/* ── ANIMATIONS ── */
+.fade-in { opacity: 0; transform: translateY(24px); transition: opacity 0.6s ease, transform 0.6s ease; }
+.fade-in.visible { opacity: 1; transform: translateY(0); }
+
+/* ── RESPONSIVE ── */
+@media (max-width: 960px) {
+  .hero { grid-template-columns: 1fr; }
+  .hero-text-panel { padding: 120px 6vw 60px; text-align: center; }
+  .hero-text-panel::after { display: none; }
+  .hero-eyebrow { margin: 0 auto 1.5rem; }
+  .hero-desc { margin: 0 auto 2.5rem; }
+  .hero-actions { justify-content: center; }
+  .hero-stats { justify-content: center; }
+  .hero-photo-panel { height: 65vw; min-height: 360px; }
+  .hero-name-badge { bottom: 2.8rem; }
+  .about-inner { grid-template-columns: 1fr; gap: 3rem; }
+  .contact-inner { grid-template-columns: 1fr; gap: 3rem; }
+  .portfolio-grid { grid-template-columns: repeat(2, 1fr); }
+  .processo-steps { grid-template-columns: repeat(2, 1fr); }
+  .nav-links { display: none; }
+  .nav-burger { display: block; }
+}
+@media (max-width: 560px) {
+  .portfolio-grid { grid-template-columns: 1fr; }
+  .form-row { grid-template-columns: 1fr; }
+  .processo-steps { grid-template-columns: 1fr; }
+  section { padding: 72px 5vw; }
+  .hero-photo-panel { min-height: 300px; }
+}
+</style>
+</head>
+<body>
+
+<!-- MOBILE NAV -->
+<div id="mobile-nav" class="mobile-nav">
+  <button class="mobile-close" onclick="toggleNav()"><i class="fas fa-times"></i></button>
+  <a href="#servicos" onclick="toggleNav()">Serviços</a>
+  <a href="#sobre" onclick="toggleNav()">Sobre</a>
+  <a href="#portfolio" onclick="toggleNav()">Portefólio</a>
+  <a href="#processo" onclick="toggleNav()">Processo</a>
+  <a href="#contato" onclick="toggleNav()">Contato</a>
+</div>
+
+<!-- NAV -->
+<nav id="main-nav">
+  <a href="#" class="nav-logo">M.E.<span>.</span>Maurício</a>
+  <ul class="nav-links">
+    <li><a href="#servicos">Serviços</a></li>
+    <li><a href="#sobre">Sobre</a></li>
+    <li><a href="#portfolio">Portefólio</a></li>
+    <li><a href="#processo">Processo</a></li>
+    <li><a href="#contato" class="nav-cta">Fale Comigo</a></li>
+  </ul>
+  <button class="nav-burger" onclick="toggleNav()"><i class="fas fa-bars"></i></button>
+</nav>
+
+<!-- HERO -->
+<header class="hero">
+  <!-- Esquerda: texto -->
+  <div class="hero-text-panel">
+    <div class="hero-eyebrow">Disponível para novos projectos</div>
+    <h1>Design que<br>vende. Identidade<br>que <em>fica.</em></h1>
+    <p class="hero-desc">
+      Designer Gráfico Sénior com mais de 10 anos a transformar marcas angolanas em experiências visuais memoráveis. Da estratégia à execução.
+    </p>
+    <div class="hero-actions">
+      <a href="#portfolio" class="btn-primary"><i class="fas fa-eye"></i> Ver Portefólio</a>
+      <a href="#contato" class="btn-outline"><i class="fas fa-paper-plane"></i> Solicitar Orçamento</a>
+    </div>
+    <div class="hero-stats">
+      <div><div class="stat-num">10<span>+</span></div><div class="stat-label">Anos de Exp.</div></div>
+      <div><div class="stat-num">80<span>+</span></div><div class="stat-label">Projectos</div></div>
+      <div><div class="stat-num">30<span>+</span></div><div class="stat-label">Clientes</div></div>
+    </div>
+  </div>
+
+  <!-- Direita: slideshow -->
+  <div class="hero-photo-panel">
+
+    <div class="hero-slideshow" id="hero-slideshow">
+      <!-- slides gerados por JS -->
+    </div>
+
+    <!-- Setas -->
+    <button class="hero-arrow hero-arrow-prev" onclick="heroSlide(-1)" aria-label="Anterior">
+      <i class="fas fa-chevron-left"></i>
+    </button>
+    <button class="hero-arrow hero-arrow-next" onclick="heroSlide(1)" aria-label="Próximo">
+      <i class="fas fa-chevron-right"></i>
+    </button>
+
+    <!-- Dots -->
+    <div class="hero-dots" id="hero-dots"></div>
+
+    <!-- Badge -->
+    <div class="hero-name-badge">
+      <div class="hb-title">M.E. Maurício</div>
+      <div class="hb-sub">Senior Designer · Luanda</div>
+    </div>
+
+  </div>
+</header>
+
+<!-- SERVIÇOS -->
+<section class="services" id="servicos">
+  <div class="section-inner">
+    <span class="section-label fade-in">O Que Faço</span>
+    <h2 class="section-title fade-in">Serviços de Design<br>para o seu Negócio</h2>
+    <p class="section-subtitle fade-in">Da identidade visual às peças de comunicacção — tudo criado com estratégia e estética ao serviço dos seus objectivos.</p>
+    <div class="services-grid">
+      <div class="service-card fade-in">
+        <div class="service-icon"><i class="fas fa-palette"></i></div>
+        <div class="service-title">Identidade Visual & Branding</div>
+        <p class="service-desc">Criacção de marcas com personalidade: logótipos, sistemas de identidade, guias de estilo e toda a linguagem visual que distingue a sua empresa.</p>
+      </div>
+      <div class="service-card fade-in">
+        <div class="service-icon"><i class="fas fa-bullhorn"></i></div>
+        <div class="service-title">Campanhas Publicitárias</div>
+        <p class="service-desc">Concepção e execução de campanhas multicanal para meios digitais, publicidade exterior, televisão e imprensa. Criatividade orientada para resultados comerciais.</p>
+      </div>
+      <div class="service-card fade-in">
+        <div class="service-icon"><i class="fas fa-print"></i></div>
+        <div class="service-title">Design Editorial & Print</div>
+        <p class="service-desc">Catálogos, revistas, embalagens, materiais de ponto de venda e comunicacção impressa com qualidade de produção profissional.</p>
+      </div>
+      <div class="service-card fade-in">
+        <div class="service-icon"><i class="fas fa-mobile-alt"></i></div>
+        <div class="service-title">Design Digital & Social</div>
+        <p class="service-desc">Conteúdo visual para redes sociais, apresentações, envios de correio electrónico e interfaces digitais que captam a atenção nos ecrãs certos.</p>
+      </div>
+      <div class="service-card fade-in">
+        <div class="service-icon"><i class="fas fa-box-open"></i></div>
+        <div class="service-title">Embalagem & Sinalética</div>
+        <p class="service-desc">Design de embalagens e sistemas de sinalética que comunicam valor no ponto de venda e criam uma experiência de marca coerente.</p>
+      </div>
+      <div class="service-card fade-in">
+        <div class="service-icon"><i class="fas fa-code"></i></div>
+        <div class="service-title">Desenvolvimento de Sites</div>
+        <p class="service-desc">Criacção de sites modernos, responsivos e orientados para a conversão — desde portefólios pessoais a páginas institucionais e de produto.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SOBRE -->
+<section id="sobre">
+  <div class="section-inner about-inner">
+    <div class="about-text">
+      <span class="section-label fade-in">Sobre Mim</span>
+      <h2 class="section-title fade-in">Designer Sénior com Raízes em Angola</h2>
+      <div class="fade-in">
+        <p>Sou M.E. Maurício, Designer Gráfico Sénior baseado em Luanda com mais de uma década de experiência a criar comunicacção visual de impacto para marcas angolanas e internacionais.</p>
+        <p>Formado em Design com especializacção em Comunicacção Visual, tenho trabalhado em agências como a BANG e a Think Tank, onde coordenei projectos desde campanhas nacionais a sistemas de identidade visual completos.</p>
+        <p>O meu trabalho liga criatividade a resultados. Cada projecto começa com uma pergunta: o que é que esta comunicacção precisa de alcançar? A resposta visual segue sempre o propósito.</p>
+      </div>
+      <div class="tools-list fade-in">
+        <span class="tool-tag"><img src="images/photoshop.png" alt="">Photoshop</span>
+        <span class="tool-tag"><img src="images/illustrator.png" alt="">Illustrator</span>
+        <span class="tool-tag"><img src="images/indesign.png" alt="">InDesign</span>
+        <span class="tool-tag"><img src="images/coreldraw.png" alt="">CorelDRAW</span>
+      </div>
+    </div>
+    <div class="about-visual fade-in">
+      <div class="about-card">
+        <p class="about-quote">"O design não decora — resolve. Cada escolha visual é uma decisão estratégica ao serviço da marca e das pessoas que ela quer alcançar."</p>
+        <div class="about-card-author">
+          <div class="author-photo"><img src="images/mm.png" alt="M.E. Maurício"></div>
+          <div>
+            <div class="author-name">M.E. Maurício</div>
+            <div class="author-role">Senior Designer · BANG Agency · Luanda</div>
+          </div>
+        </div>
+        <div class="exp-row">
+          <div class="exp-item"><div class="exp-num">10+</div><div class="exp-label">Anos</div></div>
+          <div class="exp-item"><div class="exp-num">BANG</div><div class="exp-label">Agência Actual</div></div>
+          <div class="exp-item"><div class="exp-num">360°</div><div class="exp-label">Abordagem</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PORTFÓLIO -->
+<section class="portfolio" id="portfolio">
+  <div class="section-inner">
+    <span class="section-label fade-in">Trabalhos</span>
+    <h2 class="section-title fade-in">Portefólio Seleccionado</h2>
+    <p class="section-subtitle fade-in">Uma selecção de projectos de branding, campanhas e comunicacção visual desenvolvidos para clientes em Angola e além-fronteiras.</p>
+    <div class="portfolio-filters fade-in" id="port-filters"></div>
+    <div class="portfolio-grid" id="port-grid"></div>
+    <div class="port-load-more" id="port-load-wrap" style="display:none">
+      <button class="btn-load" onclick="loadMore()"><i class="fas fa-plus"></i> Ver Mais Projectos</button>
+    </div>
+  </div>
+</section>
+
+<!-- LIGHTBOX -->
+<div class="lightbox" id="lightbox" onclick="closeLightboxBg(event)">
+  <button class="lb-close" onclick="closeLightbox()"><i class="fas fa-times"></i></button>
+  <button class="lb-nav lb-prev" onclick="lbNav(-1);event.stopPropagation()"><i class="fas fa-chevron-left"></i></button>
+  <img id="lb-img" src="" alt="">
+  <button class="lb-nav lb-next" onclick="lbNav(1);event.stopPropagation()"><i class="fas fa-chevron-right"></i></button>
+  <div class="lb-counter" id="lb-counter"></div>
+  <div id="lb-desc" style="display:none;position:absolute;bottom:56px;left:50%;transform:translateX(-50%);max-width:600px;text-align:center;color:rgba(255,255,255,0.7);font-size:0.82rem;line-height:1.6;background:rgba(0,0,0,0.4);backdrop-filter:blur(6px);padding:10px 20px;border-radius:10px;white-space:pre-line;"></div>
+</div>
+
+<!-- PROCESSO -->
+<section class="processo" id="processo">
+  <div class="section-inner">
+    <span class="section-label fade-in">Como Trabalho</span>
+    <h2 class="section-title fade-in">Um Processo Claro<br>do Início ao Fim</h2>
+    <p class="section-subtitle fade-in">Cada projecto segue uma metodologia estruturada que garante resultados consistentes e uma colaboracção tranquila e eficiente.</p>
+    <div class="processo-steps">
+      <div class="step-card fade-in"><div class="step-num">01</div><div class="step-title">Descoberta</div><p class="step-desc">Reunião de briefing profunda para entender o negócio, o público-alvo, os objectivos e o contexto competitivo.</p></div>
+      <div class="step-card fade-in"><div class="step-num">02</div><div class="step-title">Estratégia</div><p class="step-desc">Definição do posicionamento visual, referências, paleta, tipografia e direcção criativa a apresentar ao cliente.</p></div>
+      <div class="step-card fade-in"><div class="step-num">03</div><div class="step-title">Criacção</div><p class="step-desc">Desenvolvimento das peças com revisões colaborativas até atingir o resultado que serve os objectivos definidos.</p></div>
+      <div class="step-card fade-in"><div class="step-num">04</div><div class="step-title">Entrega</div><p class="step-desc">Entrega de todos os ficheiros em formatos prontos para produção, com guia de utilizacção e suporte pós-entrega.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTATO -->
+<section class="contact" id="contato">
+  <div class="section-inner contact-inner">
+    <div>
+      <span class="section-label">Vamos Trabalhar Juntos</span>
+      <h2 class="section-title">Tem um projecto?<br>Fale comigo.</h2>
+      <p class="section-subtitle">Disponível para projectos freelance, colaborações com agências e integração em equipas criativas em Angola e além-fronteiras.</p>
+      <ul class="contact-info-list">
+        <li><div class="ci-icon"><i class="fas fa-map-marker-alt"></i></div><div><div class="ci-label">Localizacção</div><span class="ci-value">Luanda, Angola</span></div></li>
+        <li><div class="ci-icon"><i class="fas fa-envelope"></i></div><div><div class="ci-label">E-mail</div><a class="ci-value" href="mailto:maedmau@hotmail.com">maedmau@hotmail.com</a></div></li>
+        <li><div class="ci-icon"><i class="fab fa-whatsapp"></i></div><div><div class="ci-label">WhatsApp</div><a class="ci-value" href="https://wa.me/+244933035504" target="_blank">+244 933 035 504</a></div></li>
+        <li><div class="ci-icon"><i class="fab fa-linkedin-in"></i></div><div><div class="ci-label">LinkedIn</div><a class="ci-value" href="https://www.linkedin.com/in/maravilha-maur%C3%ADcio-039995a8/" target="_blank">linkedin.com/in/memauricio</a></div></li>
+      </ul>
+    </div>
+    <form class="contact-form" id="contact-form" action="https://formspree.io/f/myzgpjzv" method="POST" onsubmit="submitForm(event)">
+      <div class="form-row">
+        <div class="form-group"><label class="form-label">Nome</label><input class="form-input" type="text" name="nome" placeholder="O seu nome" required></div>
+        <div class="form-group"><label class="form-label">E-mail</label><input class="form-input" type="email" name="email" placeholder="email@empresa.com" required></div>
+      </div>
+      <div class="form-group"><label class="form-label">Empresa</label><input class="form-input" type="text" name="empresa" placeholder="Nome da empresa (opcional)"></div>
+      <div class="form-group">
+        <label class="form-label">Tipo de Projecto</label>
+        <select class="form-input" name="tipo">
+          <option value="" disabled selected>Seleccione o tipo de projecto</option>
+          <option>Identidade Visual / Branding</option>
+          <option>Campanha Publicitária</option>
+          <option>Design Editorial / Print</option>
+          <option>Comunicacção Digital</option>
+          <option>Outro</option>
+        </select>
+      </div>
+      <div class="form-group"><label class="form-label">Mensagem</label><textarea class="form-textarea" name="mensagem" placeholder="Descreva o seu projecto, objectivos e prazo..."></textarea></div>
+      <button type="submit" class="btn-submit"><i class="fas fa-paper-plane"></i> Enviar Mensagem</button>
+    </form>
+  </div>
+</section>
+
+<footer>
+  <a href="#" class="footer-logo">M.E.<span>.</span>Maurício</a>
+  <span>© 2026 · Luanda, Angola</span>
+  <div class="social-links">
+    <a href="https://www.linkedin.com/in/maravilha-maur%C3%ADcio-039995a8/" class="social-link" target="_blank"><i class="fab fa-linkedin-in"></i></a>
+    <a href="https://wa.me/244933035504" class="social-link" target="_blank"><i class="fab fa-whatsapp"></i></a>
+  </div>
+</footer>
+
+<script>
+// ── NAV ──
+window.addEventListener('scroll', () => {
+  document.getElementById('main-nav').classList.toggle('scrolled', window.scrollY > 40);
+});
+function toggleNav() {
+  document.getElementById('mobile-nav').classList.toggle('open');
+}
+
+// ── SCROLL FADE ──
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach((e, i) => {
+    if (e.isIntersecting) setTimeout(() => e.target.classList.add('visible'), i * 80);
+  });
+}, { threshold: 0.1 });
+document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+
+// ────────────────────────────────────────────
+// ── HERO SLIDESHOW ──
+// Adiciona ou remove imagens PNG aqui.
+// Devem ser PNGs sem fundo para ficar bem sobre o azul.
+// ────────────────────────────────────────────
+const HERO_SLIDES = [
+  'images/mm.png',
+  'images/mm2.png',
+  'images/mm3.png',
+];
+
+const SLIDE_INTERVAL = 3500; // ms entre slides
+let heroIdx = 0;
+let heroTimer = null;
+
+function buildHeroSlideshow() {
+  const track = document.getElementById('hero-slideshow');
+  const dots  = document.getElementById('hero-dots');
+
+  HERO_SLIDES.forEach((src, i) => {
+    // Slide image
+    const img = document.createElement('img');
+    img.src   = src;
+    img.alt   = `Slide ${i + 1}`;
+    img.className = 'hero-slide' + (i === 0 ? ' active' : '');
+    track.appendChild(img);
+
+    // Dot
+    const dot = document.createElement('button');
+    dot.className = 'hero-dot' + (i === 0 ? ' active' : '');
+    dot.setAttribute('aria-label', `Slide ${i + 1}`);
+    dot.onclick = () => goToSlide(i);
+    dots.appendChild(dot);
+  });
+}
+
+function goToSlide(n) {
+  const slides = document.querySelectorAll('.hero-slide');
+  const dots   = document.querySelectorAll('.hero-dot');
+
+  slides[heroIdx].classList.remove('active');
+  dots[heroIdx].classList.remove('active');
+
+  heroIdx = (n + HERO_SLIDES.length) % HERO_SLIDES.length;
+
+  slides[heroIdx].classList.add('active');
+  dots[heroIdx].classList.add('active');
+
+  // Reset timer
+  clearInterval(heroTimer);
+  heroTimer = setInterval(() => goToSlide(heroIdx + 1), SLIDE_INTERVAL);
+}
+
+function heroSlide(dir) {
+  goToSlide(heroIdx + dir);
+}
+
+// Pause on hover
+document.querySelector('.hero-photo-panel') &&
+  document.querySelector('.hero-photo-panel').addEventListener('mouseenter', () => clearInterval(heroTimer));
+document.querySelector('.hero-photo-panel') &&
+  document.querySelector('.hero-photo-panel').addEventListener('mouseleave', () => {
+    heroTimer = setInterval(() => goToSlide(heroIdx + 1), SLIDE_INTERVAL);
+  });
+
+// Swipe support (mobile)
+let touchStartX = 0;
+document.addEventListener('touchstart', e => { touchStartX = e.touches[0].clientX; }, { passive: true });
+document.addEventListener('touchend', e => {
+  const dx = e.changedTouches[0].clientX - touchStartX;
+  if (Math.abs(dx) > 50) heroSlide(dx < 0 ? 1 : -1);
+});
+
+// ── PORTFOLIO ARRAY ──
+const PROJECTS = [
+  { thumb: 'images/port/v3p1.jpg',        full: 'images/port/v3g1.jpg',        desc: '',  cat: 'campanha'  },
+  { thumb: 'images/port/Prancheta 7.png', full: 'images/port/Prancheta 17.png', desc: '',  cat: 'campanha'  },
+  { thumb: 'images/port/a1.jpg',          full: 'images/port/a2.jpg',           desc: '',  cat: 'branding'  },
+  { thumb: 'images/port/v3p2.jpg',        full: 'images/port/v3g2.jpg',         desc: '',  cat: 'branding'  },
+  { thumb: 'images/port/b1.jpg',          full: 'images/port/b2.jpg',           desc: '',  cat: 'campanha'  },
+  { thumb: 'images/port/c1.jpg',          full: 'images/port/c2.jpg',           desc: '',  cat: 'editorial' },
+  { thumb: 'images/port/d1.jpg',          full: 'images/port/d2.jpg',           desc: '',  cat: 'editorial' },
+  { thumb: 'images/port/f1.jpg',          full: 'images/port/f2.jpg',           desc: '',  cat: 'editorial' },
+  { thumb: 'images/port/g1.jpg',          full: 'images/port/g2.jpg',           desc: '',  cat: 'branding'  },
+  { thumb: 'images/port/h1.jpg',          full: 'images/port/h2.jpg',           desc: '',  cat: 'campanha'  },
+  { thumb: 'images/port/i1.jpg',          full: 'images/port/i2.jpg',           desc: '',  cat: 'branding'  },
+  { thumb: 'images/port/j1.jpg',          full: 'images/port/j2.jpg',           desc: '',  cat: 'campanha'  },
+  { thumb: 'images/port/m1.jpg',          full: 'images/port/m2.jpg',           desc: '',  cat: 'branding'  },
+  { thumb: 'images/port/e1.jpg',          full: 'images/port/e2.jpg',           desc: '',  cat: 'editorial' },
+  { thumb: 'images/port/l1.jpg',          full: 'images/port/l2.jpg',           desc: '',  cat: 'editorial' },
+  { thumb: 'images/port/n1.jpg',          full: 'images/port/n2.jpg',           desc: '',  cat: 'campanha'  },
+  { thumb: 'images/port/p1.jpg',          full: 'images/port/p2.jpg',           desc: '',  cat: 'campanha'  },
+  { thumb: 'images/port/o1.jpg',          full: 'images/port/o2.jpg',           desc: '',  cat: 'branding'  },
+  { thumb: 'images/port/nc.jpg',          full: 'images/port/ncc2.jpg',         desc: '',  cat: 'branding'  },
+  { thumb: 'images/port/li11.jpg',        full: 'images/port/li12.jpg',         desc: '',  cat: 'editorial' },
+  { thumb: 'images/port/li22.jpg',        full: 'images/port/li21.jpg',         desc: '',  cat: 'editorial' },
+  { thumb: 'images/port/li33.jpg',        full: 'images/port/li31.jpg',         desc: '',  cat: 'editorial' },
+  { thumb: 'images/port/li44.jpg',        full: 'images/port/livro41.jpg',      desc: '',  cat: 'editorial' },
+  { thumb: 'images/port/az1.jpg',         full: 'images/port/az2.jpg',          desc: '',  cat: 'editorial' },
+  { thumb: 'images/port/bz1.jpg',         full: 'images/port/bz2.jpg',          desc: 'IDENTIDADE VISUAL — NÚMEROS POSITIVOS\nConceito chave para o logotipo da GTME: um grafismo que representa resultados estatísticos satisfatórios. O sinal de "bom" combinado com a cor azul simboliza resultados positivos.', cat: 'branding' },
+  { thumb: 'images/port/fz1.jpg',         full: 'images/port/fz2.jpg',          desc: 'UNIDADE + INTERMEDIAÇÃO\nConceito gráfico para a U.I.M.O, que exprime um grupo de profissionais de vários ramos reunidos e encaminhados por um intermediário.', cat: 'branding' },
+  { thumb: 'images/port/jz1.jpg',         full: 'images/port/jz2.jpg',          desc: '',  cat: 'branding'  },
+  { thumb: 'images/port/kz1.jpg',         full: 'images/port/kz2.jpg',          desc: '',  cat: 'branding'  },
+  { thumb: 'images/port/mz1.jpg',         full: 'images/port/mz2.jpg',          desc: '',  cat: 'branding'  },
+  { thumb: 'images/port/nz1.jpg',         full: 'images/port/nz2.jpg',          desc: '',  cat: 'branding'  },
+  { thumb: 'images/port/lz1.jpg',         full: 'images/port/lz2.jpg',          desc: '',  cat: 'branding'  },
+  { thumb: 'images/port/oz12.jpg',        full: 'images/port/oz22.jpg',         desc: '',  cat: 'editorial' },
+  { thumb: 'images/port/pz12.jpg',        full: 'images/port/pz22.jpg',         desc: '',  cat: 'campanha'  },
+  { thumb: 'images/port/qz12.jpg',        full: 'images/port/qz22.jpg',         desc: '',  cat: 'campanha'  },
+  { thumb: 'images/port/2b1.jpg',         full: 'images/port/2b2.jpg',          desc: '',  cat: 'branding'  },
+  { thumb: 'images/port/2c1.jpg',         full: 'images/port/2c2.jpg',          desc: '',  cat: 'editorial' },
+  { thumb: 'images/port/2d1.jpg',         full: 'images/port/2d2.jpg',          desc: '',  cat: 'editorial' },
+  { thumb: 'images/port/qg1.jpg',         full: 'images/port/qg2.jpg',          desc: '',  cat: 'branding'  },
+  { thumb: 'images/port/2sl1.jpg',        full: 'images/port/2sl2.jpg',         desc: '',  cat: 'editorial' },
+  { thumb: 'images/port/2f1.jpg',         full: 'images/port/2f2.jpg',          desc: '',  cat: 'digital'   },
+  { thumb: 'images/port/2p1.jpg',         full: 'images/port/2p2.jpg',          desc: '',  cat: 'campanha'  },
+  { thumb: 'images/port/2g1.jpg',         full: 'images/port/2g2.jpg',          desc: '',  cat: 'branding'  },
+  { thumb: 'images/port/2h1.jpg',         full: 'images/port/2h2.jpg',          desc: '',  cat: 'campanha'  },
+  { thumb: 'images/port/Prancheta 1.png', full: 'images/port/Prancheta 11.png', desc: '',  cat: 'branding'  },
+  { thumb: 'images/port/Prancheta 9.png', full: 'images/port/Prancheta 19.png', desc: '',  cat: 'digital'   },
+  { thumb: 'images/port/Prancheta 3.png', full: 'images/port/Prancheta 13.png', desc: '',  cat: 'editorial' },
+  { thumb: 'images/port/Prancheta 4.png', full: 'images/port/Prancheta 14.png', desc: '',  cat: 'editorial' },
+  { thumb: 'images/port/Prancheta 5.png', full: 'images/port/Prancheta 15.png', desc: '',  cat: 'campanha'  },
+  { thumb: 'images/port/Prancheta 6.png', full: 'images/port/Prancheta 16.png', desc: '',  cat: 'campanha'  },
+  { thumb: 'images/port/Prancheta 8.png', full: 'images/port/Prancheta 18.png', desc: '',  cat: 'branding'  },
+  { thumb: 'images/port/Artboard 1.png',  full: 'images/port/Artboard 11.png',  desc: '',  cat: 'branding'  },
+  { thumb: 'images/port/Artboard 2.png',  full: 'images/port/Artboard 12.png',  desc: '',  cat: 'campanha'  },
+  { thumb: 'images/port/Artboard 3.png',  full: 'images/port/Artboard 13.png',  desc: '',  cat: 'digital'   },
+  { thumb: 'images/port/4_nv_.jpg',       full: 'images/port/4.4_nv_.jpg',      desc: '',  cat: 'campanha'  },
+  { thumb: 'images/port/3_nv_.jpg',       full: 'images/port/3.3_nv_.jpg',      desc: '',  cat: 'campanha'  },
+  { thumb: 'images/port/1.2_nv_.jpg',     full: 'images/port/1_nv_.jpg',        desc: '',  cat: 'campanha'  },
+  { thumb: 'images/port/2_nv_.jpg',       full: 'images/port/2.2_nv_.jpg',      desc: '',  cat: 'campanha'  },
+  { thumb: 'images/port/5.5_nv_.jpg',     full: 'images/port/5_nv_.jpg',        desc: '',  cat: 'campanha'  },
+];
+
+PROJECTS.forEach((p, i) => { p.title = `Projecto ${String(i + 1).padStart(2, '0')}`; });
+
+const CAT_LABELS = {
+  all:       'Todos',
+  branding:  'Branding',
+  campanha:  'Campanhas e Eventos',
+  editorial: 'Editorial',
+  digital:   'Digital',
+};
+
+const PAGE_SIZE = 18;
+let currentFilter = 'all';
+let visibleCount  = PAGE_SIZE;
+let activeItems   = [];
+
+function buildFilters() {
+  const wrap = document.getElementById('port-filters');
+  Object.entries(CAT_LABELS).forEach(([key, label]) => {
+    const btn = document.createElement('button');
+    btn.className = 'filter-btn' + (key === 'all' ? ' active' : '');
+    btn.textContent = label;
+    btn.onclick = () => setFilter(key, btn);
+    wrap.appendChild(btn);
+  });
+}
+
+function setFilter(cat, btn) {
+  currentFilter = cat; visibleCount = PAGE_SIZE;
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  renderGrid();
+}
+
+function renderGrid() {
+  activeItems = currentFilter === 'all'
+    ? PROJECTS
+    : PROJECTS.filter(p => p.cat === currentFilter);
+
+  const grid = document.getElementById('port-grid');
+  grid.innerHTML = '';
+
+  activeItems.slice(0, visibleCount).forEach((p, i) => {
+    const div = document.createElement('div');
+    div.className = 'port-item fade-in';
+    div.dataset.index = PROJECTS.indexOf(p);
+    div.innerHTML = `
+      <img src="${p.thumb}" alt="${p.title}" loading="lazy">
+      <div class="port-overlay">
+        <span class="port-zoom"><i class="fas fa-expand"></i></span>
+        <div class="port-overlay-title">${p.title}</div>
+        <div class="port-overlay-cat">${CAT_LABELS[p.cat]}</div>
+      </div>`;
+    div.onclick = () => openLightbox(parseInt(div.dataset.index));
+    grid.appendChild(div);
+    requestAnimationFrame(() => setTimeout(() => div.classList.add('visible'), i * 40));
+  });
+
+  document.getElementById('port-load-wrap').style.display =
+    activeItems.length > visibleCount ? 'block' : 'none';
+}
+
+function loadMore() { visibleCount += PAGE_SIZE; renderGrid(); }
+
+// ── LIGHTBOX ──
+let lbIdx = 0;
+
+function openLightbox(globalIdx) {
+  lbIdx = globalIdx;
+  updateLightbox();
+  document.getElementById('lightbox').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+function updateLightbox() {
+  const p = PROJECTS[lbIdx];
+  document.getElementById('lb-img').src = p.full;
+  document.getElementById('lb-counter').textContent = `${p.title}  ·  ${lbIdx + 1} / ${PROJECTS.length}`;
+  const descEl = document.getElementById('lb-desc');
+  descEl.style.display = p.desc ? 'block' : 'none';
+  if (p.desc) descEl.textContent = p.desc;
+}
+
+function closeLightbox() {
+  document.getElementById('lightbox').classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+function closeLightboxBg(e) {
+  if (e.target === document.getElementById('lightbox')) closeLightbox();
+}
+
+function lbNav(dir) {
+  lbIdx = (lbIdx + dir + PROJECTS.length) % PROJECTS.length;
+  updateLightbox();
+}
+
+document.addEventListener('keydown', e => {
+  if (!document.getElementById('lightbox').classList.contains('open')) return;
+  if (e.key === 'Escape')      closeLightbox();
+  if (e.key === 'ArrowLeft')   lbNav(-1);
+  if (e.key === 'ArrowRight')  lbNav(1);
+});
+
+// ── FORM ──
+function submitForm(e) {
+  e.preventDefault();
+  const form   = e.target;
+  const inputs = form.querySelectorAll('input, select, textarea');
+  const fields = {};
+  inputs.forEach(el => {
+    if (el.name) fields[el.name] = el.value;
+  });
+
+  // Build mailto body
+  const body = [
+    'Nome: '    + (fields['nome']    || ''),
+    'E-mail: '  + (fields['email']   || ''),
+    'Empresa: ' + (fields['empresa'] || ''),
+    'Projecto: '+ (fields['tipo']    || ''),
+    '',
+    fields['mensagem'] || '',
+  ].join('%0A');
+
+  const subject = encodeURIComponent('Contacto via Site — ' + (fields['nome'] || ''));
+  const mailto  = `mailto:maedmau@hotmail.com?subject=${subject}&body=${body}`;
+
+  window.location.href = mailto;
+
+  const btn = form.querySelector('.btn-submit');
+  btn.innerHTML = '<i class="fas fa-check"></i> A abrir o seu e-mail...';
+  btn.style.background = '#2D9C5E';
+  setTimeout(() => {
+    btn.innerHTML = '<i class="fas fa-paper-plane"></i> Enviar Mensagem';
+    btn.style.background = '';
+    form.reset();
+  }, 4000);
+}
+
+// ── INIT ──
+buildHeroSlideshow();
+heroTimer = setInterval(() => goToSlide(heroIdx + 1), SLIDE_INTERVAL);
+buildFilters();
+renderGrid();
+</script>
+</body>
+</html>
