@@ -9,70 +9,84 @@
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Syne:wght@700;800&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 <style>
+/* ════════════════════════════════════════════════════════════════
+   RESET BÁSICO
+   Remove margens/paddings por defeito do browser e garante que
+   padding/border entram no cálculo da largura de qualquer elemento
+   (box-sizing: border-box) — evita surpresas de layout.
+   ════════════════════════════════════════════════════════════════ */
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+/* ── VARIÁVEIS DE COR E ESPAÇAMENTO (fáceis de alterar a partir daqui) ── */
 :root {
-  --blue: #033E8C;
-  --blue-mid: #0550B3;
-  --blue-light: #EBF2FF;
-  --gold: #F4AE02;
-  --off-white: #F7F7F5;
-  --text: #111111;
-  --text-mid: #444444;
-  --text-muted: #888888;
-  --border: rgba(0,0,0,0.09);
-  --radius: 12px;
-  --radius-lg: 20px;
+  --blue: #033E8C;            /* Azul principal da marca */
+  --blue-mid: #0550B3;        /* Azul para hover/estados intermédios */
+  --blue-light: #EBF2FF;      /* Azul muito claro, usado em fundos suaves */
+  --gold: #F4AE02;            /* Cor de destaque/acento (dourado) */
+  --off-white: #F7F7F5;       /* Branco-sujo usado em fundos de secção */
+  --text: #111111;            /* Texto principal (quase preto) */
+  --text-mid: #444444;        /* Texto secundário */
+  --text-muted: #888888;      /* Texto terciário / descrições */
+  --border: rgba(0,0,0,0.09); /* Cor de borda subtil */
+  --radius: 12px;             /* Raio de canto padrão (cards pequenos) */
+  --radius-lg: 20px;          /* Raio de canto maior (cards grandes) */
 }
-html { scroll-behavior: smooth; }
+
+html { scroll-behavior: smooth; } /* Scroll suave ao clicar nos links âncora (#secção) */
+
 body {
   font-family: 'Inter', sans-serif;
   font-size: 16px; color: var(--text);
-  background: #fff; overflow-x: hidden;
-  -webkit-font-smoothing: antialiased;
+  background: #fff; overflow-x: hidden; /* impede scroll horizontal indesejado */
+  -webkit-font-smoothing: antialiased;  /* texto mais suave no Safari/Chrome */
 }
 
-/* ── CURSOR GLOW (desktop only) ── */
+/* ── BRILHO QUE SEGUE O CURSOR (apenas em ecrãs com rato — desktop) ── */
 .cursor-glow {
   position: fixed; pointer-events: none; z-index: 9999;
   width: 320px; height: 320px; border-radius: 50%;
   background: radial-gradient(circle, rgba(244,174,2,0.07) 0%, transparent 70%);
   transform: translate(-50%,-50%);
-  will-change: left, top;
+  will-change: left, top; /* optimização: avisa o browser que estas props vão mudar muito */
   transition: opacity 0.3s;
 }
+/* Em dispositivos touch (sem hover) este efeito não faz sentido — escondido */
 @media (hover: none) { .cursor-glow { display: none; } }
 
 /* ════════════════════════════
-   NAV
+   NAVEGAÇÃO (barra fixa no topo)
    ════════════════════════════ */
 nav {
   position: fixed; top: 0; left: 0; right: 0; z-index: 100;
   padding: 18px 5vw;
   display: flex; align-items: center; justify-content: space-between;
   background: rgba(255,255,255,0.92);
-  backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); /* efeito vidro fosco */
   border-bottom: 1px solid var(--border);
   transition: box-shadow 0.3s;
-  animation: navDrop 0.6s cubic-bezier(0.22,1,0.36,1) both;
+  animation: navDrop 0.6s cubic-bezier(0.22,1,0.36,1) both; /* entra a "cair" no carregamento */
 }
 @keyframes navDrop {
   from { transform: translateY(-100%); opacity: 0; }
   to   { transform: translateY(0);     opacity: 1; }
 }
+/* Classe adicionada via JS quando o utilizador faz scroll — dá sombra à nav */
 nav.scrolled { box-shadow: 0 2px 20px rgba(0,0,0,0.08); }
 
 .nav-logo {
   font-family: 'Syne', sans-serif; font-weight: 800; font-size: 1.1rem;
   color: var(--blue); text-decoration: none; letter-spacing: -0.5px;
-  transition: color 0.2s; flex-shrink: 0;
+  transition: color 0.2s; flex-shrink: 0; /* nunca encolhe, mesmo com pouco espaço */
 }
-.nav-logo span { color: var(--gold); }
-.nav-links { display: flex; gap: 2rem; list-style: none; }
+.nav-logo span { color: var(--gold); } /* o "·" entre "M.E." e "Maurício" fica dourado */
+
+.nav-links { display: flex; gap: 2rem; list-style: none; } /* menu desktop, escondido em mobile */
 .nav-links a {
   font-size: 0.875rem; font-weight: 500; color: var(--text-mid);
   text-decoration: none; position: relative; padding-bottom: 2px;
-  transition: color 0.2s; white-space: nowrap;
+  transition: color 0.2s; white-space: nowrap; /* impede quebra de linha no texto do link */
 }
+/* Sublinhado animado: cresce da esquerda para a direita no hover */
 .nav-links a:not(.nav-cta)::after {
   content: ''; position: absolute; bottom: -2px; left: 0;
   width: 100%; height: 1.5px; background: var(--blue);
@@ -81,6 +95,8 @@ nav.scrolled { box-shadow: 0 2px 20px rgba(0,0,0,0.08); }
 }
 .nav-links a:not(.nav-cta):hover::after { transform: scaleX(1); }
 .nav-links a:hover { color: var(--blue); }
+
+/* Botão "Fale Comigo" destacado no menu (CTA = call to action) */
 .nav-cta {
   background: var(--blue); color: #fff !important;
   padding: 9px 20px; border-radius: 8px;
@@ -91,21 +107,25 @@ nav.scrolled { box-shadow: 0 2px 20px rgba(0,0,0,0.08); }
   transform: translateY(-1px);
   box-shadow: 0 4px 14px rgba(3,62,140,0.35) !important;
 }
+
+/* Botão "hamburger" (☰) — só aparece em mobile, controlado via media query mais abaixo */
 .nav-burger {
   display: none; background: none; border: none;
   cursor: pointer; font-size: 1.4rem; color: var(--text);
-  padding: 6px 8px; -webkit-tap-highlight-color: transparent;
+  padding: 6px 8px; -webkit-tap-highlight-color: transparent; /* remove flash azul no toque (iOS) */
   flex-shrink: 0;
 }
 
-/* ── MOBILE NAV ── */
+/* ── MENU MOBILE (ecrã inteiro, abre por cima de tudo) ── */
 .mobile-nav {
-  display: none; position: fixed; inset: 0;
+  display: none; position: fixed; inset: 0; /* inset:0 = top/right/bottom/left a 0 */
   background: rgba(3,62,140,0.98); z-index: 200;
   flex-direction: column; align-items: center; justify-content: center; gap: 2rem;
-  touch-action: none; overscroll-behavior: contain;
+  touch-action: none; overscroll-behavior: contain; /* impede "scroll por baixo" no iOS */
 }
-.mobile-nav.open { display: flex; }
+.mobile-nav.open { display: flex; } /* classe adicionada via JS ao clicar no hamburger */
+
+/* Cada link do menu mobile entra com um pequeno atraso sequencial (efeito cascata) */
 .mobile-nav.open a { animation: mobileLink 0.45s cubic-bezier(0.22,1,0.36,1) both; }
 .mobile-nav.open a:nth-child(2) { animation-delay: 0.05s; }
 .mobile-nav.open a:nth-child(3) { animation-delay: 0.10s; }
@@ -122,6 +142,8 @@ nav.scrolled { box-shadow: 0 2px 20px rgba(0,0,0,0.08); }
   -webkit-tap-highlight-color: transparent;
 }
 .mobile-nav a:hover, .mobile-nav a:active { color: var(--gold); }
+
+/* Botão "X" para fechar o menu mobile */
 .mobile-close {
   position: absolute; top: 20px; right: 24px;
   background: none; border: none; color: rgba(255,255,255,0.7);
@@ -129,20 +151,20 @@ nav.scrolled { box-shadow: 0 2px 20px rgba(0,0,0,0.08); }
   -webkit-tap-highlight-color: transparent;
   transition: color 0.2s, transform 0.3s;
 }
-.mobile-close:hover { color: var(--gold); transform: rotate(90deg); }
+.mobile-close:hover { color: var(--gold); transform: rotate(90deg); } /* roda 90° ao passar o rato */
 
 /* ════════════════════════════
-   HERO
+   HERO (secção de abertura, ecrã inteiro)
    ════════════════════════════ */
 .hero {
-  min-height: 100vh; min-height: 100dvh;
-  display: grid; grid-template-columns: 1fr 1fr;
+  min-height: 100vh; min-height: 100dvh; /* 100dvh = altura real visível no Safari iOS (sem a barra do URL a "comer" espaço) */
+  display: grid; grid-template-columns: 1fr 1fr; /* duas colunas iguais: texto | foto */
   position: relative; overflow: hidden;
 }
 
-/* ── Hero entrance animations ── */
+/* ── Animações de entrada dos elementos do hero (aparecem em sequência ao carregar a página) ── */
 @keyframes heroUp {
-  from { opacity: 0; transform: translateY(32px); }
+  from { opacity: 0; transform: translateY(32px); } /* começa 32px mais abaixo e invisível */
   to   { opacity: 1; transform: translateY(0); }
 }
 @keyframes heroFade {
@@ -150,6 +172,7 @@ nav.scrolled { box-shadow: 0 2px 20px rgba(0,0,0,0.08); }
   to   { opacity: 1; }
 }
 
+/* Cada elemento tem um "delay" diferente para criar o efeito de cascata na entrada */
 .hero-eyebrow { animation: heroUp   0.7s 0.3s  cubic-bezier(0.22,1,0.36,1) both; }
 .hero h1      { animation: heroUp   0.8s 0.5s  cubic-bezier(0.22,1,0.36,1) both; }
 .hero-desc    { animation: heroUp   0.7s 0.75s cubic-bezier(0.22,1,0.36,1) both; }
@@ -157,25 +180,28 @@ nav.scrolled { box-shadow: 0 2px 20px rgba(0,0,0,0.08); }
 .hero-stats   { animation: heroFade 0.8s 1.1s  ease both; }
 .hero-name-badge { animation: heroFade 1s  1.5s  ease both; }
 
+/* Painel esquerdo do hero (fundo azul com o texto) */
 .hero-text-panel {
   background: var(--blue);
   display: flex; flex-direction: column; justify-content: center;
   padding: 140px 6vw 80px 8vw;
   position: relative; z-index: 1;
 }
+/* Forma diagonal (cunha) que cria a transição angular entre o painel de texto e o da foto */
 .hero-text-panel::after {
   content: ''; position: absolute;
   top: 0; right: -60px; bottom: 0; width: 120px;
   background: var(--blue);
-  clip-path: polygon(0 0, 0% 100%, 100% 100%);
+  clip-path: polygon(0 0, 0% 100%, 100% 100%); /* forma triangular */
   z-index: 2;
-  animation: wedgeIn 1s 0.2s cubic-bezier(0.22,1,0.36,1) both;
+  animation: wedgeIn 1s 0.2s cubic-bezier(0.22,1,0.36,1) both; /* a cunha "desliza" para dentro ao abrir */
 }
 @keyframes wedgeIn {
-  from { clip-path: polygon(0 0, 0% 100%, 0% 100%); }
-  to   { clip-path: polygon(0 0, 0% 100%, 100% 100%); }
+  from { clip-path: polygon(0 0, 0% 100%, 0% 100%); } /* começa "fechada" (sem largura) */
+  to   { clip-path: polygon(0 0, 0% 100%, 100% 100%); } /* termina com a forma completa */
 }
 
+/* "Disponível para novos projectos" — pequena etiqueta no topo do hero */
 .hero-eyebrow {
   display: inline-flex; align-items: center; gap: 8px;
   background: rgba(244,174,2,0.18); border: 1px solid rgba(244,174,2,0.35);
@@ -184,6 +210,7 @@ nav.scrolled { box-shadow: 0 2px 20px rgba(0,0,0,0.08); }
   padding: 6px 14px; border-radius: 100px;
   margin-bottom: 1.75rem; width: fit-content;
 }
+/* Bolinha pulsante dourada antes do texto da etiqueta */
 .hero-eyebrow::before {
   content: ''; width: 6px; height: 6px;
   background: var(--gold); border-radius: 50%;
@@ -193,12 +220,15 @@ nav.scrolled { box-shadow: 0 2px 20px rgba(0,0,0,0.08); }
   0%,100% { opacity:1; transform:scale(1); }
   50%      { opacity:0.4; transform:scale(0.7); }
 }
+
+/* Título principal "Design que vende. Identidade que fica." */
 .hero h1 {
   font-family: 'Syne', sans-serif; font-weight: 800;
-  font-size: clamp(2.4rem, 4.5vw, 4.8rem);
+  font-size: clamp(2.4rem, 4.5vw, 4.8rem); /* tamanho fluido: mínimo 2.4rem, máximo 4.8rem */
   line-height: 1.04; color: #fff;
   letter-spacing: -0.03em; margin-bottom: 1.5rem;
 }
+/* A palavra "fica." dentro de <em> fica dourada e com sublinhado animado */
 .hero h1 em {
   font-style: normal; color: var(--gold);
   position: relative; display: inline-block;
@@ -209,19 +239,24 @@ nav.scrolled { box-shadow: 0 2px 20px rgba(0,0,0,0.08); }
   background: linear-gradient(90deg, var(--gold), rgba(255,255,255,0.5), var(--gold));
   background-size: 200% 100%;
   border-radius: 2px;
-  animation: shimmer 3s 1.5s linear infinite;
+  animation: shimmer 3s 1.5s linear infinite; /* brilho que desliza ao longo do sublinhado */
 }
 @keyframes shimmer {
   0%   { background-position: 200% 0; }
   100% { background-position: -200% 0; }
 }
+
+/* Parágrafo de descrição abaixo do título */
 .hero-desc {
   font-size: 1rem; line-height: 1.75;
   color: rgba(255,255,255,0.68);
-  max-width: 440px; margin-bottom: 2.5rem;
+  max-width: 440px; margin-bottom: 2.5rem; /* limita a largura para não esticar demasiado */
 }
+
+/* Contentor dos dois botões (Ver Portefólio / Solicitar Orçamento) */
 .hero-actions { display: flex; gap: 1rem; flex-wrap: wrap; }
 
+/* Botão principal — fundo dourado */
 .btn-primary {
   display: inline-flex; align-items: center; gap: 8px;
   background: var(--gold); color: #1a1000;
@@ -229,17 +264,19 @@ nav.scrolled { box-shadow: 0 2px 20px rgba(0,0,0,0.08); }
   font-size: 0.95rem; font-weight: 600; text-decoration: none;
   transition: transform 0.25s, box-shadow 0.25s;
   -webkit-tap-highlight-color: transparent;
-  position: relative; overflow: hidden;
+  position: relative; overflow: hidden; /* necessário para o efeito de brilho abaixo ficar contido */
 }
+/* Efeito de "brilho a passar" (shine) que atravessa o botão no hover */
 .btn-primary::before {
   content: ''; position: absolute; top: 0; left: -100%;
   width: 60%; height: 100%;
   background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
   transition: left 0.4s ease;
 }
-.btn-primary:hover::before { left: 160%; }
+.btn-primary:hover::before { left: 160%; } /* desliza de fora para fora, atravessando o botão */
 .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(244,174,2,0.45); }
 
+/* Botão secundário — apenas contorno (outline) */
 .btn-outline {
   display: inline-flex; align-items: center; gap: 8px;
   background: transparent; color: rgba(255,255,255,0.8);
@@ -251,51 +288,55 @@ nav.scrolled { box-shadow: 0 2px 20px rgba(0,0,0,0.08); }
 }
 .btn-outline:hover { border-color: rgba(255,255,255,0.6); background: rgba(255,255,255,0.06); transform: translateY(-2px); }
 
+/* Linha de estatísticas (10+ anos / 150+ projectos / 50+ clientes) */
 .hero-stats {
   display: flex; gap: 2rem;
   margin-top: 3rem; padding-top: 2.5rem;
-  border-top: 1px solid rgba(255,255,255,0.12);
-  flex-wrap: wrap;
+  border-top: 1px solid rgba(255,255,255,0.12); /* linha divisória fina por cima */
+  flex-wrap: wrap; /* em ecrãs pequenos os números podem passar para a linha seguinte */
 }
-.stat-item { flex: 0 0 auto; }
+.stat-item { flex: 0 0 auto; } /* cada bloco de estatística não estica nem encolhe */
 .stat-num {
   font-family: 'Syne', sans-serif; font-weight: 800;
   font-size: 2rem; color: #fff; line-height: 1; margin-bottom: 4px;
 }
-.stat-num span { color: var(--gold); }
+.stat-num span { color: var(--gold); } /* o símbolo "+" fica dourado */
 .stat-label { font-size: 0.72rem; color: rgba(255,255,255,0.45); text-transform: uppercase; letter-spacing: 0.05em; }
 
-/* ── HERO PHOTO PANEL ── */
+/* ── PAINEL DIREITO DO HERO (slideshow de fotos) ── */
 .hero-photo-panel {
   position: relative; background: var(--blue); overflow: hidden;
 }
+/* Imagem de fundo subtil (textura), muito transparente */
 .hero-photo-panel::before {
   content: ''; position: absolute; inset: 0;
   background: url('images/bg2.jpg') center/cover no-repeat;
   opacity: 0.06; pointer-events: none;
 }
 
-/* Particles */
+/* Contentor das "partículas" flutuantes douradas (efeito decorativo) */
 .hero-particles {
   position: absolute; inset: 0; pointer-events: none; overflow: hidden; z-index: 1;
 }
+/* Cada partícula individual — criada dinamicamente via JS (ver buildParticles()) */
 .particle {
   position: absolute; border-radius: 50%;
   background: rgba(244,174,2,0.15);
   animation: floatUp linear infinite;
 }
 @keyframes floatUp {
-  0%   { transform: translateY(100%) scale(0); opacity: 0; }
+  0%   { transform: translateY(100%) scale(0); opacity: 0; }  /* começa em baixo, invisível */
   10%  { opacity: 1; }
   90%  { opacity: 0.6; }
-  100% { transform: translateY(-20%) scale(1); opacity: 0; }
+  100% { transform: translateY(-20%) scale(1); opacity: 0; } /* sobe e desaparece no topo */
 }
 
-/* ── SLIDESHOW ── 
-   CRITICAL FIX: No CSS animation on .hero-slide.
-   Opacity/transform are managed exclusively by JS via .active class.
-   The CSS animation (firstSlideIn) has been removed because it was
-   keeping opacity:0 via fill-mode:both, overriding .active { opacity:1 }.
+/* ── SLIDESHOW DE IMAGENS (fotos do designer) ──
+   IMPORTANTE: a opacidade/transformação de cada slide é controlada
+   APENAS pela classe .active, adicionada/removida via JavaScript.
+   Não há nenhuma "animation" CSS aplicada directamente ao .hero-slide,
+   porque isso entrava em conflito com o controlo via JS e fazia o
+   slideshow não funcionar (ficava sempre invisível).
 */
 .hero-slideshow {
   position: absolute; inset: 0;
@@ -305,29 +346,29 @@ nav.scrolled { box-shadow: 0 2px 20px rgba(0,0,0,0.08); }
 .hero-slide {
   position: absolute;
   bottom: 0; left: 50%;
-  /* default state: hidden, slightly scaled down */
+  /* Estado por defeito: escondido e ligeiramente mais pequeno */
   opacity: 0;
   transform: translateX(-50%) scale(0.97);
   height: 95%; width: auto; max-width: 90%;
   object-fit: contain; object-position: bottom center;
-  /* transition only — NO animation property here */
+  /* Apenas "transition" aqui — a mudança de estado é feita via classe .active */
   transition: opacity 0.9s ease, transform 0.9s ease;
   display: block; pointer-events: none;
   will-change: opacity, transform;
 }
-/* Active slide: JS adds this class */
+/* Slide actualmente visível — esta classe é alternada pelo JS (função goToSlide) */
 .hero-slide.active {
   opacity: 1;
   transform: translateX(-50%) scale(1);
 }
 
-/* Dots */
+/* Bolinhas indicadoras (dots) por baixo do slideshow */
 .hero-dots {
   position: absolute; bottom: 1.5rem; left: 50%; transform: translateX(-50%);
   display: flex; gap: 6px; z-index: 3;
 }
 .hero-dot {
-  width: 32px; height: 32px;
+  width: 32px; height: 32px; /* área de toque generosa, mesmo que a bolinha visível seja pequena */
   display: flex; align-items: center; justify-content: center;
   background: none; border: none; cursor: pointer; padding: 0;
   -webkit-tap-highlight-color: transparent;
@@ -338,12 +379,13 @@ nav.scrolled { box-shadow: 0 2px 20px rgba(0,0,0,0.08); }
   background: rgba(255,255,255,0.3);
   transition: background 0.35s, width 0.35s, border-radius 0.35s;
 }
+/* Dot do slide actual: fica dourado e em forma de "pílula" alongada */
 .hero-dot.active::after {
   background: var(--gold);
   width: 22px; border-radius: 4px;
 }
 
-/* Arrows */
+/* Setas de navegação (anterior / seguinte) do slideshow */
 .hero-arrow {
   position: absolute; top: 50%; transform: translateY(-50%);
   background: rgba(255,255,255,0.08);
@@ -360,15 +402,15 @@ nav.scrolled { box-shadow: 0 2px 20px rgba(0,0,0,0.08); }
 .hero-arrow-prev { left: 12px; }
 .hero-arrow-next { right: 12px; }
 
-/* Name badge */
+/* Cartão/etiqueta com o nome do designer, sobreposto ao slideshow */
 .hero-name-badge {
   position: absolute; bottom: 3.5rem; right: 1.5rem;
   background: rgba(2,30,75,0.82);
   backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
   border: 1px solid rgba(244,174,2,0.3);
   border-radius: 14px; padding: 1rem 1.4rem; z-index: 4;
-  max-width: calc(100% - 3rem);
-  animation: badgeFloat 4s ease-in-out infinite;
+  max-width: calc(100% - 3rem); /* nunca encosta às bordas do ecrã */
+  animation: badgeFloat 4s ease-in-out infinite; /* flutua suavemente para cima/baixo */
 }
 @keyframes badgeFloat {
   0%,100% { transform: translateY(0); }
@@ -377,7 +419,7 @@ nav.scrolled { box-shadow: 0 2px 20px rgba(0,0,0,0.08); }
 .hb-title { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 1rem; color: #fff; line-height: 1.2; }
 .hb-sub   { font-size: 0.72rem; color: var(--gold); letter-spacing: 0.07em; text-transform: uppercase; margin-top: 3px; }
 
-/* Gold line at bottom */
+/* Linha dourada decorativa na base do painel de fotos, com brilho a percorrê-la */
 .hero-photo-panel::after {
   content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 3px;
   background: linear-gradient(90deg, transparent 0%, var(--gold) 50%, transparent 100%);
@@ -390,11 +432,13 @@ nav.scrolled { box-shadow: 0 2px 20px rgba(0,0,0,0.08); }
 }
 
 /* ════════════════════════════
-   SECTION COMMONS + REVEAL
+   ELEMENTOS COMUNS DE SECÇÃO
+   (usados em Serviços, Sobre, Portefólio, Processo, Contacto)
    ════════════════════════════ */
-section { padding: 96px 5vw; }
-.section-inner { max-width: 1200px; margin: 0 auto; }
+section { padding: 96px 5vw; } /* espaçamento vertical generoso entre secções */
+.section-inner { max-width: 1200px; margin: 0 auto; } /* limita a largura do conteúdo e centra-o */
 
+/* Pequena etiqueta acima do título de cada secção (ex: "O Que Faço", "Sobre Mim") */
 .section-label {
   display: inline-flex; align-items: center; gap: 0;
   font-size: 0.75rem; font-weight: 600;
@@ -402,7 +446,7 @@ section { padding: 96px 5vw; }
   color: var(--blue); margin-bottom: 0.75rem;
   overflow: hidden;
 }
-/* Animated bar — uses max-width so layout never breaks */
+/* Barrinha dourada que "cresce" da esquerda quando a etiqueta entra em vista (scroll reveal) */
 .section-label::before {
   content: '';
   display: inline-block;
@@ -413,6 +457,7 @@ section { padding: 96px 5vw; }
   transition: max-width 0.5s cubic-bezier(0.22,1,0.36,1), margin-right 0.4s;
   vertical-align: middle; flex-shrink: 0;
 }
+/* .visible é adicionada via JS (IntersectionObserver) quando o elemento entra no ecrã */
 .section-label.visible::before { max-width: 20px; width: 20px; margin-right: 8px; }
 
 .section-title {
@@ -426,14 +471,17 @@ section { padding: 96px 5vw; }
   color: var(--text-muted); max-width: 560px; margin-bottom: 3rem;
 }
 
-/* Reveal classes — all start hidden */
+/* ── CLASSES DE "REVEAL" (animação ao aparecer no scroll) ──
+   Todas começam escondidas (opacity:0) e ganham a classe .visible
+   via JavaScript (IntersectionObserver) quando entram no ecrã. */
 .fade-in {
-  opacity: 0; transform: translateY(28px);
+  opacity: 0; transform: translateY(28px); /* sobe ligeiramente enquanto aparece */
   transition: opacity 0.65s ease, transform 0.65s ease;
 }
 .fade-in.visible { opacity: 1; transform: translateY(0); }
 
-/* Only applied on ≥960px to avoid horizontal overflow on mobile */
+/* fade-left / fade-right: entram de lado, mas só em ecrãs ≥960px,
+   para evitar overflow horizontal em mobile (em mobile comportam-se como fade-in) */
 .fade-left {
   opacity: 0; transform: translateX(0) translateY(28px);
   transition: opacity 0.65s ease, transform 0.65s ease;
@@ -443,11 +491,12 @@ section { padding: 96px 5vw; }
   transition: opacity 0.65s ease, transform 0.65s ease;
 }
 @media (min-width: 960px) {
-  .fade-left  { transform: translateX(-28px); }
-  .fade-right { transform: translateX(28px); }
+  .fade-left  { transform: translateX(-28px); } /* entra a deslizar da esquerda */
+  .fade-right { transform: translateX(28px); }  /* entra a deslizar da direita */
 }
 .fade-left.visible, .fade-right.visible { opacity: 1; transform: translateX(0) translateY(0); }
 
+/* fade-scale: entra com um ligeiro efeito de "zoom in" — usado nos cards do portefólio */
 .fade-scale {
   opacity: 0; transform: translateY(20px) scale(0.97);
   transition: opacity 0.55s ease, transform 0.55s cubic-bezier(0.22,1,0.36,1);
@@ -455,11 +504,13 @@ section { padding: 96px 5vw; }
 .fade-scale.visible { opacity: 1; transform: translateY(0) scale(1); }
 
 /* ════════════════════════════
-   SERVIÇOS
+   SECÇÃO "SERVIÇOS"
    ════════════════════════════ */
 .services { background: var(--off-white); }
 .services-grid {
   display: grid;
+  /* auto-fit + minmax: cria automaticamente o número de colunas que cabem,
+     cada uma com no mínimo 260px (ou 100% se o ecrã for mais estreito) */
   grid-template-columns: repeat(auto-fit, minmax(min(100%, 260px), 1fr));
   gap: 1.5rem; margin-top: 2rem;
 }
@@ -469,6 +520,7 @@ section { padding: 96px 5vw; }
   transition: transform 0.3s cubic-bezier(0.22,1,0.36,1), box-shadow 0.3s;
   position: relative; overflow: hidden;
 }
+/* Linha dourada que aparece por baixo do card no hover (cresce da esquerda) */
 .service-card::after {
   content: ''; position: absolute;
   bottom: 0; left: 0; right: 0; height: 3px;
@@ -478,25 +530,37 @@ section { padding: 96px 5vw; }
 }
 .service-card:hover { transform: translateY(-6px); box-shadow: 0 20px 48px rgba(3,62,140,0.12); }
 .service-card:hover::after { transform: scaleX(1); }
+
+/* Ícone circular/quadrado no topo de cada card de serviço */
 .service-icon {
   width: 48px; height: 48px; background: var(--blue-light); border-radius: 12px;
   display: flex; align-items: center; justify-content: center;
   margin-bottom: 1.25rem; font-size: 1.25rem; color: var(--blue);
   transition: transform 0.35s cubic-bezier(0.34,1.56,0.64,1), background 0.3s, color 0.3s;
 }
+/* No hover do card, o ícone aumenta, roda ligeiramente e inverte as cores */
 .service-card:hover .service-icon { transform: scale(1.15) rotate(-5deg); background: var(--blue); color: #fff; }
 .service-title { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 1.05rem; color: var(--text); margin-bottom: 0.6rem; }
 .service-desc  { font-size: 0.875rem; line-height: 1.65; color: var(--text-muted); }
 
 /* ════════════════════════════
-   SOBRE
+   SECÇÃO "SOBRE"
    ════════════════════════════ */
+/* Grid de 2 colunas: texto à esquerda, cartão de citação à direita */
 .about-inner { display: grid; grid-template-columns: 1fr 1fr; gap: 5rem; align-items: center; }
-/* Prevent any child from spilling outside the section */
+
+/* Rede de segurança: garante que nada nesta secção ultrapassa a largura do ecrã */
 #sobre { overflow: hidden; }
-.about-text { min-width: 0; } /* critical: grid children need min-width:0 to respect container */
+/* IMPORTANTE: por defeito, colunas de grid têm min-width:auto, o que as
+   impede de encolher abaixo do tamanho do seu conteúdo (texto/imagens).
+   Isto causava o texto a ser cortado em mobile. min-width:0 corrige isso,
+   permitindo que o texto quebre linha correctamente em vez de transbordar. */
+.about-text { min-width: 0; }
 .about-visual { min-width: 0; }
+
 .about-text p { font-size: 1rem; line-height: 1.75; color: var(--text-mid); margin-bottom: 1.2rem; }
+
+/* Lista de "tags" com os programas usados (Photoshop, Illustrator, etc.) */
 .tools-list { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 1.5rem; }
 .tool-tag {
   display: flex; align-items: center; gap: 7px;
@@ -508,19 +572,22 @@ section { padding: 96px 5vw; }
 .tool-tag:hover { transform: translateY(-3px) scale(1.04); box-shadow: 0 6px 18px rgba(3,62,140,0.15); }
 .tool-tag img { width: 18px; height: 18px; object-fit: contain; }
 
+/* Cartão azul com a citação de destaque */
 .about-card {
   background: var(--blue); color: #fff;
   border-radius: var(--radius-lg); padding: 2.5rem;
   position: relative; overflow: hidden;
-  /* Ensure card never bleeds outside its column */
+  /* Garante que o cartão nunca ultrapassa a largura da sua coluna */
   width: 100%; box-sizing: border-box;
 }
+/* Aspas decorativas gigantes no canto superior esquerdo do cartão */
 .about-card::before {
   content: '"'; position: absolute; top: -20px; left: 20px;
   font-family: 'Syne', sans-serif; font-size: 8rem;
   color: rgba(244,174,2,0.15); font-weight: 800; line-height: 1;
   pointer-events: none;
 }
+/* Brilho azul pulsante no canto inferior direito do cartão (efeito decorativo) */
 .about-card-glow {
   position: absolute; right: -40px; bottom: -40px;
   width: 200px; height: 200px; border-radius: 50%;
@@ -536,7 +603,7 @@ section { padding: 96px 5vw; }
   font-size: 1.05rem; line-height: 1.7;
   color: rgba(255,255,255,0.9);
   position: relative; z-index: 1; margin-bottom: 1.5rem;
-  /* Break long words on very small screens */
+  /* Garante que mesmo uma palavra muito longa quebra linha em vez de transbordar */
   overflow-wrap: break-word; word-break: break-word;
 }
 .about-card-author { display: flex; align-items: center; gap: 12px; position: relative; z-index: 1; flex-wrap: wrap; }
@@ -548,6 +615,8 @@ section { padding: 96px 5vw; }
 .author-photo img { width: 100%; height: 100%; object-fit: cover; object-position: top; }
 .author-name { font-weight: 600; font-size: 0.9rem; color: #fff; }
 .author-role { font-size: 0.78rem; color: rgba(255,255,255,0.55); }
+
+/* Linha com 3 mini-estatísticas dentro do cartão azul (10+ Anos / BANG / 360°) */
 .exp-row { display: grid; grid-template-columns: repeat(3,1fr); gap: 0.75rem; margin-top: 1.5rem; position: relative; z-index: 1; }
 .exp-item {
   background: rgba(255,255,255,0.07); border: 1px solid rgba(255,255,255,0.12);
@@ -559,9 +628,11 @@ section { padding: 96px 5vw; }
 .exp-label { font-size: 0.7rem; color: rgba(255,255,255,0.5); text-transform: uppercase; letter-spacing: 0.05em; }
 
 /* ════════════════════════════
-   PORTFÓLIO
+   SECÇÃO "PORTEFÓLIO"
    ════════════════════════════ */
 .portfolio { background: #fff; }
+
+/* Botões de filtro por categoria (Todos / Branding / Campanhas... ) */
 .portfolio-filters { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 2.5rem; }
 .filter-btn {
   background: var(--off-white); border: 1px solid var(--border);
@@ -570,32 +641,39 @@ section { padding: 96px 5vw; }
   transition: all 0.25s; font-family: 'Inter', sans-serif;
   -webkit-tap-highlight-color: transparent; white-space: nowrap;
 }
+/* Estado activo (filtro seleccionado) e hover têm o mesmo estilo visual */
 .filter-btn:hover, .filter-btn.active {
   background: var(--blue); border-color: var(--blue); color: #fff;
   transform: translateY(-1px); box-shadow: 0 4px 12px rgba(3,62,140,0.2);
 }
+
+/* Grelha de imagens do portefólio — 4 colunas em desktop (ajustado em mobile mais abaixo) */
 .portfolio-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 1.25rem; }
 .port-item {
   border-radius: var(--radius); overflow: hidden; position: relative;
-  aspect-ratio: 4/3; cursor: pointer; background: var(--off-white);
+  aspect-ratio: 4/3; cursor: pointer; background: var(--off-white); /* mantém proporção mesmo antes da imagem carregar */
   min-height: 0;
   transition: transform 0.35s cubic-bezier(0.22,1,0.36,1), box-shadow 0.35s;
 }
 .port-item:hover { transform: scale(1.03) translateY(-4px); box-shadow: 0 20px 48px rgba(0,0,0,0.18); z-index: 2; }
 .port-item img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s ease; display: block; }
-.port-item:hover img { transform: scale(1.08); }
+.port-item:hover img { transform: scale(1.08); } /* leve "zoom" na imagem ao passar o rato */
+
+/* Camada escura com informação (título + categoria) que aparece por cima da imagem no hover */
 .port-overlay {
   position: absolute; inset: 0;
   background: linear-gradient(to top, rgba(3,62,140,0.92) 0%, rgba(3,62,140,0.4) 50%, transparent 100%);
   opacity: 0; transition: opacity 0.3s;
   display: flex; flex-direction: column; justify-content: flex-end; padding: 1.25rem;
 }
+/* Em dispositivos touch (sem hover), o overlay fica sempre semi-visível para ser "descobrível" */
 @media (hover: none) { .port-overlay { opacity: 0.85; } }
 .port-item:hover .port-overlay { opacity: 1; }
+
 .port-overlay-title {
   font-family: 'Syne', sans-serif; font-weight: 700;
   font-size: 0.9rem; color: #fff; margin-bottom: 3px;
-  transform: translateY(6px); transition: transform 0.3s 0.05s;
+  transform: translateY(6px); transition: transform 0.3s 0.05s; /* sobe ligeiramente ao aparecer */
 }
 .port-overlay-cat {
   font-size: 0.72rem; color: var(--gold); font-weight: 500;
@@ -604,6 +682,8 @@ section { padding: 96px 5vw; }
 }
 .port-item:hover .port-overlay-title,
 .port-item:hover .port-overlay-cat { transform: translateY(0); }
+
+/* Ícone de "expandir" (lupa) no canto superior direito de cada imagem */
 .port-zoom {
   position: absolute; top: 10px; right: 10px;
   width: 34px; height: 34px; background: rgba(255,255,255,0.15);
@@ -615,6 +695,7 @@ section { padding: 96px 5vw; }
 .port-item:hover .port-zoom { opacity: 1; transform: scale(1); }
 @media (hover: none) { .port-zoom { opacity: 1; transform: scale(1); } }
 
+/* Botão "Ver Mais Projectos" (paginação simples — carrega mais 18 de cada vez) */
 .port-load-more { text-align: center; margin-top: 2.5rem; }
 .btn-load {
   display: inline-flex; align-items: center; gap: 8px;
@@ -627,26 +708,31 @@ section { padding: 96px 5vw; }
 .btn-load:hover { background: var(--blue-light); color: var(--blue); border-color: var(--blue); transform: translateY(-1px); }
 
 /* ════════════════════════════
-   LIGHTBOX
+   LIGHTBOX (visualização ampliada das imagens do portefólio)
    ════════════════════════════ */
 .lightbox {
-  display: none; position: fixed; inset: 0; z-index: 1000;
+  display: none; position: fixed; inset: 0; z-index: 1000; /* acima de tudo o resto */
   background: rgba(2,15,45,0.97);
   align-items: center; justify-content: center;
+  /* env(safe-area-inset-*) garante espaçamento correcto em iPhones com notch/Island */
   padding: max(2rem, env(safe-area-inset-top)) max(1rem, env(safe-area-inset-right)) max(2rem, env(safe-area-inset-bottom)) max(1rem, env(safe-area-inset-left));
-  touch-action: none; overscroll-behavior: contain;
+  touch-action: none; overscroll-behavior: contain; /* impede scroll da página por baixo */
 }
-.lightbox.open { display: flex; }
+.lightbox.open { display: flex; } /* classe adicionada via JS ao abrir uma imagem */
+
 .lb-img-wrap { display: flex; align-items: center; justify-content: center; }
+/* Pequena animação de "entrada" da imagem (zoom suave) — reaplicada via JS a cada troca de imagem */
 .lb-img-wrap.anim { animation: lbIn 0.35s cubic-bezier(0.22,1,0.36,1) both; }
 @keyframes lbIn {
   from { opacity:0; transform: scale(0.92); }
   to   { opacity:1; transform: scale(1); }
 }
 .lightbox img {
-  max-width: 90vw; max-height: 75vh; max-height: 75dvh;
+  max-width: 90vw; max-height: 75vh; max-height: 75dvh; /* 75dvh = mais fiável em iOS Safari */
   border-radius: var(--radius); object-fit: contain; display: block;
 }
+
+/* Botão de fechar (X) */
 .lb-close {
   position: absolute; top: 16px; right: 16px;
   background: rgba(255,255,255,0.08); border: none; color: rgba(255,255,255,0.7);
@@ -656,6 +742,8 @@ section { padding: 96px 5vw; }
   -webkit-tap-highlight-color: transparent;
 }
 .lb-close:hover { color: var(--gold); background: rgba(255,255,255,0.14); transform: rotate(90deg); }
+
+/* Setas de navegação dentro do lightbox (imagem anterior/seguinte) */
 .lb-nav {
   position: absolute; top: 50%; transform: translateY(-50%);
   background: rgba(255,255,255,0.1); border: none; color: #fff;
@@ -669,33 +757,37 @@ section { padding: 96px 5vw; }
 .lb-next { right: 12px; }
 .lb-prev:hover { transform: translateY(-50%) translateX(-3px); }
 .lb-next:hover { transform: translateY(-50%) translateX(3px); }
+
+/* Texto "Projecto 01 · 1 / 58" no rodapé do lightbox */
 .lb-counter {
   position: absolute; bottom: 16px; left: 50%; transform: translateX(-50%);
   color: rgba(255,255,255,0.5); font-size: 0.78rem; letter-spacing: 0.05em; white-space: nowrap;
 }
+/* Descrição opcional de cada projecto (só aparece se p.desc não estiver vazio no array PROJECTS) */
 #lb-desc {
   display: none; position: absolute;
   bottom: 48px; left: 50%; transform: translateX(-50%);
   max-width: min(600px, 88vw); text-align: center;
   color: rgba(255,255,255,0.75); font-size: 0.82rem; line-height: 1.6;
   background: rgba(0,0,0,0.45); backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px);
-  padding: 10px 20px; border-radius: 10px; white-space: pre-line;
+  padding: 10px 20px; border-radius: 10px; white-space: pre-line; /* respeita quebras de linha \n no texto */
 }
 
 /* ════════════════════════════
-   PROCESSO
+   SECÇÃO "PROCESSO"
    ════════════════════════════ */
 .processo { background: var(--off-white); }
 .processo-steps {
-  display: grid; grid-template-columns: repeat(4,1fr);
+  display: grid; grid-template-columns: repeat(4,1fr); /* 4 passos lado a lado em desktop */
   gap: 1.5rem; margin-top: 2rem; position: relative;
 }
-/* Connecting line — desktop only, controlled via JS class */
+/* Linha cinzenta de fundo, ligando os 4 passos (visível apenas em desktop) */
 .processo-steps::before {
   content: ''; position: absolute;
   top: 24px; left: calc(12.5% + 24px); right: calc(12.5% + 24px);
   height: 2px; background: var(--border); z-index: 0;
 }
+/* Linha colorida (dourado → azul) que "cresce" por cima da linha cinzenta quando entra em vista */
 .processo-steps::after {
   content: ''; position: absolute;
   top: 24px; left: calc(12.5% + 24px);
@@ -703,15 +795,18 @@ section { padding: 96px 5vw; }
   background: linear-gradient(90deg, var(--gold), var(--blue));
   z-index: 1; transition: width 1.4s 0.2s cubic-bezier(0.22,1,0.36,1);
 }
+/* .line-animated é adicionada via JS quando o primeiro step-card entra no ecrã */
 .processo-steps.line-animated::after { width: calc(75% - 48px); }
 
 .step-card {
   background: #fff; border: 1px solid var(--border);
   border-radius: var(--radius-lg); padding: 2rem 1.5rem; text-align: center;
-  position: relative; z-index: 2;
+  position: relative; z-index: 2; /* fica por cima das linhas conectoras */
   transition: transform 0.3s cubic-bezier(0.22,1,0.36,1), box-shadow 0.3s, border-color 0.3s;
 }
 .step-card:hover { transform: translateY(-5px); box-shadow: 0 16px 40px rgba(3,62,140,0.1); border-color: rgba(3,62,140,0.2); }
+
+/* Círculo numerado (01, 02, 03, 04) no topo de cada passo */
 .step-num {
   width: 48px; height: 48px; border-radius: 50%;
   background: var(--blue); color: #fff;
@@ -725,9 +820,10 @@ section { padding: 96px 5vw; }
 .step-desc  { font-size: 0.825rem; line-height: 1.6; color: var(--text-muted); }
 
 /* ════════════════════════════
-   CONTACTO
+   SECÇÃO "CONTACTO"
    ════════════════════════════ */
 .contact { background: var(--blue); position: relative; overflow: hidden; }
+/* Padrão de pontinhos subtil em movimento, no fundo da secção */
 .contact::before {
   content: ''; position: absolute; inset: 0;
   background-image: radial-gradient(rgba(244,174,2,0.06) 1px, transparent 1px);
@@ -738,12 +834,16 @@ section { padding: 96px 5vw; }
   from { background-position: 0 0; }
   to   { background-position: 32px 32px; }
 }
+/* Grid de 2 colunas: informações de contacto à esquerda, formulário à direita */
 .contact-inner { display: grid; grid-template-columns: 1fr 1fr; gap: 5rem; align-items: start; position: relative; z-index: 1; }
+
+/* Nesta secção (fundo azul), os textos da etiqueta/título/subtítulo precisam de cores claras */
 .contact .section-label { color: var(--gold); }
 .contact .section-label::before { background: rgba(255,255,255,0.4); }
 .contact .section-title { color: #fff; }
 .contact .section-subtitle { color: rgba(255,255,255,0.65); }
 
+/* Lista de contactos (Localização, E-mail, WhatsApp, LinkedIn) */
 .contact-info-list { list-style: none; }
 .contact-info-list li {
   display: flex; align-items: flex-start; gap: 1rem;
@@ -751,7 +851,7 @@ section { padding: 96px 5vw; }
   transition: transform 0.25s;
 }
 .contact-info-list li:last-child { border-bottom: none; }
-.contact-info-list li:hover { transform: translateX(4px); }
+.contact-info-list li:hover { transform: translateX(4px); } /* desloca-se ligeiramente para a direita */
 .ci-icon {
   width: 40px; height: 40px; background: rgba(244,174,2,0.15); border-radius: 10px;
   display: flex; align-items: center; justify-content: center;
@@ -760,36 +860,44 @@ section { padding: 96px 5vw; }
 }
 .contact-info-list li:hover .ci-icon { background: rgba(244,174,2,0.25); transform: scale(1.1); }
 .ci-label { font-size: 0.72rem; color: rgba(255,255,255,0.45); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 3px; }
-.ci-value { font-size: 0.9rem; color: rgba(255,255,255,0.88); font-weight: 500; text-decoration: none; transition: color 0.2s; word-break: break-all; }
+.ci-value {
+  font-size: 0.9rem; color: rgba(255,255,255,0.88); font-weight: 500; text-decoration: none; transition: color 0.2s;
+  word-break: break-all; /* impede que e-mails/links muito longos transbordem em mobile */
+}
 .ci-value:hover { color: var(--gold); }
 
+/* ── FORMULÁRIO DE CONTACTO ── */
 .contact-form { display: flex; flex-direction: column; gap: 1rem; }
-.form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+.form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; } /* Nome + E-mail lado a lado */
 .form-group { display: flex; flex-direction: column; gap: 6px; }
 .form-label { font-size: 0.78rem; font-weight: 500; color: rgba(255,255,255,0.6); letter-spacing: 0.04em; text-transform: uppercase; }
+
 .form-input, .form-textarea, .form-select {
   background: rgba(255,255,255,0.07); border: 1px solid rgba(255,255,255,0.15);
   border-radius: 10px; padding: 12px 16px;
-  font-size: 1rem; /* ≥16px prevents iOS auto-zoom */
+  font-size: 1rem; /* ATENÇÃO: tem de ser ≥16px para o iOS Safari não fazer zoom automático ao focar o campo */
   color: #fff; font-family: 'Inter', sans-serif;
   transition: border-color 0.25s, background 0.25s, box-shadow 0.25s;
   outline: none; width: 100%;
-  -webkit-appearance: none; appearance: none;
+  -webkit-appearance: none; appearance: none; /* remove o estilo nativo do browser (necessário para o select) */
 }
 .form-input::placeholder, .form-textarea::placeholder { color: rgba(255,255,255,0.3); }
 .form-input:focus, .form-textarea:focus, .form-select:focus {
   border-color: var(--gold); background: rgba(255,255,255,0.1);
-  box-shadow: 0 0 0 3px rgba(244,174,2,0.15);
+  box-shadow: 0 0 0 3px rgba(244,174,2,0.15); /* anel de foco suave, em vez do outline padrão */
 }
-.form-textarea { resize: vertical; min-height: 120px; }
+.form-textarea { resize: vertical; min-height: 120px; } /* só permite redimensionar verticalmente */
+
+/* Envolve o <select> para podermos desenhar a seta personalizada (já que appearance:none remove a nativa) */
 .select-wrap { position: relative; }
 .select-wrap::after {
-  content: '\f107'; font-family: 'Font Awesome 6 Free'; font-weight: 900;
+  content: '\f107'; font-family: 'Font Awesome 6 Free'; font-weight: 900; /* ícone de seta para baixo */
   position: absolute; right: 14px; top: 50%; transform: translateY(-50%);
   color: rgba(255,255,255,0.5); pointer-events: none;
 }
-.form-select option { background: #033E8C; color: #fff; }
+.form-select option { background: #033E8C; color: #fff; } /* estilo das opções do dropdown */
 
+/* Botão "Enviar Mensagem" */
 .btn-submit {
   background: var(--gold); color: #1a1000; border: none;
   padding: 14px 28px; border-radius: 10px;
@@ -797,10 +905,11 @@ section { padding: 96px 5vw; }
   font-family: 'Inter', sans-serif;
   display: inline-flex; align-items: center; gap: 8px;
   transition: transform 0.25s, box-shadow 0.25s;
-  align-self: flex-start;
+  align-self: flex-start; /* não estica a toda a largura por defeito (excepto em mobile, ver media query) */
   -webkit-tap-highlight-color: transparent;
   position: relative; overflow: hidden;
 }
+/* Mesmo efeito de "brilho a passar" usado no btn-primary */
 .btn-submit::before {
   content: ''; position: absolute; top: 0; left: -100%;
   width: 60%; height: 100%;
@@ -811,14 +920,14 @@ section { padding: 96px 5vw; }
 .btn-submit:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(244,174,2,0.4); }
 
 /* ════════════════════════════
-   FOOTER
+   RODAPÉ (FOOTER)
    ════════════════════════════ */
 footer {
   background: #01224E; color: rgba(255,255,255,0.5);
   padding: 2.5rem 5vw;
   display: flex; align-items: center; justify-content: space-between;
   font-size: 0.82rem; flex-wrap: wrap; gap: 1rem;
-  padding-bottom: max(2.5rem, env(safe-area-inset-bottom));
+  padding-bottom: max(2.5rem, env(safe-area-inset-bottom)); /* respeita a barra inferior do iPhone */
 }
 .footer-logo { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 1rem; color: rgba(255,255,255,0.85); text-decoration: none; transition: color 0.2s; }
 .footer-logo span { color: var(--gold); }
@@ -834,7 +943,9 @@ footer {
 .social-link:hover { background: var(--gold); color: #1a1000; transform: translateY(-3px); }
 
 /* ════════════════════════════
-   REDUCED MOTION
+   ACESSIBILIDADE: "MOVIMENTO REDUZIDO"
+   Se o utilizador tiver activado esta preferência no sistema
+   operativo, todas as animações/transições são quase instantâneas.
    ════════════════════════════ */
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after {
@@ -842,56 +953,55 @@ footer {
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
   }
-  .hero-slide { transition: opacity 0.3s ease !important; }
+  .hero-slide { transition: opacity 0.3s ease !important; } /* slideshow continua a funcionar, mas mais rápido */
 }
 
 /* ════════════════════════════
-   RESPONSIVE — TABLET ≤960px
+   RESPONSIVO — TABLET (até 960px de largura)
    ════════════════════════════ */
 @media (max-width: 960px) {
-  /* Hero: stack panels */
+  /* Hero: as duas colunas passam a empilhar-se (texto em cima, foto em baixo) */
   .hero { grid-template-columns: 1fr; min-height: auto; }
 
   .hero-text-panel {
     padding: 100px 6vw 52px;
     text-align: center;
-    align-items: center; /* centre children horizontally */
+    align-items: center; /* centra horizontalmente todos os filhos (flex-direction: column) */
   }
-  .hero-text-panel::after { display: none; }
+  .hero-text-panel::after { display: none; } /* remove a cunha diagonal, já não faz sentido empilhado */
 
   .hero h1 { font-size: clamp(2.2rem, 7vw, 3.6rem); }
-  .hero h1 em::after { display: none; }
+  .hero h1 em::after { display: none; } /* remove o sublinhado brilhante em ecrãs pequenos (fica mais "limpo") */
 
   .hero-eyebrow { margin-bottom: 1.5rem; }
   .hero-desc { margin-left: auto; margin-right: auto; margin-bottom: 2rem; }
   .hero-actions { justify-content: center; }
   .hero-stats { justify-content: center; margin-top: 2rem; padding-top: 2rem; gap: 2rem; }
 
-  /* Photo panel: explicit height below text */
+  /* Painel de fotos passa a ter uma altura fixa/relativa, já não ocupa metade do ecrã */
   .hero-photo-panel { height: 60vw; min-height: 300px; max-height: 480px; }
   .hero-name-badge  { bottom: 3.8rem; right: 1rem; }
 
-  /* Layout */
+  /* Outras secções passam a 1 ou 2 colunas */
   .about-inner    { grid-template-columns: 1fr; gap: 2.5rem; }
   .contact-inner  { grid-template-columns: 1fr; gap: 3rem; }
   .portfolio-grid { grid-template-columns: repeat(2,1fr); }
   .processo-steps { grid-template-columns: repeat(2,1fr); }
-  .processo-steps::before, .processo-steps::after { display: none; }
+  .processo-steps::before, .processo-steps::after { display: none; } /* a linha conectora só faz sentido com 4 colunas */
 
-  /* Nav */
+  /* Troca o menu desktop pelo botão hamburger */
   .nav-links  { display: none; }
   .nav-burger { display: block; }
-  .cursor-glow { display: none; }
+  .cursor-glow { display: none; } /* não há rato em tablet/mobile, este efeito não se aplica */
 
-  /* Contact */
-  .btn-submit { align-self: stretch; justify-content: center; }
+  .btn-submit { align-self: stretch; justify-content: center; } /* botão ocupa toda a largura disponível */
 }
 
 /* ════════════════════════════
-   RESPONSIVE — MOBILE ≤600px
+   RESPONSIVO — MOBILE (até 600px de largura)
    ════════════════════════════ */
 @media (max-width: 600px) {
-  section { padding: 60px 5vw; }
+  section { padding: 60px 5vw; } /* reduz o espaçamento vertical das secções */
 
   .hero-text-panel { padding: 88px 5vw 44px; }
   .hero h1 { font-size: clamp(1.9rem, 8.5vw, 2.8rem); }
@@ -906,35 +1016,35 @@ footer {
   .hb-title { font-size: 0.85rem; }
   .hb-sub   { font-size: 0.62rem; }
 
-  /* Portfolio */
+  /* Portefólio: 1 imagem por linha, proporção mais larga (16:9 em vez de 4:3) */
   .portfolio-grid  { grid-template-columns: 1fr; }
   .port-item       { aspect-ratio: 16/9; }
   .portfolio-filters { gap: 6px; }
   .filter-btn      { padding: 8px 13px; font-size: 0.78rem; }
 
-  /* Processo */
+  /* Processo: 1 passo por linha */
   .processo-steps { grid-template-columns: 1fr; }
 
-  /* Form */
+  /* Formulário: Nome e E-mail empilham-se, botão ocupa 100% da largura */
   .form-row   { grid-template-columns: 1fr; }
   .btn-submit { width: 100%; justify-content: center; align-self: auto; }
 
-  /* Lightbox nav — move inward */
+  /* Lightbox: setas e botão de fechar mais próximos dos cantos para poupar espaço */
   .lb-prev { left: 6px; }
   .lb-next { right: 6px; }
   .lb-nav  { width: 40px; height: 40px; font-size: 0.95rem; }
   .lb-close { top: 10px; right: 10px; }
 
-  /* Footer */
+  /* Rodapé: tudo empilhado e centrado */
   footer { flex-direction: column; align-items: center; text-align: center; gap: 0.75rem; }
 
-  /* Section */
+  /* Títulos de secção ligeiramente mais pequenos */
   .section-title    { font-size: clamp(1.6rem, 7vw, 2.2rem); }
   .section-subtitle { font-size: 0.9rem; margin-bottom: 2rem; }
 }
 
 /* ════════════════════════════
-   RESPONSIVE — SMALL ≤380px
+   RESPONSIVO — ECRÃS MUITO PEQUENOS (até 380px, ex: iPhone SE)
    ════════════════════════════ */
 @media (max-width: 380px) {
   nav { padding: 14px 4vw; }
@@ -949,7 +1059,10 @@ footer {
 </head>
 <body>
 
-<!-- MOBILE NAV OVERLAY -->
+<!-- ════════════════════════════
+     MENU MOBILE (ecrã inteiro, escondido por defeito via CSS)
+     Aberto/fechado pela função toggleNav() no JS
+     ════════════════════════════ -->
 <div id="mobile-nav" class="mobile-nav" role="dialog" aria-modal="true" aria-label="Menu de navegação">
   <button class="mobile-close" onclick="toggleNav()" aria-label="Fechar menu">
     <i class="fas fa-times" aria-hidden="true"></i>
@@ -961,9 +1074,12 @@ footer {
   <a href="#Contacto" onclick="toggleNav()">Contacto</a>
 </div>
 
-<!-- NAV -->
+<!-- ════════════════════════════
+     BARRA DE NAVEGAÇÃO PRINCIPAL (fixa no topo)
+     ════════════════════════════ -->
 <nav id="main-nav" role="navigation" aria-label="Navegação principal">
   <a href="#" class="nav-logo">M.E.<span>·</span>Maurício</a>
+  <!-- Menu visível em desktop (escondido em mobile via CSS, ver media query ≤960px) -->
   <ul class="nav-links">
     <li><a href="#servicos">Serviços</a></li>
     <li><a href="#sobre">Sobre</a></li>
@@ -971,24 +1087,34 @@ footer {
     <li><a href="#processo">Processo</a></li>
     <li><a href="#Contacto" class="nav-cta">Fale Comigo</a></li>
   </ul>
+  <!-- Botão hamburger, visível apenas em mobile -->
   <button class="nav-burger" onclick="toggleNav()" aria-label="Abrir menu" aria-expanded="false">
     <i class="fas fa-bars" aria-hidden="true"></i>
   </button>
 </nav>
 
-<!-- HERO -->
+<!-- ════════════════════════════
+     HERO — secção de abertura
+     ════════════════════════════ -->
 <header class="hero">
-  <!-- Esquerda: texto -->
+
+  <!-- Coluna esquerda: título, descrição, botões e estatísticas -->
   <div class="hero-text-panel">
     <div class="hero-eyebrow">Disponível para novos projectos</div>
+
+    <!-- Título principal. A palavra "fica." dentro de <em> recebe o estilo dourado + sublinhado animado -->
     <h1>Design que<br>vende. Identidade<br>que <em>fica.</em></h1>
+
     <p class="hero-desc">
       Designer Gráfico Sénior com mais de 10 anos de experiência em branding, comunicação visual e desenvolvimento de websites. Transformo ideias em soluções visuais e digitais que unem criatividade, estratégia e tecnologia, da concepção à implementação.
     </p>
+
     <div class="hero-actions">
       <a href="#portfolio" class="btn-primary"><i class="fas fa-eye" aria-hidden="true"></i> Ver Portefólio</a>
       <a href="#Contacto" class="btn-outline"><i class="fas fa-paper-plane" aria-hidden="true"></i> Solicitar Orçamento</a>
     </div>
+
+    <!-- Estatísticas — para editar os números, basta mudar o texto aqui (não há contador animado nesta versão) -->
     <div class="hero-stats">
       <div><div class="stat-num">10<span>+</span></div><div class="stat-label">Anos de Exp.</div></div>
       <div><div class="stat-num">150<span>+</span></div><div class="stat-label">Projectos</div></div>
@@ -996,10 +1122,14 @@ footer {
     </div>
   </div>
 
-  <!-- Direita: slideshow -->
+  <!-- Coluna direita: slideshow de fotos, com setas, dots e a etiqueta com o nome -->
   <div class="hero-photo-panel">
+
+    <!-- Este <div> é preenchido dinamicamente pelo JS (função buildHeroSlideshow),
+         que lê o array HERO_SLIDES e cria uma <img> para cada foto -->
     <div class="hero-slideshow" id="hero-slideshow"></div>
 
+    <!-- Setas para navegar manualmente entre fotos -->
     <button class="hero-arrow hero-arrow-prev" onclick="heroSlide(-1)" aria-label="Slide anterior">
       <i class="fas fa-chevron-left" aria-hidden="true"></i>
     </button>
@@ -1007,8 +1137,10 @@ footer {
       <i class="fas fa-chevron-right" aria-hidden="true"></i>
     </button>
 
+    <!-- Bolinhas indicadoras, também preenchidas via JS -->
     <div class="hero-dots" id="hero-dots" role="tablist" aria-label="Slides"></div>
 
+    <!-- Etiqueta fixa com o nome (não faz parte do slideshow) -->
     <div class="hero-name-badge" aria-hidden="true">
       <div class="hb-title">M.E. Maurício</div>
       <div class="hb-sub">Senior Designer · Luanda</div>
@@ -1016,12 +1148,18 @@ footer {
   </div>
 </header>
 
-<!-- SERVIÇOS -->
+<!-- ════════════════════════════
+     SECÇÃO "SERVIÇOS"
+     ════════════════════════════ -->
 <section class="services" id="servicos">
   <div class="section-inner">
+    <!-- A classe "fade-in" faz estes elementos aparecerem com animação ao chegar ao scroll -->
     <span class="section-label fade-in">O Que Faço</span>
     <h2 class="section-title fade-in">Serviços de Design<br>para o seu Negócio</h2>
     <p class="section-subtitle fade-in">Da identidade visual às peças de comunicação — tudo criado com estratégia e estética ao serviço dos seus objectivos.</p>
+
+    <!-- Grelha de cards de serviço — para adicionar/remover um serviço, basta
+         copiar/apagar um destes blocos .service-card -->
     <div class="services-grid">
       <div class="service-card fade-in">
         <div class="service-icon"><i class="fas fa-palette" aria-hidden="true"></i></div>
@@ -1057,9 +1195,13 @@ footer {
   </div>
 </section>
 
-<!-- SOBRE -->
+<!-- ════════════════════════════
+     SECÇÃO "SOBRE"
+     ════════════════════════════ -->
 <section id="sobre">
   <div class="section-inner about-inner">
+
+    <!-- Coluna esquerda: texto biográfico + ferramentas usadas -->
     <div class="about-text">
       <span class="section-label fade-in">Sobre Mim</span>
       <h2 class="section-title fade-in">Designer Sénior</h2>
@@ -1068,6 +1210,7 @@ footer {
         <p>Tenho trabalhado em agências como a BANG e a Think Tank, onde coordenei projectos desde campanhas nacionais a sistemas de identidade visual completos.</p>
         <p>O meu trabalho liga criatividade a resultados. Cada projecto começa com uma pergunta: o que é que esta comunicação precisa de alcançar? A resposta visual segue sempre o propósito.</p>
       </div>
+      <!-- Lista de ferramentas/software — para adicionar uma nova, copia um destes <span class="tool-tag"> -->
       <div class="tools-list fade-in">
         <span class="tool-tag"><img src="images/photoshop.png" alt="Adobe Photoshop">Photoshop</span>
         <span class="tool-tag"><img src="images/illustrator.png" alt="Adobe Illustrator">Illustrator</span>
@@ -1075,6 +1218,8 @@ footer {
         <span class="tool-tag"><img src="images/coreldraw.png" alt="CorelDRAW">CorelDRAW</span>
       </div>
     </div>
+
+    <!-- Coluna direita: cartão azul com citação de destaque -->
     <div class="about-visual fade-in">
       <div class="about-card">
         <p class="about-quote">"O design não decora — resolve. Cada escolha visual é uma decisão estratégica ao serviço da marca e das pessoas que ela quer alcançar."</p>
@@ -1085,6 +1230,7 @@ footer {
             <div class="author-role">Senior Designer · BANG Agency · Luanda</div>
           </div>
         </div>
+        <!-- Mini-estatísticas dentro do cartão — editar directamente o texto aqui -->
         <div class="exp-row">
           <div class="exp-item"><div class="exp-num">10+</div><div class="exp-label">Anos</div></div>
           <div class="exp-item"><div class="exp-num">BANG</div><div class="exp-label">Agência Actual</div></div>
@@ -1095,21 +1241,35 @@ footer {
   </div>
 </section>
 
-<!-- PORTFÓLIO -->
+<!-- ════════════════════════════
+     SECÇÃO "PORTEFÓLIO"
+     O conteúdo (imagens) é gerado dinamicamente pelo JS a partir do
+     array PROJECTS — ver bloco <script> mais abaixo.
+     ════════════════════════════ -->
 <section class="portfolio" id="portfolio">
   <div class="section-inner">
     <span class="section-label fade-in">Trabalhos</span>
     <h2 class="section-title fade-in">Portefólio Seleccionado</h2>
     <p class="section-subtitle fade-in">Uma selecção de projectos de branding, campanhas e comunicação visual desenvolvidos para clientes em Angola e além-fronteiras.</p>
+
+    <!-- Botões de filtro — preenchidos via JS (função buildFilters), a partir do objecto CAT_LABELS -->
     <div class="portfolio-filters fade-in" id="port-filters" role="group" aria-label="Filtros de categoria"></div>
+
+    <!-- Grelha de imagens — preenchida via JS (função renderGrid), a partir do array PROJECTS -->
     <div class="portfolio-grid" id="port-grid"></div>
+
+    <!-- Botão "Ver Mais Projectos" — só aparece se houver mais imagens do que as actualmente mostradas -->
     <div class="port-load-more" id="port-load-wrap" style="display:none">
       <button class="btn-load" onclick="loadMore()"><i class="fas fa-plus" aria-hidden="true"></i> Ver Mais Projectos</button>
     </div>
   </div>
 </section>
 
-<!-- LIGHTBOX -->
+<!-- ════════════════════════════
+     LIGHTBOX — janela de visualização ampliada
+     Está sempre presente no HTML, mas escondida (display:none) até
+     o utilizador clicar numa imagem do portefólio (ver openLightbox no JS)
+     ════════════════════════════ -->
 <div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-label="Visualização de imagem" onclick="closeLightboxBg(event)">
   <button class="lb-close" onclick="closeLightbox()" aria-label="Fechar">
     <i class="fas fa-times" aria-hidden="true"></i>
@@ -1117,20 +1277,28 @@ footer {
   <button class="lb-nav lb-prev" onclick="lbNav(-1);event.stopPropagation()" aria-label="Imagem anterior">
     <i class="fas fa-chevron-left" aria-hidden="true"></i>
   </button>
+  <!-- O 'src' desta imagem é trocado dinamicamente via JS (updateLightbox) -->
   <img id="lb-img" src="" alt="">
   <button class="lb-nav lb-next" onclick="lbNav(1);event.stopPropagation()" aria-label="Próxima imagem">
     <i class="fas fa-chevron-right" aria-hidden="true"></i>
   </button>
+  <!-- Texto "Projecto XX · posição / total" -->
   <div class="lb-counter" id="lb-counter" aria-live="polite"></div>
+  <!-- Descrição do projecto (só visível se existir texto em "desc" no array PROJECTS) -->
   <div id="lb-desc"></div>
 </div>
 
-<!-- PROCESSO -->
+<!-- ════════════════════════════
+     SECÇÃO "PROCESSO"
+     ════════════════════════════ -->
 <section class="processo" id="processo">
   <div class="section-inner">
     <span class="section-label fade-in">Como Trabalho</span>
     <h2 class="section-title fade-in">Um Processo Claro<br>do Início ao Fim</h2>
     <p class="section-subtitle fade-in">Cada projecto segue uma metodologia estruturada que garante resultados consistentes e uma colaboração tranquila e eficiente.</p>
+
+    <!-- 4 passos do processo — para adicionar/remover um passo, ajustar também o
+         grid-template-columns em .processo-steps no CSS (está fixo em 4 colunas) -->
     <div class="processo-steps">
       <div class="step-card fade-in"><div class="step-num">01</div><div class="step-title">Descoberta</div><p class="step-desc">Reunião de briefing profunda para entender o negócio, o público-alvo, os objectivos e o contexto competitivo.</p></div>
       <div class="step-card fade-in"><div class="step-num">02</div><div class="step-title">Estratégia</div><p class="step-desc">Definição do posicionamento visual, referências, paleta, tipografia e direcção criativa a apresentar ao cliente.</p></div>
@@ -1140,9 +1308,13 @@ footer {
   </div>
 </section>
 
-<!-- CONTACTO -->
+<!-- ════════════════════════════
+     SECÇÃO "CONTACTO"
+     ════════════════════════════ -->
 <section class="contact" id="Contacto">
   <div class="section-inner contact-inner">
+
+    <!-- Coluna esquerda: informação de contacto -->
     <div>
       <span class="section-label">Vamos Trabalhar Juntos</span>
       <h2 class="section-title">Tem um projecto?<br>Fale comigo.</h2>
@@ -1166,6 +1338,11 @@ footer {
         </li>
       </ul>
     </div>
+
+    <!-- Coluna direita: formulário de contacto.
+         IMPORTANTE: este formulário não envia dados para um servidor —
+         a função submitForm() (ver JS) constrói um link "mailto:" e abre
+         a aplicação de e-mail do utilizador já com o assunto/corpo preenchidos. -->
     <form class="contact-form" id="contact-form" onsubmit="submitForm(event)" novalidate>
       <div class="form-row">
         <div class="form-group">
@@ -1205,6 +1382,9 @@ footer {
   </div>
 </section>
 
+<!-- ════════════════════════════
+     RODAPÉ
+     ════════════════════════════ -->
 <footer>
   <a href="#" class="footer-logo">M.E.<span>·</span>Maurício</a>
   <span>© 2026 · Luanda, Angola</span>
@@ -1219,89 +1399,128 @@ footer {
 </footer>
 
 <script>
-'use strict';
+'use strict'; // activa o "modo estrito" do JS — ajuda a apanhar erros comuns mais cedo
 
-// ── NAV SCROLL ──
+/* ════════════════════════════════════════════════════════════
+   BARRA DE NAVEGAÇÃO — sombra ao fazer scroll
+   ════════════════════════════════════════════════════════════ */
+// Sempre que o utilizador faz scroll, verificamos se já desceu mais de 40px.
+// Se sim, adicionamos a classe "scrolled" à nav (dá-lhe uma sombra subtil, ver CSS).
 window.addEventListener('scroll', () => {
   document.getElementById('main-nav').classList.toggle('scrolled', window.scrollY > 40);
-}, { passive: true });
+}, { passive: true }); // passive:true = melhora a performance do scroll (o browser sabe que não vamos bloquear o evento)
 
-// ── MOBILE NAV ──
+
+/* ════════════════════════════════════════════════════════════
+   MENU MOBILE — abrir/fechar
+   ════════════════════════════════════════════════════════════ */
 function toggleNav() {
   const nav    = document.getElementById('mobile-nav');
   const burger = document.querySelector('.nav-burger');
+  // .toggle() liga/desliga a classe "open" e devolve true/false consoante o novo estado
   const isOpen = nav.classList.toggle('open');
-  burger.setAttribute('aria-expanded', isOpen);
-  // Prevent body scroll when menu open
+  burger.setAttribute('aria-expanded', isOpen); // acessibilidade: informa leitores de ecrã se o menu está aberto
+  // Bloqueia o scroll da página por baixo do menu enquanto este está aberto
   document.body.style.overflow = isOpen ? 'hidden' : '';
 }
 
-// ── SCROLL FADE (IntersectionObserver) ──
+
+/* ════════════════════════════════════════════════════════════
+   ANIMAÇÃO AO FAZER SCROLL ("fade-in" reveal)
+   Usa um IntersectionObserver: o browser avisa-nos automaticamente
+   quando um elemento entra na área visível do ecrã, sem termos de
+   ficar a verificar a posição do scroll manualmente (mais eficiente).
+   ════════════════════════════════════════════════════════════ */
 const fadeObserver = new IntersectionObserver((entries) => {
+  // "entries" é a lista de elementos observados que mudaram de estado (entraram/saíram do ecrã)
   entries.forEach((entry, i) => {
-    if (entry.isIntersecting) {
+    if (entry.isIntersecting) { // true quando o elemento está visível no ecrã
       setTimeout(() => {
-        entry.target.classList.add('visible');
-        fadeObserver.unobserve(entry.target); // stop watching once visible
-      }, i * 80);
+        entry.target.classList.add('visible'); // dispara a animação CSS (.fade-in.visible)
+        fadeObserver.unobserve(entry.target);   // pára de observar — só precisa de acontecer uma vez
+      }, i * 80); // pequeno atraso crescente, para os elementos não aparecerem todos ao mesmo tempo
     }
   });
-}, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+}, {
+  threshold: 0.1,              // dispara quando 10% do elemento está visível
+  rootMargin: '0px 0px -40px 0px' // só dispara um pouco "antes" de chegar mesmo ao fundo do ecrã
+});
 
-// Run after DOM fully ready
+// Liga o observer a todos os elementos com a classe .fade-in existentes na página.
+// É chamada no fim do script, depois do portefólio já ter sido construído.
 function initFadeObserver() {
   document.querySelectorAll('.fade-in').forEach(el => fadeObserver.observe(el));
 }
 
-// ────────────────────────────────────────
-// ── HERO SLIDESHOW ──
-// ────────────────────────────────────────
-const HERO_SLIDES    = ['images/mm.png', 'images/mm2.png', 'images/mm3.png'];
-const SLIDE_INTERVAL = 3500;
-let heroIdx   = 0;
-let heroTimer = null;
 
+/* ════════════════════════════════════════════════════════════
+   SLIDESHOW DO HERO (fotos do designer)
+   ════════════════════════════════════════════════════════════ */
+
+// Lista de imagens do slideshow — para adicionar/remover/trocar fotos,
+// basta editar este array (os caminhos são relativos à pasta "images/").
+const HERO_SLIDES    = ['images/mm.png', 'images/mm2.png', 'images/mm3.png'];
+const SLIDE_INTERVAL = 3500; // tempo (em milissegundos) entre trocas automáticas de slide
+
+let heroIdx   = 0;    // índice do slide actualmente visível
+let heroTimer = null; // referência ao temporizador (setInterval), para podermos cancelá-lo/reiniciá-lo
+
+// Constrói o slideshow: cria uma <img> e um botão "dot" para cada foto em HERO_SLIDES
 function buildHeroSlideshow() {
   const track = document.getElementById('hero-slideshow');
   const dots  = document.getElementById('hero-dots');
 
   HERO_SLIDES.forEach((src, i) => {
+    // Cria a imagem do slide
     const img = document.createElement('img');
     img.src       = src;
     img.alt       = `Slide ${i + 1}`;
+    // A primeira imagem (i === 0) já nasce com a classe "active" e por isso visível;
+    // as restantes começam invisíveis (ver .hero-slide no CSS, opacity:0 por defeito)
     img.className = 'hero-slide' + (i === 0 ? ' active' : '');
-    img.loading   = 'eager'; // preload first; lazy for others done via JS
+    img.loading   = 'eager'; // carrega imediatamente (não usa "lazy loading", já que é a primeira coisa vista)
     track.appendChild(img);
 
+    // Cria o botão "dot" correspondente
     const dot = document.createElement('button');
     dot.className = 'hero-dot' + (i === 0 ? ' active' : '');
     dot.setAttribute('aria-label', `Slide ${i + 1}`);
     dot.setAttribute('role', 'tab');
-    dot.onclick = () => goToSlide(i);
+    dot.onclick = () => goToSlide(i); // clicar num dot vai directamente a esse slide
     dots.appendChild(dot);
   });
 }
 
+// Muda o slide visível para o índice "n" (com wrap-around: depois do último volta ao primeiro)
 function goToSlide(n) {
   const slides = document.querySelectorAll('.hero-slide');
   const dots   = document.querySelectorAll('.hero-dot');
-  if (!slides.length) return;
+  if (!slides.length) return; // segurança: se ainda não houver slides construídos, não faz nada
 
+  // Remove a classe "active" do slide/dot actuais
   slides[heroIdx].classList.remove('active');
   dots[heroIdx].classList.remove('active');
 
+  // Calcula o novo índice, garantindo que nunca sai do intervalo [0, length-1]
+  // (o duplo módulo % garante que também funciona correctamente com números negativos,
+  //  necessário para quando se clica na seta "anterior")
   heroIdx = ((n % HERO_SLIDES.length) + HERO_SLIDES.length) % HERO_SLIDES.length;
 
+  // Adiciona "active" ao novo slide/dot — é esta troca de classe que o CSS usa
+  // para fazer a transição de opacidade/escala (ver .hero-slide.active no CSS)
   slides[heroIdx].classList.add('active');
   dots[heroIdx].classList.add('active');
 
+  // Reinicia o temporizador automático sempre que há uma troca manual de slide,
+  // para o utilizador ter sempre os mesmos 3.5s completos antes da próxima troca automática
   clearInterval(heroTimer);
   heroTimer = setInterval(() => goToSlide(heroIdx + 1), SLIDE_INTERVAL);
 }
 
+// Função auxiliar chamada pelos botões de seta (prev/next) no HTML
 function heroSlide(dir) { goToSlide(heroIdx + dir); }
 
-// Pause on hover
+// Pausa o slideshow quando o rato está em cima do painel de fotos, e retoma quando sai
 const photoPanel = document.querySelector('.hero-photo-panel');
 if (photoPanel) {
   photoPanel.addEventListener('mouseenter', () => clearInterval(heroTimer));
@@ -1310,7 +1529,9 @@ if (photoPanel) {
   });
 }
 
-// ── Touch/swipe — scoped to hero panel only ──
+// ── Suporte a "swipe" (arrastar o dedo) em ecrãs tácteis ──
+// Está limitado apenas ao painel de fotos (photoPanel), para não interferir
+// com o scroll vertical normal da página no resto do site.
 let touchStartX = 0;
 let touchStartY = 0;
 if (photoPanel) {
@@ -1320,18 +1541,33 @@ if (photoPanel) {
   }, { passive: true });
 
   photoPanel.addEventListener('touchend', e => {
-    const dx = e.changedTouches[0].clientX - touchStartX;
-    const dy = e.changedTouches[0].clientY - touchStartY;
-    // Only fire if horizontal swipe dominates (avoids scroll conflict)
+    const dx = e.changedTouches[0].clientX - touchStartX; // distância percorrida na horizontal
+    const dy = e.changedTouches[0].clientY - touchStartY; // distância percorrida na vertical
+    // Só interpretamos como "swipe de slide" se o movimento horizontal for
+    // claramente maior do que o vertical (evita conflito com o scroll da página)
+    // e se a distância for suficiente (>40px) para não disparar com toques acidentais.
     if (Math.abs(dx) > Math.abs(dy) && Math.abs(dx) > 40) {
-      heroSlide(dx < 0 ? 1 : -1);
+      heroSlide(dx < 0 ? 1 : -1); // arrastar para a esquerda = slide seguinte; para a direita = anterior
     }
   }, { passive: true });
 }
 
-// ────────────────────────────────────────
-// ── PORTFOLIO ──
-// ────────────────────────────────────────
+
+/* ════════════════════════════════════════════════════════════
+   PORTEFÓLIO — dados dos projectos
+   ════════════════════════════════════════════════════════════
+   Cada objecto representa uma imagem do portefólio:
+     thumb : caminho da miniatura (mostrada na grelha)
+     full  : caminho da imagem em alta resolução (mostrada no lightbox)
+     desc  : descrição opcional (aparece no lightbox; usar \n para quebra de linha)
+     cat   : categoria — tem de corresponder a uma das chaves em CAT_LABELS
+             ('branding', 'campanha', 'editorial' ou 'digital')
+
+   PARA ADICIONAR UM NOVO PROJECTO: copia uma destas linhas e ajusta
+   os caminhos thumb/full e a categoria.
+   PARA REMOVER: apaga a linha correspondente.
+   A ORDEM AQUI É A ORDEM DE EXIBIÇÃO no portefólio (categoria "Todos").
+*/
 const PROJECTS = [
   { thumb: 'images/port/v3p1.jpg',        full: 'images/port/v3g1.jpg',         desc: '',  cat: 'campanha'  },
   { thumb: 'images/port/Prancheta 7.png', full: 'images/port/Prancheta 17.png', desc: '',  cat: 'campanha'  },
@@ -1366,6 +1602,7 @@ const PROJECTS = [
 
   { thumb: 'images/port/li44.jpg',        full: 'images/port/livro41.jpg',      desc: '',  cat: 'editorial' },
   { thumb: 'images/port/az1.jpg',         full: 'images/port/az2.jpg',          desc: '',  cat: 'editorial' },
+  // Estes dois projectos têm descrição: o texto aparece no lightbox por baixo da imagem
   { thumb: 'images/port/bz1.jpg',         full: 'images/port/bz2.jpg',          desc: 'IDENTIDADE VISUAL — NÚMEROS POSITIVOS\nConceito chave para o logotipo da GTME: um grafismo que representa resultados estatísticos satisfatórios. O sinal de "bom" combinado com a cor azul simboliza resultados positivos.', cat: 'branding' },
   { thumb: 'images/port/fz1.jpg',         full: 'images/port/fz2.jpg',          desc: 'UNIDADE + INTERMEDIAÇÃO\nConceito gráfico para a U.I.M.O, que exprime um grupo de profissionais de vários ramos reunidos e encaminhados por um intermediário.', cat: 'branding' },
   
@@ -1408,8 +1645,13 @@ const PROJECTS = [
   { thumb: 'images/port/5.5_nv_.jpg',     full: 'images/port/5_nv_.jpg',        desc: '',  cat: 'campanha'  },
 ];
 
+// Adiciona automaticamente um título a cada projecto: "Projecto 01", "Projecto 02", etc.
+// (padStart(2, '0') garante sempre 2 dígitos, ex: 1 → "01", 12 → "12")
 PROJECTS.forEach((p, i) => { p.title = `Projecto ${String(i + 1).padStart(2, '0')}`; });
 
+// Etiquetas legíveis para cada categoria — usadas nos botões de filtro
+// e no texto mostrado por cima de cada imagem no hover.
+// 'all' é o filtro especial que mostra todos os projectos sem distinção.
 const CAT_LABELS = {
   all:       'Todos',
   branding:  'Branding',
@@ -1418,45 +1660,52 @@ const CAT_LABELS = {
   digital:   'Digital',
 };
 
-const PAGE_SIZE   = 18;
-let currentFilter = 'all';
-let visibleCount  = PAGE_SIZE;
-let activeItems   = [];
+const PAGE_SIZE   = 18;     // quantos projectos são mostrados de cada vez (antes de clicar "Ver Mais")
+let currentFilter = 'all';  // categoria actualmente seleccionada
+let visibleCount  = PAGE_SIZE; // quantos projectos estão visíveis neste momento
+let activeItems   = [];     // lista de projectos que correspondem ao filtro actual (recalculada em renderGrid)
 
+// Constrói os botões de filtro (Todos / Branding / Campanhas... ) a partir de CAT_LABELS
 function buildFilters() {
   const wrap = document.getElementById('port-filters');
   Object.entries(CAT_LABELS).forEach(([key, label]) => {
     const btn = document.createElement('button');
-    btn.className   = 'filter-btn' + (key === 'all' ? ' active' : '');
+    btn.className   = 'filter-btn' + (key === 'all' ? ' active' : ''); // "Todos" começa seleccionado
     btn.textContent = label;
-    btn.type        = 'button';
+    btn.type        = 'button'; // impede que o botão tente submeter algum formulário por engano
     btn.onclick     = () => setFilter(key, btn);
     wrap.appendChild(btn);
   });
 }
 
+// Chamada quando o utilizador clica num botão de filtro
 function setFilter(cat, btn) {
   currentFilter = cat;
-  visibleCount  = PAGE_SIZE;
+  visibleCount  = PAGE_SIZE; // reinicia a paginação sempre que se muda de filtro
+  // Remove "active" de todos os botões e adiciona apenas ao que foi clicado
   document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
   btn.classList.add('active');
-  renderGrid();
+  renderGrid(); // reconstrói a grelha de imagens com o novo filtro
 }
 
+// Constrói (ou reconstrói) a grelha de imagens do portefólio.
+// É chamada sempre que: a página carrega, se muda de filtro, ou se clica em "Ver Mais".
 function renderGrid() {
+  // Filtra os projectos consoante a categoria seleccionada
   activeItems = currentFilter === 'all'
     ? PROJECTS
     : PROJECTS.filter(p => p.cat === currentFilter);
 
   const grid = document.getElementById('port-grid');
-  grid.innerHTML = '';
+  grid.innerHTML = ''; // limpa a grelha antes de a reconstruir
 
+  // .slice(0, visibleCount) garante que só mostramos os primeiros N itens (paginação)
   activeItems.slice(0, visibleCount).forEach((p, i) => {
-    const globalIdx = PROJECTS.indexOf(p);
+    const globalIdx = PROJECTS.indexOf(p); // posição deste projecto no array completo (necessário para o lightbox)
     const div = document.createElement('div');
-    div.className    = 'port-item fade-in';
+    div.className    = 'port-item fade-in'; // também recebe "fade-in" para animar ao aparecer no scroll
     div.dataset.index = globalIdx;
-    div.setAttribute('tabindex', '0');
+    div.setAttribute('tabindex', '0');   // torna o item navegável por teclado (acessibilidade)
     div.setAttribute('role', 'button');
     div.setAttribute('aria-label', `Abrir ${p.title}`);
     div.innerHTML = `
@@ -1467,37 +1716,47 @@ function renderGrid() {
         <div class="port-overlay-cat">${CAT_LABELS[p.cat]}</div>
       </div>`;
     div.onclick  = () => openLightbox(globalIdx);
+    // Permite abrir a imagem também com Enter ou Espaço, não só com clique do rato
     div.onkeydown = (e) => { if (e.key === 'Enter' || e.key === ' ') openLightbox(globalIdx); };
     grid.appendChild(div);
 
-    // stagger visibility
+    // Anima a entrada de cada item com um pequeno atraso crescente (efeito cascata),
+    // semelhante ao usado no fadeObserver mas aplicado aqui directamente
     requestAnimationFrame(() =>
       setTimeout(() => div.classList.add('visible'), i * 40)
     );
   });
 
+  // Só mostra o botão "Ver Mais Projectos" se ainda houver mais itens
+  // no filtro actual do que os que já estão visíveis
   document.getElementById('port-load-wrap').style.display =
     activeItems.length > visibleCount ? 'block' : 'none';
 }
 
+// Chamada ao clicar em "Ver Mais Projectos": aumenta o limite visível e reconstrói a grelha
 function loadMore() { visibleCount += PAGE_SIZE; renderGrid(); }
 
-// ── LIGHTBOX ──
-let lbIdx = 0;
 
+/* ════════════════════════════════════════════════════════════
+   LIGHTBOX — janela de imagem ampliada
+   ════════════════════════════════════════════════════════════ */
+let lbIdx = 0; // índice (no array PROJECTS completo) da imagem actualmente aberta no lightbox
+
+// Abre o lightbox na imagem com o índice indicado
 function openLightbox(globalIdx) {
   lbIdx = globalIdx;
-  updateLightbox();
+  updateLightbox(); // actualiza a imagem, o contador e a descrição
   const lb = document.getElementById('lightbox');
-  lb.classList.add('open');
-  document.body.style.overflow = 'hidden';
-  lb.querySelector('#lb-img').focus();
+  lb.classList.add('open'); // torna o lightbox visível (ver .lightbox.open no CSS)
+  document.body.style.overflow = 'hidden'; // impede scroll da página por baixo
+  lb.querySelector('#lb-img').focus(); // acessibilidade: move o foco do teclado para a imagem
 }
 
+// Actualiza o conteúdo do lightbox (imagem, contador "X / Y" e descrição) consoante lbIdx
 function updateLightbox() {
   const p      = PROJECTS[lbIdx];
   const img    = document.getElementById('lb-img');
-  img.src      = p.full;
+  img.src      = p.full; // usa sempre a versão em alta resolução
   img.alt      = p.title;
   document.getElementById('lb-counter').textContent = `${p.title}  ·  ${lbIdx + 1} / ${PROJECTS.length}`;
   const descEl = document.getElementById('lb-desc');
@@ -1505,25 +1764,30 @@ function updateLightbox() {
     descEl.textContent     = p.desc;
     descEl.style.display   = 'block';
   } else {
-    descEl.style.display   = 'none';
+    descEl.style.display   = 'none'; // esconde completamente se não houver descrição
   }
 }
 
+// Fecha o lightbox e restaura o scroll normal da página
 function closeLightbox() {
   document.getElementById('lightbox').classList.remove('open');
   document.body.style.overflow = '';
 }
 
+// Permite fechar o lightbox clicando no fundo escuro (fora da imagem),
+// mas NÃO quando se clica na própria imagem ou nos botões (graças ao
+// "event.stopPropagation()" usado nos botões de seta no HTML)
 function closeLightboxBg(e) {
   if (e.target === document.getElementById('lightbox')) closeLightbox();
 }
 
+// Navega para a imagem anterior/seguinte dentro do lightbox (com wrap-around)
 function lbNav(dir) {
   lbIdx = ((lbIdx + dir) % PROJECTS.length + PROJECTS.length) % PROJECTS.length;
   updateLightbox();
 }
 
-// Keyboard + swipe in lightbox
+// Atalhos de teclado: Esc fecha, setas esquerda/direita navegam — mas só quando o lightbox está aberto
 document.addEventListener('keydown', e => {
   if (!document.getElementById('lightbox').classList.contains('open')) return;
   if (e.key === 'Escape')     closeLightbox();
@@ -1531,7 +1795,7 @@ document.addEventListener('keydown', e => {
   if (e.key === 'ArrowRight') lbNav(1);
 });
 
-// Swipe in lightbox
+// Suporte a "swipe" dentro do lightbox (navegar entre imagens arrastando o dedo)
 let lbTouchX = 0;
 const lb = document.getElementById('lightbox');
 lb.addEventListener('touchstart', e => { lbTouchX = e.touches[0].clientX; }, { passive: true });
@@ -1540,15 +1804,29 @@ lb.addEventListener('touchend', e => {
   if (Math.abs(dx) > 40) lbNav(dx < 0 ? 1 : -1);
 }, { passive: true });
 
-// ── FORM ──
+
+/* ════════════════════════════════════════════════════════════
+   FORMULÁRIO DE CONTACTO
+   ════════════════════════════════════════════════════════════
+   Este formulário NÃO envia dados para um servidor/base de dados.
+   Em vez disso, recolhe os valores preenchidos e constrói um link
+   "mailto:" com o assunto e corpo já preenchidos, abrindo a aplicação
+   de e-mail por defeito do utilizador (Outlook, Gmail, Mail, etc.)
+   com a mensagem pronta a enviar.
+*/
 function submitForm(e) {
-  e.preventDefault();
+  e.preventDefault(); // impede o comportamento padrão do formulário (recarregar a página)
+
   const form   = e.target;
   const fields = {};
+  // Percorre todos os campos do formulário e guarda os seus valores num objecto simples
+  // { nome: '...', email: '...', empresa: '...', tipo: '...', mensagem: '...' }
   form.querySelectorAll('input, select, textarea').forEach(el => {
     if (el.name) fields[el.name] = el.value;
   });
 
+  // Constrói o corpo do e-mail, juntando cada campo numa linha.
+  // "%0A" é o código para "nova linha" dentro de um URL (necessário para o mailto: funcionar correctamente)
   const body = [
     'Nome: '     + (fields['nome']     || ''),
     'E-mail: '   + (fields['email']    || ''),
@@ -1558,25 +1836,35 @@ function submitForm(e) {
     fields['mensagem'] || '',
   ].join('%0A');
 
+  // encodeURIComponent garante que caracteres especiais (acentos, espaços, etc.)
+  // não quebram o link mailto:
   const subject = encodeURIComponent('Contacto via Site — ' + (fields['nome'] || ''));
   window.location.href = `mailto:maedmau@hotmail.com?subject=${subject}&body=${body}`;
 
+  // Feedback visual: o botão muda temporariamente de texto/cor para confirmar a acção,
+  // depois volta ao estado normal e o formulário é limpo
   const btn = form.querySelector('.btn-submit');
   btn.innerHTML = '<i class="fas fa-check"></i> A abrir o seu e-mail...';
-  btn.style.background = '#2D9C5E';
+  btn.style.background = '#2D9C5E'; // verde, indicando sucesso
   setTimeout(() => {
     btn.innerHTML = '<i class="fas fa-paper-plane" aria-hidden="true"></i> Enviar Mensagem';
-    btn.style.background = '';
-    form.reset();
-  }, 4000);
+    btn.style.background = ''; // volta à cor dourada original definida no CSS
+    form.reset(); // limpa todos os campos do formulário
+  }, 4000); // após 4 segundos
 }
 
-// ── INIT ──
-buildHeroSlideshow();
-heroTimer = setInterval(() => goToSlide(heroIdx + 1), SLIDE_INTERVAL);
-buildFilters();
-renderGrid();
-initFadeObserver(); // after renderGrid so portfolio items are in DOM
+
+/* ════════════════════════════════════════════════════════════
+   INICIALIZAÇÃO — chamado uma única vez quando a página carrega
+   A ORDEM AQUI IMPORTA: o slideshow e o portefólio precisam de
+   estar construídos no HTML antes do fadeObserver começar a observar
+   os elementos (daí initFadeObserver() ser a última chamada).
+   ════════════════════════════════════════════════════════════ */
+buildHeroSlideshow();                                          // 1. Cria as imagens/dots do slideshow
+heroTimer = setInterval(() => goToSlide(heroIdx + 1), SLIDE_INTERVAL); // 2. Arranca a troca automática de slides
+buildFilters();                                                 // 3. Cria os botões de filtro do portefólio
+renderGrid();                                                   // 4. Constrói a grelha inicial de imagens
+initFadeObserver();                                              // 5. Liga a animação de scroll a todos os .fade-in (incluindo os do portefólio recém-criados)
 </script>
 </body>
 </html>
