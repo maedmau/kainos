@@ -617,15 +617,23 @@ section { padding: 96px 5vw; } /* espaçamento vertical generoso entre secções
 .author-role { font-size: 0.78rem; color: rgba(255,255,255,0.55); }
 
 /* Linha com 3 mini-estatísticas dentro do cartão azul (10+ Anos / BANG / 360°) */
-.exp-row { display: grid; grid-template-columns: repeat(3,1fr); gap: 0.75rem; margin-top: 1.5rem; position: relative; z-index: 1; }
+.exp-row { display: grid; grid-template-columns: repeat(3, minmax(0,1fr)); gap: 0.75rem; margin-top: 1.5rem; position: relative; z-index: 1; }
 .exp-item {
   background: rgba(255,255,255,0.07); border: 1px solid rgba(255,255,255,0.12);
-  border-radius: 12px; padding: 1rem 0.75rem; text-align: center;
+  border-radius: 12px; padding: 1rem 0.5rem; text-align: center;
   transition: background 0.25s;
+  min-width: 0;      /* impede que o conteúdo force a coluna a alargar além do espaço disponível */
+  overflow: hidden;
 }
 .exp-item:hover { background: rgba(255,255,255,0.13); }
-.exp-num  { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 1.6rem; color: var(--gold); line-height: 1; margin-bottom: 4px; }
-.exp-label { font-size: 0.7rem; color: rgba(255,255,255,0.5); text-transform: uppercase; letter-spacing: 0.05em; }
+.exp-num {
+  font-family: 'Syne', sans-serif; font-weight: 800; font-size: 1.6rem; color: var(--gold); line-height: 1; margin-bottom: 4px;
+  overflow-wrap: break-word; word-break: break-word; /* "BANG" passa a quebrar em vez de transbordar */
+}
+.exp-label {
+  font-size: 0.7rem; color: rgba(255,255,255,0.5); text-transform: uppercase; letter-spacing: 0.05em;
+  overflow-wrap: break-word; word-break: break-word;
+}
 
 /* ════════════════════════════
    SECÇÃO "PORTEFÓLIO"
@@ -956,6 +964,15 @@ footer {
   .hero-slide { transition: opacity 0.3s ease !important; } /* slideshow continua a funcionar, mas mais rápido */
 }
 
+/* ════════════════════════════
+   RESPONSIVO —  para telas muito pequenas
+   ════════════════════════════ */
+
+@media (max-width: 380px) {
+  .exp-num { font-size: 1.25rem; }
+  .exp-label { font-size: 0.62rem; }
+  .exp-item { padding: 0.85rem 0.35rem; }
+}
 /* ════════════════════════════
    RESPONSIVO — TABLET (até 960px de largura)
    ════════════════════════════ */
@@ -1577,7 +1594,7 @@ const PROJECTS = [
   { thumb: 'images/port/Prancheta 8.png', full: 'images/port/Prancheta 18.png', desc: '',  cat: 'branding'  },
   { thumb: 'images/port/Prancheta 5.png', full: 'images/port/Prancheta 15.png', desc: '',  cat: 'campanha'  },
   { thumb: 'images/port/2_nv_.jpg',       full: 'images/port/2.2_nv_.jpg',      desc: '',  cat: 'campanha'  },
-  { thumb: 'images/port/pascoa1.jpg',          full: 'images/port/pascoa.jpg',           desc: '',  cat: 'campanha' },
+  { thumb: 'images/port/pascoa1.jpg',     full: 'images/port/pascoa.jpg',       desc: '',  cat: 'campanha' },
 
 
   { thumb: 'images/port/b1.jpg',          full: 'images/port/b2.jpg',           desc: '',  cat: 'campanha'  },
