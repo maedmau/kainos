@@ -98,28 +98,22 @@ nav.scrolled { box-shadow: 0 2px 20px rgba(0,0,0,0.08); }
 
 /* Botão "Fale Comigo" destacado no menu (CTA = call to action) */
 
+
+.nav-cta {
+
+  padding: 9px 20px; border-radius: 8px;
+  transition: background 0.2s, transform 0.2s, box-shadow 0.2s !important; 
+}
+ 
 /* 
-.nav-cta {
-  background: var(--blue); color: #fff !important;
-  padding: 9px 20px; border-radius: 8px;
-  transition: background 0.2s, transform 0.2s, box-shadow 0.2s !important;
-}
-*/
-
-.nav-cta {
-  background: var(--blue); color: #fff !important;
-  padding: 9px 20px; border-radius: 8px;
-  transition: background 0.2s !important;
-}
-
 .nav-cta:hover { background: var(--blue-mid) !important; }
-/* 
-.nav-cta:hover {
-  background: var(--blue-mid) !important;
-  transform: translateY(-1px);
-  box-shadow: 0 4px 14px rgba(3,62,140,0.35) !important;
-}
   */
+.nav-cta:hover {
+  color: var(--gold) !important;
+  transform: translateY(-1px);
+ 
+}
+
 
 /* Botão "hamburger" (☰) — só aparece em mobile, controlado via media query mais abaixo */
 .nav-burger {
@@ -1611,13 +1605,13 @@ const PROJECTS = [
 /* 8 */  { thumb: 'images/port/pascoa1.jpg',     full: 'images/port/pascoa.jpg',       desc: '',  cat: 'campanha' },
 
 /* 9 */  { thumb: 'images/port/b1.jpg',          full: 'images/port/b2.jpg',           desc: '',  cat: 'campanha' },
-/* 10 */ { thumb: 'images/port/f1.jpg',          full: 'images/port/f2.jpg',           desc: '',  cat: 'editorial' },
+/* 10 */ { thumb: 'images/port/f1.jpg',          full: 'images/port/f2.jpg',           desc: '',  cat: 'campanha' },
 /* 11 */ { thumb: 'images/port/g1.jpg',          full: 'images/port/g2.jpg',           desc: '',  cat: 'editorial' },
 /* 12 */ { thumb: 'images/port/h1.jpg',          full: 'images/port/h2.jpg',           desc: '',  cat: 'editorial' },
 
 /* 13 */ { thumb: 'images/port/i1.jpg',          full: 'images/port/i2.jpg',           desc: '',  cat: 'editorial' },
-/* 14 */ { thumb: 'images/port/j1.jpg',          full: 'images/port/j2.jpg',           desc: '',  cat: 'digital' },
-/* 15 */ { thumb: 'images/port/m1.jpg',          full: 'images/port/m2.jpg',           desc: '',  cat: 'editorial' },
+/* 14 */ { thumb: 'images/port/e1.jpg',          full: 'images/port/e2.jpg',           desc: '',  cat: 'branding' },
+/* 15 */ { thumb: 'images/port/m1.jpg',          full: 'images/port/m2.jpg',           desc: '',  cat: 'campanha' },
 /* 16 */ { thumb: 'images/port/l1.jpg',          full: 'images/port/l2.jpg',           desc: '',  cat: 'editorial' },
 
 /* 17 */ { thumb: 'images/port/d1.jpg',          full: 'images/port/d2.jpg',           desc: '',  cat: 'editorial' },
@@ -1640,17 +1634,17 @@ const PROJECTS = [
 /* 31 */ { thumb: 'images/port/lz1.jpg',         full: 'images/port/lz2.jpg',          desc: '',  cat: 'branding' },
 /* 32 */ { thumb: 'images/port/mz1.jpg',         full: 'images/port/mz2.jpg',          desc: '',  cat: 'campanha' },
 
-/* 33 */ { thumb: 'images/port/mz1.jpg',         full: 'images/port/mz2.jpg',          desc: '',  cat: 'digital' }, 
-/* 34 */ { thumb: 'images/port/oz12.jpg',        full: 'images/port/oz22.jpg',         desc: '',  cat: 'editorial' },
-/* 35 */ { thumb: 'images/port/pz12.jpg',        full: 'images/port/pz22.jpg',         desc: '',  cat: 'digital' },
-/* 36 */ { thumb: 'images/port/qz12.jpg',        full: 'images/port/qz22.jpg',         desc: '',  cat: 'campanha' },
+/* 33 */ { thumb: 'images/port/c1.jpg',          full: 'images/port/c2.jpg',           desc: '',  cat: 'editorial' }, 
+/* 34 */ { thumb: 'images/port/oz12.jpg',        full: 'images/port/oz22.jpg',         desc: '',  cat: 'digital' },
+/* 35 */ { thumb: 'images/port/pz12.jpg',        full: 'images/port/pz22.jpg',         desc: '',  cat: 'editorial' },
+/* 36 */ { thumb: 'images/port/qz12.jpg',        full: 'images/port/qz22.jpg',         desc: '',  cat: 'digital' },
 
 /* 37 */ { thumb: 'images/port/2b1.jpg',         full: 'images/port/2b2.jpg',          desc: '',  cat: 'branding' },
 /* 38 */ { thumb: 'images/port/2c1.jpg',         full: 'images/port/2c2.jpg',          desc: '',  cat: 'editorial' },
-/* 39 */ { thumb: 'images/port/2d1.jpg',         full: 'images/port/2d2.jpg',          desc: '',  cat: 'editorial' },
+/* 39 */ { thumb: 'images/port/2d1.jpg',         full: 'images/port/2d2.jpg',          desc: '',  cat: 'branding' },
 /* 40 */ { thumb: 'images/port/qg1.jpg',         full: 'images/port/qg2.jpg',          desc: '',  cat: 'branding' },
 
-/* 41 */ { thumb: 'images/port/2sl1.jpg',        full: 'images/port/2sl2.jpg',         desc: '',  cat: 'campanha' },
+/* 41 */ { thumb: 'images/port/2sl1.jpg',        full: 'images/port/2sl2.jpg',         desc: '',  cat: 'editorial' },
 /* 42 */ { thumb: 'images/port/2f1.jpg',         full: 'images/port/2f2.jpg',          desc: '',  cat: 'campanha' },
 /* 43 */ { thumb: 'images/port/2p1.jpg',         full: 'images/port/2p2.jpg',          desc: '',  cat: 'campanha' },
 /* 44 */ { thumb: 'images/port/2g1.jpg',         full: 'images/port/2g2.jpg',          desc: '',  cat: 'branding' },
@@ -1661,8 +1655,8 @@ const PROJECTS = [
 /* 48 */ { thumb: 'images/port/Prancheta 3.png', full: 'images/port/Prancheta 13.png', desc: '',  cat: 'editorial' },
 
 /* 49 */ { thumb: 'images/port/Prancheta 4.png', full: 'images/port/Prancheta 14.png', desc: '',  cat: 'editorial' },
-/* 50 */ { thumb: 'images/port/Prancheta 6.png', full: 'images/port/Prancheta 16.png', desc: '',  cat: 'campanha' },
-/* 51 */ { thumb: 'images/port/Artboard 1.png',  full: 'images/port/Artboard 11.png',  desc: '',  cat: 'branding' },
+/* 50 */ { thumb: 'images/port/Prancheta 6.png', full: 'images/port/Prancheta 16.png', desc: '',  cat: 'digital' },
+/* 51 */ { thumb: 'images/port/Artboard 1.png',  full: 'images/port/Artboard 11.png',  desc: '',  cat: 'campanha' },
 /* 52 */ { thumb: 'images/port/Artboard 2.png',  full: 'images/port/Artboard 12.png',  desc: '',  cat: 'digital' },
 
 /* 53 */ { thumb: 'images/port/Artboard 3.png',  full: 'images/port/Artboard 13.png',  desc: '',  cat: 'digital' },
@@ -1670,8 +1664,8 @@ const PROJECTS = [
 /* 55 */ { thumb: 'images/port/3_nv_.jpg',       full: 'images/port/3.3_nv_.jpg',      desc: '',  cat: 'campanha' },
 /* 56 */ { thumb: 'images/port/1.2_nv_.jpg',     full: 'images/port/1_nv_.jpg',        desc: '',  cat: 'campanha' },
 
-/* 57 */ { thumb: 'images/port/e1.jpg',          full: 'images/port/e2.jpg',           desc: '',  cat: 'branding' },
-/* 58 */ { thumb: 'images/port/c1.jpg',          full: 'images/port/c2.jpg',           desc: '',  cat: 'editorial' },
+/* 57 */ { thumb: 'images/port/j1.jpg',          full: 'images/port/j2.jpg',           desc: '',  cat: 'digital' },
+/* 58 */ 
 /* 59 */ 
 ];
 
