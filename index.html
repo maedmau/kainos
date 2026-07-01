@@ -1651,7 +1651,7 @@ const PROJECTS = [
 /* 40 */ { thumb: 'images/port/qg1.jpg',         full: 'images/port/qg2.jpg',          desc: '',  cat: 'branding' },
 
 /* 41 */ { thumb: 'images/port/2sl1.jpg',        full: 'images/port/2sl2.jpg',         desc: '',  cat: 'campanha' },
-/* 42 */ { thumb: 'images/port/2f1.jpg',         full: 'images/port/2f2.jpg',          desc: '',  cat: 'digital' },
+/* 42 */ { thumb: 'images/port/2f1.jpg',         full: 'images/port/2f2.jpg',          desc: '',  cat: 'campanha' },
 /* 43 */ { thumb: 'images/port/2p1.jpg',         full: 'images/port/2p2.jpg',          desc: '',  cat: 'campanha' },
 /* 44 */ { thumb: 'images/port/2g1.jpg',         full: 'images/port/2g2.jpg',          desc: '',  cat: 'branding' },
 
@@ -1660,7 +1660,7 @@ const PROJECTS = [
 /* 47 */ { thumb: 'images/port/Prancheta 9.png', full: 'images/port/Prancheta 19.png', desc: '',  cat: 'branding' },
 /* 48 */ { thumb: 'images/port/Prancheta 3.png', full: 'images/port/Prancheta 13.png', desc: '',  cat: 'editorial' },
 
-/* 49 */ { thumb: 'images/port/Prancheta 4.png', full: 'images/port/Prancheta 14.png', desc: '',  cat: 'digital' },
+/* 49 */ { thumb: 'images/port/Prancheta 4.png', full: 'images/port/Prancheta 14.png', desc: '',  cat: 'editorial' },
 /* 50 */ { thumb: 'images/port/Prancheta 6.png', full: 'images/port/Prancheta 16.png', desc: '',  cat: 'campanha' },
 /* 51 */ { thumb: 'images/port/Artboard 1.png',  full: 'images/port/Artboard 11.png',  desc: '',  cat: 'branding' },
 /* 52 */ { thumb: 'images/port/Artboard 2.png',  full: 'images/port/Artboard 12.png',  desc: '',  cat: 'digital' },
@@ -1770,68 +1770,104 @@ function loadMore() { visibleCount += PAGE_SIZE; renderGrid(); }
 /* ════════════════════════════════════════════════════════════
    LIGHTBOX — janela de imagem ampliada
    ════════════════════════════════════════════════════════════ */
-let lbIdx = 0; // índice (no array PROJECTS completo) da imagem actualmente aberta no lightbox
+let lbIdx = 0;          // índice no array PROJECTS
+let lbViewIdx = 0;      // posição dentro de activeItems
 
-// Abre o lightbox na imagem com o índice indicado
 function openLightbox(globalIdx) {
+
   lbIdx = globalIdx;
-  updateLightbox(); // actualiza a imagem, o contador e a descrição
+
+  // Descobre onde este projecto está dentro da lista actualmente visível
+  lbViewIdx = activeItems.findIndex(p => PROJECTS.indexOf(p) === globalIdx);
+
+  if (lbViewIdx < 0) lbViewIdx = 0;
+
+  updateLightbox();
+
   const lb = document.getElementById('lightbox');
-  lb.classList.add('open'); // torna o lightbox visível (ver .lightbox.open no CSS)
-  document.body.style.overflow = 'hidden'; // impede scroll da página por baixo
-  lb.querySelector('#lb-img').focus(); // acessibilidade: move o foco do teclado para a imagem
+  lb.classList.add('open');
+  document.body.style.overflow = 'hidden';
+
+  lb.querySelector('#lb-img').focus();
 }
 
-// Actualiza o conteúdo do lightbox (imagem, contador "X / Y" e descrição) consoante lbIdx
 function updateLightbox() {
-  const p      = PROJECTS[lbIdx];
-  const img    = document.getElementById('lb-img');
-  img.src      = p.full; // usa sempre a versão em alta resolução
-  img.alt      = p.title;
-  document.getElementById('lb-counter').textContent = `${p.title}  ·  ${lbIdx + 1} / ${PROJECTS.length}`;
+
+  const p = activeItems[lbViewIdx];
+
+  if (!p) return;
+
+  // actualiza também o índice global
+  lbIdx = PROJECTS.indexOf(p);
+
+  const img = document.getElementById('lb-img');
+
+  img.src = p.full;
+  img.alt = p.title;
+
+  document.getElementById('lb-counter').textContent =
+      `${p.title} · ${lbViewIdx + 1} / ${activeItems.length}`;
+
   const descEl = document.getElementById('lb-desc');
-  if (p.desc) {
-    descEl.textContent     = p.desc;
-    descEl.style.display   = 'block';
+
+  if (p.desc && p.desc.trim() !== '') {
+      descEl.textContent = p.desc;
+      descEl.style.display = 'block';
   } else {
-    descEl.style.display   = 'none'; // esconde completamente se não houver descrição
+      descEl.textContent = '';
+      descEl.style.display = 'none';
   }
 }
 
-// Fecha o lightbox e restaura o scroll normal da página
 function closeLightbox() {
   document.getElementById('lightbox').classList.remove('open');
   document.body.style.overflow = '';
 }
 
-// Permite fechar o lightbox clicando no fundo escuro (fora da imagem),
-// mas NÃO quando se clica na própria imagem ou nos botões (graças ao
-// "event.stopPropagation()" usado nos botões de seta no HTML)
 function closeLightboxBg(e) {
-  if (e.target === document.getElementById('lightbox')) closeLightbox();
+  if (e.target === document.getElementById('lightbox'))
+      closeLightbox();
 }
 
-// Navega para a imagem anterior/seguinte dentro do lightbox (com wrap-around)
 function lbNav(dir) {
-  lbIdx = ((lbIdx + dir) % PROJECTS.length + PROJECTS.length) % PROJECTS.length;
+
+  lbViewIdx =
+      ((lbViewIdx + dir) % activeItems.length + activeItems.length)
+      % activeItems.length;
+
   updateLightbox();
 }
 
-// Atalhos de teclado: Esc fecha, setas esquerda/direita navegam — mas só quando o lightbox está aberto
 document.addEventListener('keydown', e => {
-  if (!document.getElementById('lightbox').classList.contains('open')) return;
-  if (e.key === 'Escape')     closeLightbox();
-  if (e.key === 'ArrowLeft')  lbNav(-1);
-  if (e.key === 'ArrowRight') lbNav(1);
+
+  if (!document.getElementById('lightbox').classList.contains('open'))
+      return;
+
+  if (e.key === 'Escape')
+      closeLightbox();
+
+  if (e.key === 'ArrowLeft')
+      lbNav(-1);
+
+  if (e.key === 'ArrowRight')
+      lbNav(1);
 });
 
-// Suporte a "swipe" dentro do lightbox (navegar entre imagens arrastando o dedo)
 let lbTouchX = 0;
+
 const lb = document.getElementById('lightbox');
-lb.addEventListener('touchstart', e => { lbTouchX = e.touches[0].clientX; }, { passive: true });
+
+lb.addEventListener('touchstart', e => {
+    lbTouchX = e.touches[0].clientX;
+}, { passive: true });
+
 lb.addEventListener('touchend', e => {
-  const dx = e.changedTouches[0].clientX - lbTouchX;
-  if (Math.abs(dx) > 40) lbNav(dx < 0 ? 1 : -1);
+
+    const dx = e.changedTouches[0].clientX - lbTouchX;
+
+    if (Math.abs(dx) > 40)
+        lbNav(dx < 0 ? 1 : -1);
+
 }, { passive: true });
 
 
