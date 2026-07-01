@@ -725,67 +725,86 @@ section { padding: 96px 5vw; } /* espaçamento vertical generoso entre secções
 /* ════════════════════════════
    LIGHTBOX (visualização ampliada das imagens do portefólio)
    ════════════════════════════ */
-.lightbox {
-  display: none; position: fixed; inset: 0; z-index: 1000; /* acima de tudo o resto */
-  background: rgba(2,15,45,0.97);
-  align-items: center; justify-content: center;
-  /* env(safe-area-inset-*) garante espaçamento correcto em iPhones com notch/Island */
-  padding: max(2rem, env(safe-area-inset-top)) max(1rem, env(safe-area-inset-right)) max(2rem, env(safe-area-inset-bottom)) max(1rem, env(safe-area-inset-left));
-  touch-action: none; overscroll-behavior: contain; /* impede scroll da página por baixo */
-}
-.lightbox.open { display: flex; } /* classe adicionada via JS ao abrir uma imagem */
+.lightbox{
+    display:none;
+    position:fixed;
+    inset:0;
+    z-index:1000;
 
-.lb-img-wrap { display: flex; align-items: center; justify-content: center; }
-/* Pequena animação de "entrada" da imagem (zoom suave) — reaplicada via JS a cada troca de imagem */
-.lb-img-wrap.anim { animation: lbIn 0.35s cubic-bezier(0.22,1,0.36,1) both; }
-@keyframes lbIn {
-  from { opacity:0; transform: scale(0.92); }
-  to   { opacity:1; transform: scale(1); }
-}
-.lightbox img {
-  max-width: 90vw; max-height: 75vh; max-height: 75dvh; /* 75dvh = mais fiável em iOS Safari */
-  border-radius: var(--radius); object-fit: contain; display: block;
+    background:rgba(2,15,45,.97);
+
+    overflow-y:auto;
+    overflow-x:hidden;
+
+    padding:40px 0;
 }
 
-/* Botão de fechar (X) */
-.lb-close {
-  position: absolute; top: 16px; right: 16px;
-  background: rgba(255,255,255,0.08); border: none; color: rgba(255,255,255,0.7);
-  font-size: 1.4rem; cursor: pointer; width: 44px; height: 44px; border-radius: 50%;
-  display: flex; align-items: center; justify-content: center;
-  transition: color 0.2s, background 0.2s, transform 0.3s;
-  -webkit-tap-highlight-color: transparent;
+.lightbox.open{
+    display:flex;
+    justify-content:center;
+    align-items:flex-start;
 }
-.lb-close:hover { color: var(--gold); background: rgba(255,255,255,0.14); transform: rotate(90deg); }
 
-/* Setas de navegação dentro do lightbox (imagem anterior/seguinte) */
-.lb-nav {
-  position: absolute; top: 50%; transform: translateY(-50%);
-  background: rgba(255,255,255,0.1); border: none; color: #fff;
-  width: 48px; height: 48px; border-radius: 50%; font-size: 1.2rem;
-  cursor: pointer; display: flex; align-items: center; justify-content: center;
-  transition: background 0.2s, transform 0.2s;
-  -webkit-tap-highlight-color: transparent;
-}
-.lb-nav:hover { background: rgba(255,255,255,0.22); }
-.lb-prev { left: 12px; }
-.lb-next { right: 12px; }
-.lb-prev:hover { transform: translateY(-50%) translateX(-3px); }
-.lb-next:hover { transform: translateY(-50%) translateX(3px); }
+.lb-img-wrap{
 
-/* Texto "Projecto 01 · 1 / 58" no rodapé do lightbox */
-.lb-counter {
-  position: absolute; bottom: 16px; left: 50%; transform: translateX(-50%);
-  color: rgba(255,255,255,0.5); font-size: 0.78rem; letter-spacing: 0.05em; white-space: nowrap;
+    width:100%;
+    min-height:100vh;
+
+    display:flex;
+    justify-content:center;
+    align-items:center;
+
+    padding:40px 0;
 }
-/* Descrição opcional de cada projecto (só aparece se p.desc não estiver vazio no array PROJECTS) */
-#lb-desc {
-  display: none; position: absolute;
-  bottom: 48px; left: 50%; transform: translateX(-50%);
-  max-width: min(600px, 88vw); text-align: center;
-  color: rgba(255,255,255,0.75); font-size: 0.82rem; line-height: 1.6;
-  background: rgba(0,0,0,0.45); backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px);
-  padding: 10px 20px; border-radius: 10px; white-space: pre-line; /* respeita quebras de linha \n no texto */
+.lb-img-wrap.anim{animation:lbIn .35s cubic-bezier(.22,1,.36,1) both;}
+@keyframes lbIn{from{opacity:0;transform:scale(.92)}to{opacity:1;transform:scale(1)}}
+.lightbox img{
+width:60vw;
+max-width:60vw;
+height:auto;
+display:block;
+border-radius:var(--radius);
+object-fit:contain;
+}
+.lb-close{
+position:fixed;top:16px;right:16px;z-index:1002;
+background:rgba(255,255,255,.08);border:none;color:rgba(255,255,255,.7);
+font-size:1.4rem;cursor:pointer;width:44px;height:44px;border-radius:50%;
+display:flex;align-items:center;justify-content:center;
+transition:color .2s,background .2s,transform .3s;
+}
+.lb-close:hover{color:var(--gold);background:rgba(255,255,255,.14);transform:rotate(90deg);}
+.lb-nav{
+position:fixed;top:50%;transform:translateY(-50%);
+z-index:1002;
+background:rgba(255,255,255,.1);border:none;color:#fff;
+width:48px;height:48px;border-radius:50%;font-size:1.2rem;
+display:flex;align-items:center;justify-content:center;cursor:pointer;
+transition:background .2s,transform .2s;
+}
+.lb-nav:hover{background:rgba(255,255,255,.22);}
+.lb-prev{left:12px;}
+.lb-next{right:12px;}
+.lb-prev:hover{transform:translateY(-50%) translateX(-3px);}
+.lb-next:hover{transform:translateY(-50%) translateX(3px);}
+.lb-counter{
+position:fixed;bottom:16px;left:50%;transform:translateX(-50%);
+z-index:1002;
+color:rgba(255,255,255,.5);font-size:.78rem;letter-spacing:.05em;white-space:nowrap;
+}
+#lb-desc{
+display:none;
+position:fixed;
+bottom:48px;left:50%;transform:translateX(-50%);
+z-index:1002;
+max-width:min(600px,88vw);
+text-align:center;
+color:rgba(255,255,255,.75);
+font-size:.82rem;line-height:1.6;
+background:rgba(0,0,0,.45);
+backdrop-filter:blur(6px);
+-webkit-backdrop-filter:blur(6px);
+padding:10px 20px;border-radius:10px;white-space:pre-line;
 }
 
 /* ════════════════════════════
@@ -1102,7 +1121,7 @@ footer {
      BARRA DE NAVEGAÇÃO PRINCIPAL (fixa no topo)
      ════════════════════════════ -->
 <nav id="main-nav" role="navigation" aria-label="Navegação principal">
-  <a href="#" class="nav-logo">M.E.<span>·</span>Maurício</a>
+  <a href="#" class="nav-logo">M.E.Maurício</a>
   <!-- Menu visível em desktop (escondido em mobile via CSS, ver media query ≤960px) -->
   <ul class="nav-links">
     <li><a href="#servicos">Serviços</a></li>
@@ -1410,7 +1429,7 @@ footer {
      RODAPÉ
      ════════════════════════════ -->
 <footer>
-  <a href="#" class="footer-logo">M.E.<span>·</span>Maurício</a>
+  <a href="#" class="footer-logo">M.E.Maurício</a>
   <span>© 2026 · Luanda, Angola</span>
   <div class="social-links">
     <a href="https://www.linkedin.com/in/maravilha-maur%C3%ADcio-039995a8/" class="social-link" target="_blank" rel="noopener" aria-label="LinkedIn">
