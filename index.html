@@ -4,8 +4,16 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>M.E. Maurício — Designer Gráfico Sénior</title>
+<meta name="description" content="M.E. Maurício, Designer Gráfico Sénior em Luanda com mais de 10 anos de experiência em identidade visual, campanhas publicitárias, design editorial e desenvolvimento de websites.">
+<meta property="og:type" content="website">
+<meta property="og:title" content="M.E. Maurício — Designer Gráfico Sénior">
+<meta property="og:description" content="Identidade visual, campanhas e comunicação visual com mais de 10 anos de experiência. Baseado em Luanda, Angola.">
+<meta property="og:image" content="images/mm.png">
+<meta name="theme-color" content="#033E8C">
+<link rel="icon" type="image/png" href="images/favicon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preload" as="image" href="images/mm.png">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Syne:wght@700;800&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 <style>
@@ -40,6 +48,25 @@ body {
   background: #fff;
   overflow-x: hidden;
   -webkit-font-smoothing: antialiased;
+}
+
+/* ── SKIP LINK (acessibilidade por teclado) ── */
+.skip-link {
+  position: fixed;
+  top: -60px;
+  left: 12px;
+  z-index: 1100;
+  background: var(--gold);
+  color: #1a1000;
+  font-weight: 600;
+  font-size: 0.9rem;
+  padding: 12px 20px;
+  border-radius: 8px;
+  text-decoration: none;
+  transition: top 0.2s;
+}
+.skip-link:focus {
+  top: 12px;
 }
 
 /* ── BRILHO QUE SEGUE O CURSOR ── */
@@ -362,7 +389,6 @@ nav.scrolled { box-shadow: 0 2px 20px rgba(0,0,0,0.08); }
 }
 .btn-primary:hover {
   transform: translateY(-2px);
-  box-shadow: 0 8px 24px rgba(244,174,2,0.45);
 }
 
 .btn-outline {
@@ -593,7 +619,7 @@ nav.scrolled { box-shadow: 0 2px 20px rgba(0,0,0,0.08); }
 /* ════════════════════════════
    ELEMENTOS COMUNS DE SECÇÃO
    ════════════════════════════ */
-section { padding: 96px 5vw; }
+section { padding: 96px 5vw; scroll-margin-top: 84px; }
 .section-inner { max-width: 1200px; margin: 0 auto; }
 
 .section-label {
@@ -1416,7 +1442,7 @@ section { padding: 96px 5vw; }
 }
 .btn-submit:hover {
   transform: translateY(-2px);
-  box-shadow: 0 8px 24px rgba(244,174,2,0.4);
+   
 }
 
 /* ════════════════════════════
@@ -1611,6 +1637,8 @@ footer {
 </style>
 </head>
 <body>
+
+<a href="#servicos" class="skip-link">Saltar para o conteúdo</a>
 
 <!-- ════════════════════════════
      MENU MOBILE
@@ -1948,6 +1976,11 @@ footer {
      SLIDESHOW DO HERO
      ════════════════════════════════════════════════════════════ */
   const HERO_SLIDES = ['images/mm.png', 'images/mm2.png', 'images/mm3.png'];
+  const HERO_SLIDE_ALTS = [
+    'M.E. Maurício, Designer Gráfico Sénior, em Luanda',
+    'M.E. Maurício a trabalhar em projectos de identidade visual',
+    'M.E. Maurício, retrato profissional'
+  ];
   const SLIDE_INTERVAL = 3500;
 
   let heroIdx = 0;
@@ -1960,9 +1993,10 @@ footer {
     HERO_SLIDES.forEach((src, i) => {
       const img = document.createElement('img');
       img.src = src;
-      img.alt = `Slide ${i + 1}`;
+      img.alt = HERO_SLIDE_ALTS[i] || `M.E. Maurício, Designer Gráfico — foto ${i + 1}`;
       img.className = 'hero-slide' + (i === 0 ? ' active' : '');
       img.loading = 'eager';
+      if (i === 0) img.setAttribute('fetchpriority', 'high');
       track.appendChild(img);
 
       const dot = document.createElement('button');
@@ -2081,8 +2115,6 @@ footer {
     { thumb: 'images/port/j1.jpg', full: 'images/port/j2.jpg', desc: '', cat: 'digital' },
   ];
 
-  PROJECTS.forEach((p, i) => { p.title = `Projecto ${String(i + 1).padStart(2, '0')}`; });
-
   const CAT_LABELS = {
     all: 'Todos',
     branding: 'Branding',
@@ -2090,6 +2122,11 @@ footer {
     editorial: 'Editorial',
     digital: 'Digital',
   };
+
+  PROJECTS.forEach((p, i) => {
+    p.title = `Projecto ${String(i + 1).padStart(2, '0')}`;
+    p.alt = `${CAT_LABELS[p.cat] || 'Design'} — ${p.title}, por M.E. Maurício`;
+  });
 
   const PAGE_SIZE = 20;
   let currentFilter = 'all';
@@ -2137,7 +2174,7 @@ footer {
       div.setAttribute('role', 'button');
       div.setAttribute('aria-label', `Abrir ${p.title}`);
       div.innerHTML = `
-        <img src="${p.thumb}" alt="${p.title}" loading="lazy">
+        <img src="${p.thumb}" alt="${p.alt}" loading="lazy">
         <div class="port-overlay" aria-hidden="true">
           <span class="port-zoom"><i class="fas fa-expand"></i></span>
           <div class="port-overlay-title">${p.title}</div>
@@ -2188,7 +2225,7 @@ footer {
 
     const img = document.getElementById('lb-img');
     img.src = p.full;
-    img.alt = p.title;
+    img.alt = p.alt;
 
     document.getElementById('lb-counter').textContent =
       `${p.title} · ${lbViewIdx + 1} / ${activeItems.length}`;
